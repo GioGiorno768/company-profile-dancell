@@ -1,46 +1,52 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, Award, CheckCircle2, Building2, Store, Users } from 'lucide-react';
+import DynamicIcon from '@/Components/Common/DynamicIcon';
 
-export default function HistoryTimeline() {
+export default function HistoryTimeline({ historyTimeline }) {
     const [activeTab, setActiveTab] = useState('expansion');
 
-    const branchHistory = [
-        { year: '2020', count: 14, added: '14 Cabang', highlight: 'Dancell 2020 – Mojoroto', desc: 'Awal ekspansi multi-cabang terstruktur di area Kediri & Mojoroto.' },
-        { year: '2021', count: 25, added: '+11 Cabang', highlight: 'Dancell 2021 – Srengat', desc: 'Pertumbuhan pesat merambah area Blitar & Srengat.' },
-        { year: '2022', count: 34, added: '+9 Cabang', highlight: 'Dancell 2022 – Magetan', desc: 'Melebarkan jaringan ritel ke wilayah Barat Jawa Timur (Magetan).' },
-        { year: '2023', count: 41, added: '+7 Cabang', highlight: 'Dancell 2023 – Semen', desc: 'Tersebar kokoh hampir di seluruh wilayah strategis Jawa Timur.' },
-        { year: '2024', count: 48, added: '+7 Cabang', highlight: 'Dancell 2024 – Uteran', desc: 'Memperkuat jaringan outlet di kawasan Uteran dan sekitarnya.' },
-        { year: '2025', count: 53, added: '+5 Cabang', highlight: 'Dancell 2025 – Mojosari', desc: 'Penambahan cabang berlanjut secara masif di Mojosari.' },
-        { year: '2026', count: 56, added: '+3 Cabang', highlight: '56 Cabang Terkini', desc: 'Kondisi terkini 56 outlet aktif siap melayani pelanggan Jawa Timur.', current: true },
-    ];
+    const headerBadge = historyTimeline?.header_badge || 'Perjalanan & Rekam Jejak';
+    const headerTitle = historyTimeline?.header_title || 'Sejarah Pertumbuhan Dancell';
+    const headerDesc = historyTimeline?.header_description || 'Dari toko pertama di Warujayeng pada tahun 2008, bertransformasi menjadi jaringan ritel 56 cabang terdepan di Jawa Timur.';
 
-    const milestones = [
-        { year: '2008', title: 'Berdiri Pertama Kali', desc: 'Dancell pertama kali berdiri di Warujayeng, Nganjuk.', icon: Store },
-        { year: '2012', title: 'Awal Perjalanan Toko', desc: 'Perjalanan awal toko dengan pembentukan tim kecil yang solid.', icon: Users },
-        { year: '2013', title: 'Pengembangan Layanan', desc: 'Pengembangan kapasitas tim dan standar pelayanan ritel.', icon: TrendingUp },
-        { year: '2015', title: 'Pembukaan Dancell 2', desc: 'Pembukaan outlet Dancell 2, tim operasional mulai membesar.', icon: Building2 },
-        { year: '2017', title: 'Budaya Kerja Solid', desc: 'Pematangan suasana kerja yang semakin terstruktur dan kompak.', icon: CheckCircle2 },
-        { year: '2018', title: 'Pertumbuhan Pesat', desc: 'Tim besar dengan seragam khas, menandai era pertumbuhan cepat.', icon: Award },
-    ];
+    const branchHistory = historyTimeline?.expansions && historyTimeline.expansions.length > 0
+        ? historyTimeline.expansions
+        : [
+            { year: '2020', count: 14, added: '14 Cabang', highlight: 'Dancell 2020 – Mojoroto', desc: 'Awal ekspansi multi-cabang terstruktur di area Kediri & Mojoroto.' },
+            { year: '2021', count: 25, added: '+11 Cabang', highlight: 'Dancell 2021 – Srengat', desc: 'Pertumbuhan pesat merambah area Blitar & Srengat.' },
+            { year: '2022', count: 34, added: '+9 Cabang', highlight: 'Dancell 2022 – Magetan', desc: 'Melebarkan jaringan ritel ke wilayah Barat Jawa Timur (Magetan).' },
+            { year: '2023', count: 41, added: '+7 Cabang', highlight: 'Dancell 2023 – Semen', desc: 'Tersebar kokoh hampir di seluruh wilayah strategis Jawa Timur.' },
+            { year: '2024', count: 48, added: '+7 Cabang', highlight: 'Dancell 2024 – Uteran', desc: 'Memperkuat jaringan outlet di kawasan Uteran dan sekitarnya.' },
+            { year: '2025', count: 53, added: '+5 Cabang', highlight: 'Dancell 2025 – Mojosari', desc: 'Penambahan cabang berlanjut secara masif di Mojosari.' },
+            { year: '2026', count: 56, added: '+3 Cabang', highlight: '56 Cabang Terkini', desc: 'Kondisi terkini 56 outlet aktif siap melayani pelanggan Jawa Timur.', current: true },
+        ];
+
+    const milestones = historyTimeline?.milestones && historyTimeline.milestones.length > 0
+        ? historyTimeline.milestones
+        : [
+            { year: '2008', title: 'Berdiri Pertama Kali', desc: 'Dancell pertama kali berdiri di Warujayeng, Nganjuk.', icon_svg: '' },
+            { year: '2012', title: 'Awal Perjalanan Toko', desc: 'Perjalanan awal toko dengan pembentukan tim kecil yang solid.', icon_svg: '' },
+            { year: '2013', title: 'Pengembangan Layanan', desc: 'Pengembangan kapasitas tim dan standar pelayanan ritel.', icon_svg: '' },
+            { year: '2015', title: 'Pembukaan Dancell 2', desc: 'Pembukaan outlet Dancell 2, tim operasional mulai membesar.', icon_svg: '' },
+            { year: '2017', title: 'Budaya Kerja Solid', desc: 'Pematangan suasana kerja yang semakin terstruktur dan kompak.', icon_svg: '' },
+            { year: '2018', title: 'Pertumbuhan Pesat', desc: 'Tim besar dengan seragam khas, menandai era pertumbuhan cepat.', icon_svg: '' },
+        ];
 
     return (
-        <section id="history" className="py-20 bg-slate-50 relative overflow-hidden">
+        <section id="history" className="py-20 bg-slate-50 relative overflow-hidden font-['Raleway']">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 
                 {/* Header */}
                 <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
                     <span className="px-3.5 py-1 rounded-full bg-rose-100/80 text-[#800020] text-xs font-normal uppercase tracking-wider">
-                        Perjalanan & Rekam Jejak
+                        {headerBadge}
                     </span>
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-slate-900 tracking-tight font-['Raleway']">
-                        Sejarah Pertumbuhan{' '}
-                        <span className="text-[#800020] font-medium">
-                            Dancell
-                        </span>
+                        {headerTitle}
                     </h2>
                     <p className="text-slate-600 text-base sm:text-lg font-normal">
-                        Dari toko pertama di Warujayeng pada tahun 2008, bertransformasi menjadi jaringan ritel 56 cabang terdepan di Jawa Timur.
+                        {headerDesc}
                     </p>
                 </div>
 
@@ -56,7 +62,7 @@ export default function HistoryTimeline() {
                             }`}
                         >
                             <TrendingUp className="w-3.5 h-3.5" />
-                            <span>Pertumbuhan Cabang (2020 - 2026)</span>
+                            <span>Pertumbuhan Cabang ({branchHistory.length} Tahun)</span>
                         </button>
 
                         <button
@@ -68,7 +74,7 @@ export default function HistoryTimeline() {
                             }`}
                         >
                             <Award className="w-3.5 h-3.5" />
-                            <span>Momen Penting (2008 - 2018)</span>
+                            <span>Momen Penting ({milestones.length} Item)</span>
                         </button>
                     </div>
                 </div>
@@ -87,7 +93,7 @@ export default function HistoryTimeline() {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                                 {branchHistory.map((item, idx) => (
                                     <motion.div
-                                        key={item.year}
+                                        key={item.id || item.year || idx}
                                         initial={{ opacity: 0, y: 20 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
@@ -104,13 +110,15 @@ export default function HistoryTimeline() {
                                             }`}>
                                                 {item.year}
                                             </span>
-                                            <span className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full ${
-                                                item.current
-                                                    ? 'bg-rose-950 text-rose-200 border border-rose-800'
-                                                    : 'bg-rose-50 text-[#800020]'
-                                            }`}>
-                                                {item.added}
-                                            </span>
+                                            {item.added && (
+                                                <span className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full ${
+                                                    item.current
+                                                        ? 'bg-rose-950 text-rose-200 border border-rose-800'
+                                                        : 'bg-rose-50 text-[#800020]'
+                                                }`}>
+                                                    {item.added}
+                                                </span>
+                                            )}
                                         </div>
 
                                         <div className="space-y-1.5">
@@ -148,10 +156,10 @@ export default function HistoryTimeline() {
                         >
                             <div className="relative border-l border-rose-200 ml-4 md:ml-32 space-y-8 py-2">
                                 {milestones.map((m, idx) => {
-                                    const IconComp = m.icon;
+                                    const fallbackIcon = idx === 0 ? Store : idx === 1 ? Users : idx === 2 ? TrendingUp : idx === 3 ? Building2 : idx === 4 ? CheckCircle2 : Award;
                                     return (
                                         <motion.div
-                                            key={m.year}
+                                            key={m.id || m.year || idx}
                                             initial={{ opacity: 0, x: -20 }}
                                             whileInView={{ opacity: 1, x: 0 }}
                                             viewport={{ once: true }}
@@ -172,7 +180,7 @@ export default function HistoryTimeline() {
                                                 </div>
                                                 <div className="flex items-center gap-2.5 mb-1.5">
                                                     <div className="p-1.5 rounded-lg bg-rose-50 text-[#800020]">
-                                                        <IconComp className="w-4 h-4" />
+                                                        <DynamicIcon svgString={m.icon_svg} fallback={fallbackIcon} className="w-4 h-4 text-[#800020]" />
                                                     </div>
                                                     <h3 className="text-base font-semibold text-slate-900 font-['Raleway']">
                                                         {m.title}

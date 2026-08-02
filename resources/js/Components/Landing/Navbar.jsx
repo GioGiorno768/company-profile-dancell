@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Store, Menu, X, ChevronRight, MapPin } from 'lucide-react';
+import { Link } from '@inertiajs/react';
+import { Store, Menu, X, ChevronRight, MapPin, LogIn } from 'lucide-react';
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -22,7 +23,7 @@ export default function Navbar() {
         { name: 'Tentang Kami', href: '#about' },
         { name: 'Visi & Misi', href: '#visimisi' },
         { name: 'Sejarah & Cabang', href: '#history' },
-        { name: 'Dampak Sosial', href: '#social-impact' },
+        { name: 'Produk & Aksesori', href: '#products' },
         { name: 'Jaringan Ritel', href: '#branches' },
     ];
 
@@ -39,13 +40,7 @@ export default function Navbar() {
                     
                     {/* Brand Logo */}
                     <a href="#" className="flex items-center gap-3 group">
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                            scrolled
-                                ? 'bg-gradient-to-tr from-[#5c0017] via-[#800020] to-[#a31d3b] text-white shadow-xs'
-                                : 'bg-white text-[#800020] shadow-md'
-                        }`}>
-                            <Store className="w-4 h-4" />
-                        </div>
+                        
                         <div className="flex flex-col">
                             <div className="flex items-center gap-1.5">
                                 <span className={`font-semibold text-xl tracking-tight font-['Raleway'] transition-colors duration-300 ${
@@ -56,7 +51,7 @@ export default function Navbar() {
                                 <span className={`px-1.5 py-0.5 text-[9px] font-medium rounded-md tracking-wider uppercase transition-colors duration-300 ${
                                     scrolled ? 'bg-[#800020] text-white' : 'bg-white/20 text-white backdrop-blur-xs'
                                 }`}>
-                                    Group
+                                    Official
                                 </span>
                             </div>
                             <span className={`text-[10px] font-normal tracking-wider transition-colors duration-300 ${
