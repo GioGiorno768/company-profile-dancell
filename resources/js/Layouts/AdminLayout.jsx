@@ -28,9 +28,9 @@ export default function AdminLayout({ children, activeMenu = 'dashboard' }) {
     const navigation = [
         { id: 'dashboard', name: 'Dashboard Utama', href: route('dashboard'), icon: LayoutDashboard },
         { id: 'content-hero', name: 'Kelola Content Web', href: route('admin.content.hero'), icon: Layers },
-        { id: 'branches', name: 'Jaringan 56 Cabang', href: route('dashboard') + '#branches', icon: Store },
-        { id: 'products', name: 'Katalog Produk & Brand', href: route('dashboard') + '#products', icon: ShoppingBag },
-        { id: 'settings', name: 'Pengaturan Akun', href: route('profile.edit'), icon: Settings },
+        { id: 'branches', name: 'Kelola Cabang', href: route('admin.branches.index'), icon: Store },
+        // { id: 'products', name: 'Katalog Produk & Brand', href: route('dashboard') + '#products', icon: ShoppingBag },
+        // { id: 'settings', name: 'Pengaturan Akun', href: route('profile.edit'), icon: Settings },
     ];
 
     return (

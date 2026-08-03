@@ -20,11 +20,10 @@ export default function Navbar() {
     }, []);
 
     const navLinks = [
-        { name: 'Tentang Kami', href: '#about' },
-        { name: 'Visi & Misi', href: '#visimisi' },
-        { name: 'Sejarah & Cabang', href: '#history' },
-        { name: 'Produk & Aksesori', href: '#products' },
-        { name: 'Jaringan Ritel', href: '#branches' },
+        { name: 'Tentang Kami', href: '/#about' },
+        { name: 'Visi & Misi', href: '/#visimisi' },
+        { name: 'Sejarah Dancell', href: '/#history' },
+        { name: 'Cabang Ritel', href: route('branches.public') },
     ];
 
     return (
@@ -93,7 +92,7 @@ export default function Navbar() {
                             }`}
                         >
                             <MapPin className="w-3.5 h-3.5" />
-                            <span>56 Cabang Ritel</span>
+                            <span>Cabang Ritel</span>
                             <ChevronRight className="w-3.5 h-3.5" />
                         </a>
                     </div>
@@ -142,7 +141,7 @@ export default function Navbar() {
                                     className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-[#800020] font-medium text-xs shadow-xs"
                                 >
                                     <MapPin className="w-3.5 h-3.5" />
-                                    <span>Lihat 56 Cabang Ritel</span>
+                                    <span>Lihat Selengkapnya</span>
                                 </a>
                             </div>
                         </div>

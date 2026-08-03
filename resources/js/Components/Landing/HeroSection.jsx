@@ -93,7 +93,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                 {/* Subtle Texture Grid */}
                 <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex-1 flex flex-col justify-end">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex-1 flex flex-col justify-center">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
                         
                         {/* Left Hero Text Column */}

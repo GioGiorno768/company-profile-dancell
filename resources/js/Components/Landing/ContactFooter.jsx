@@ -3,8 +3,8 @@ import { Store, MapPin, Clock, ShieldCheck, Heart } from 'lucide-react';
 
 export default function ContactFooter({ footer }) {
     const brandName = footer?.brand_name || 'DANCELL';
-    const brandTag = footer?.brand_tag || 'Group';
-    const brandSubtitle = footer?.brand_subtitle || 'Dan Group Official Company Profile 2025/2026';
+    const brandTag = footer?.brand_tag || 'Official';
+    const brandSubtitle = footer?.brand_subtitle || 'Dancell Official Company Profile 2025/2026';
     const brandDesc = footer?.brand_description || 'Dancell adalah perusahaan ritel terpercaya yang pertama kali berdiri pada tahun 2008 di Warujayeng, Nganjuk. Hingga kini memiliki 56 cabang aktif di seluruh wilayah Jawa Timur.';
     const branchBadge = footer?.branch_badge_text || '56 Cabang Siap Melayani Pelanggan';
 
@@ -17,7 +17,7 @@ export default function ContactFooter({ footer }) {
     const valueBoxHeading = footer?.value_box_heading || 'Kesejahteraan Bersama';
     const valueBoxDesc = footer?.value_box_description || 'Mengedepankan kualitas pelayanan dan kebermanfaatan bagi masyarakat, karyawan, serta relasi bisnis.';
 
-    const copyrightText = footer?.copyright_text || '© 2008 - 2026 Dancell (Dan Group). All rights reserved.';
+    const copyrightText = footer?.copyright_text || '© 2008 - 2026 Dancell (Dancell Official). All rights reserved.';
 
     const navLinks = footer?.nav_links && footer.nav_links.length > 0
         ? footer.nav_links
@@ -45,9 +45,7 @@ export default function ContactFooter({ footer }) {
                     {/* Brand Info */}
                     <div className="lg:col-span-2 space-y-5">
                         <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#5c0017] to-[#800020] flex items-center justify-center text-white font-normal shadow-xs">
-                                <Store className="w-4 h-4" />
-                            </div>
+                            
                             <div className="flex flex-col">
                                 <div className="flex items-center gap-1.5">
                                     <span className="font-semibold text-xl tracking-tight text-white font-['Raleway']">

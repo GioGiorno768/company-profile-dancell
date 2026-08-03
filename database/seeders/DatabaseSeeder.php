@@ -30,6 +30,9 @@ class DatabaseSeeder extends Seeder
             HistoryTimelineSettingSeeder::class,
             PartnerBrandSettingSeeder::class,
             FooterSettingSeeder::class,
+            BranchSeeder::class,
+            BranchSectionSettingSeeder::class,
+            SeoSettingSeeder::class,
         ]);
     }
 }
