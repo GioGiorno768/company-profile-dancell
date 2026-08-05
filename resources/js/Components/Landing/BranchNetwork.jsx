@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from '@inertiajs/react';
 import { MapPin, Store, Navigation, ShieldCheck, ArrowRight } from 'lucide-react';
 
 export default function BranchNetwork({ branchSection = null, branches = [] }) {
@@ -47,13 +48,13 @@ export default function BranchNetwork({ branchSection = null, branches = [] }) {
                     </div>
 
                     {/* Tombol Lihat Selengkapnya */}
-                    <a
+                    <Link
                         href={route('branches.public')}
                         className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-[#800020] hover:bg-[#600018] text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all shrink-0 self-start md:self-auto group cursor-pointer"
                     >
                         <span>Lihat Selengkapnya ({allBranches.length} Outlet)</span>
                         <ArrowRight className="w-4 h-4 text-rose-200 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Branches Grid (Maksimal 8 Cabang) */}

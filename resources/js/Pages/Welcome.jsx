@@ -10,6 +10,11 @@ import BranchNetwork from '../Components/Landing/BranchNetwork';
 import ContactFooter from '../Components/Landing/ContactFooter';
 
 export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerBrand, footer, branchSection, branches = [], canLogin, canRegister }) {
+    const rawOgImage = seo?.og_image || 'https://dancell-official.com/assets/images/og-dancell.jpg';
+    const ogImageUrl = rawOgImage.startsWith('http')
+        ? rawOgImage
+        : `https://dancell-official.com${rawOgImage.startsWith('/') ? '' : '/'}${rawOgImage}`;
+
     return (
         <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
             <Head>
@@ -42,8 +47,8 @@ export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerB
                 <meta property="og:type" content={seo?.og_type || "website"} />
                 <meta property="og:locale" content={seo?.locale || "id_ID"} />
                 {seo?.canonical_url && <meta property="og:url" content={seo.canonical_url} />}
-                {seo?.og_image && <meta property="og:image" content={seo.og_image} />}
-                {seo?.og_image && <meta property="og:image:secure_url" content={seo.og_image} />}
+                <meta property="og:image" content={ogImageUrl} />
+                <meta property="og:image:secure_url" content={ogImageUrl} />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
                 <meta property="og:image:type" content="image/jpeg" />
@@ -55,7 +60,7 @@ export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerB
                 {seo?.twitter_creator && <meta name="twitter:creator" content={seo.twitter_creator} />}
                 <meta name="twitter:title" content={seo?.og_title || seo?.site_title} />
                 <meta name="twitter:description" content={seo?.og_description || seo?.meta_description} />
-                {seo?.og_image && <meta name="twitter:image" content={seo.og_image} />}
+                <meta name="twitter:image" content={ogImageUrl} />
                 {seo?.og_image_alt && <meta name="twitter:image:alt" content={seo.og_image_alt} />}
 
                 {/* 6. Theme & PWA Meta Tags */}

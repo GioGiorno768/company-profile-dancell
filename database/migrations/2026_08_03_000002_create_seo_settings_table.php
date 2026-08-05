@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('meta_description')->nullable();
             $table->text('meta_keywords')->nullable();
             $table->string('author')->default('Dancell Indonesia');
-            $table->string('canonical_url')->default('https://dancell.id');
+            $table->string('canonical_url')->default('https://dancell-official.com');
             $table->string('og_title')->nullable();
             $table->text('og_description')->nullable();
             $table->string('og_image')->nullable();

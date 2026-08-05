@@ -28,9 +28,8 @@ export default function GuestLayout({ children }) {
                 
                 {/* Brand Logo Header - Clean Vector Typography without box */}
                 <div className="text-center space-y-3">
-                    <Link href="/" className="inline-flex items-center gap-2.5 group">
-                        <Store className="w-7 h-7 text-[#800020] group-hover:scale-110 transition-transform duration-300" />
-                        <div className="text-left">
+                    <Link href="/" className="inline-flex items-center gap-2 group">
+                        <div className="text-left leading-3">
                             <div className="flex items-center gap-2">
                                 <span className="font-semibold text-2xl tracking-tight text-slate-900 font-['Raleway']">
                                     DANCELL

@@ -39,10 +39,10 @@ export default function Edit({ mustVerifyEmail, status, seo }) {
         meta_keywords: seo?.meta_keywords || 'Dancell, toko hp Nganjuk, toko gadget Kediri, toko hp Blitar, toko hp Magetan, toko hp Madiun, toko hp Mojokerto',
         author: seo?.author || 'Dancell Indonesia',
         locale: seo?.locale || 'id_ID',
-        canonical_url: seo?.canonical_url || 'https://dancell.id',
+        canonical_url: seo?.canonical_url || 'https://dancell-official.com',
         og_title: seo?.og_title || 'Dancell — 56 Outlet Ritel Gadget Terpercaya Jawa Timur',
         og_description: seo?.og_description || 'Temukan cabang toko HP Dancell terdekat di Nganjuk, Kediri, Blitar, Magetan, Madiun, & Mojokerto.',
-        og_image: seo?.og_image || 'https://dancell.id/assets/images/og-dancell.jpg',
+        og_image: seo?.og_image || 'https://dancell-official.com/assets/images/og-dancell.jpg',
         og_image_file: null,
         og_image_alt: seo?.og_image_alt || 'Dancell Indonesia — Outlet Ritel Gadget Terkemuka Jawa Timur',
         og_type: seo?.og_type || 'website',
@@ -416,7 +416,7 @@ export default function Edit({ mustVerifyEmail, status, seo }) {
                                                     setImagePreview(e.target.value);
                                                 }}
                                                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-medium focus:bg-white focus:border-[#800020] focus:ring-1 focus:ring-[#800020] transition-all outline-none"
-                                                placeholder="https://dancell.id/assets/images/og-dancell.jpg"
+                                                placeholder="https://dancell-official.com/assets/images/og-dancell.jpg"
                                             />
                                         </div>
                                     </div>

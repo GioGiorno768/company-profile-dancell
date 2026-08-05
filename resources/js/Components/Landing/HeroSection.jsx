@@ -5,7 +5,8 @@ import {
     ShieldCheck,
     Store,
     ShoppingBag,
-    Laptop
+    Laptop,
+    ChevronRight
 } from "lucide-react";
 
 export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" }) {
@@ -62,7 +63,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                     opacity,
                     borderRadius,
                 }}
-                className="sticky top-0 left-0 h-screen w-full flex flex-col justify-between pt-32 pb-0 overflow-hidden origin-center"
+                className="sticky top-0 left-0 h-screen w-full flex flex-col justify-between pt-16 sm:pt-24 lg:pt-32 pb-4 lg:pb-0 overflow-hidden origin-center"
             >
                 {/* Animated Ambient Background Glows */}
                 <motion.div
@@ -94,10 +95,102 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                 <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex-1 flex flex-col justify-center">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+                    
+                    {/* ========================================================== */}
+                    {/* MOBILE SIMKOPDES-STYLE OVERLAY LAYOUT (Visible on Mobile)  */}
+                    {/* ========================================================== */}
+                    <div className="block lg:hidden w-full space-y-4 pt-2 pb-6 text-center">
+                        
+                        {/* Compact Badge */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="lg:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-rose-100 text-[11px] font-normal backdrop-blur-xs max-w-full truncate  hidden"
+                        >
+                            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
+                            {renderIcon(badgeSvg, Store, "w-3 h-3 text-rose-200 shrink-0")}
+                            <span className="truncate">{badgeText}</span>
+                        </motion.div>
+
+                        {/* Ambassador Image & Title Overlay Container */}
+                        <div className="relative flex flex-col items-center justify-end pt-2 pb-2">
+                            {/* Centered Ambassador Image */}
+                            <motion.img
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.6 }}
+                                src={heroImageSrc}
+                                alt="Tim Pelayanan Dancell"
+                                className="h-[260px] sm:h-[380px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)] relative z-0 -mb-6"
+                            />
+
+                            {/* Main Title Overlaying Lower Image (Clean without box boundaries) */}
+                            <motion.h1
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.1 }}
+                                className="relative z-10 text-2xl sm:text-3xl font-semibold text-white leading-snug tracking-tight font-['Raleway'] drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)] px-2 text-center"
+                            >
+                                {titleText}
+                            </motion.h1>
+                        </div>
+
+                        {/* Floating Glass Card Box for Description & Actions */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-5 shadow-2xl space-y-4 text-left relative z-20"
+                        >
+                            <p className="text-xs sm:text-sm text-rose-100/90 leading-relaxed font-normal text-center whitespace-pre-line [@media(max-height:699px)]:hidden">
+                                {descText}
+                            </p>
+
+                            <div className="flex flex-col gap-2.5 pt-1">
+                                <a
+                                    href={primaryBtnLink}
+                                    className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-white text-[#800020] font-semibold text-xs shadow-md active:scale-[0.98] transition-transform"
+                                >
+                                    {renderIcon(primaryBtnSvg, MapPin, "w-4 h-4 text-[#800020]")}
+                                    <span>{primaryBtnText}</span>
+                                    <ChevronRight className="w-4 h-4 ml-auto text-[#800020]" />
+                                </a>
+                                <a
+                                    href={secondaryBtnLink}
+                                    className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-white/10 border border-white/20 text-white font-medium text-xs hover:bg-white/20 transition-colors"
+                                >
+                                    {renderIcon(secondaryBtnSvg, ShoppingBag, "w-4 h-4 text-rose-300")}
+                                    <span>{secondaryBtnText}</span>
+                                </a>
+                            </div>
+
+                            {/* Trust Badge Highlights */}
+                            <div className="pt-3 border-t border-white/10 grid grid-cols-3 gap-1 text-[10px] text-center text-rose-100/80 font-normal">
+                                <div className="flex flex-col items-center gap-1">
+                                    {renderIcon(feature1Svg, ShieldCheck, "w-3.5 h-3.5 text-rose-300")}
+                                    <span>100% Garansi</span>
+                                </div>
+                                <div className="flex flex-col items-center gap-1">
+                                    {renderIcon(feature2Svg, Laptop, "w-3.5 h-3.5 text-rose-300")}
+                                    <span>Lengkap</span>
+                                </div>
+                                <div className="flex flex-col items-center gap-1">
+                                    {renderIcon(feature3Svg, MapPin, "w-3.5 h-3.5 text-rose-300")}
+                                    <span>56 Outlet</span>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                    </div>
+
+
+                    {/* ========================================================== */}
+                    {/* DESKTOP 2-COLUMN LAYOUT (Visible on Desktop lg:grid)       */}
+                    {/* ========================================================== */}
+                    <div className="hidden lg:grid lg:grid-cols-12 gap-8 items-end">
                         
                         {/* Left Hero Text Column */}
-                        <div className="lg:col-span-6 space-y-7 text-center lg:text-left pb-16 lg:pb-24">
+                        <div className="lg:col-span-6 space-y-7 text-left pb-24">
                             
                             {/* Pill Badge */}
                             <motion.div
@@ -116,7 +209,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                                 initial={{ opacity: 0, y: 25 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.1 }}
-                                className="text-4xl sm:text-5xl lg:text-4xl font-normal text-white leading-[1.16] tracking-tight font-['Raleway']"
+                                className="text-4xl lg:text-5xl font-normal text-white leading-[1.16] tracking-tight font-['Raleway']"
                             >
                                 {titleText}
                             </motion.h1>
@@ -126,7 +219,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
-                                className="text-base sm:text-md text-rose-100/90 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0 whitespace-pre-line"
+                                className="text-base text-rose-100/90 font-normal leading-relaxed max-w-2xl whitespace-pre-line"
                             >
                                 {descText}
                             </motion.p>
@@ -136,18 +229,18 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
-                                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
+                                className="flex items-center justify-start gap-4 pt-2"
                             >
                                 <a
                                     href={primaryBtnLink}
-                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-white text-[#800020] font-medium text-sm shadow-lg hover:bg-rose-50 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                                    className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-white text-[#800020] font-medium text-sm shadow-lg hover:bg-rose-50 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                                 >
                                     {renderIcon(primaryBtnSvg, MapPin, "w-4 h-4 text-[#800020]")}
                                     <span>{primaryBtnText}</span>
                                 </a>
                                 <a
                                     href={secondaryBtnLink}
-                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 border border-white/25 text-white font-medium text-sm hover:bg-white/20 backdrop-blur-xs transition-all duration-200"
+                                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 border border-white/25 text-white font-medium text-sm hover:bg-white/20 backdrop-blur-xs transition-all duration-200"
                                 >
                                     {renderIcon(secondaryBtnSvg, ShoppingBag, "w-4 h-4 text-rose-300")}
                                     <span>{secondaryBtnText}</span>
@@ -159,7 +252,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
-                                className="pt-6 border-t border-white/15 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs font-normal text-rose-100/90"
+                                className="pt-6 border-t border-white/15 flex flex-wrap items-center justify-start gap-6 text-xs font-normal text-rose-100/90"
                             >
                                 <div className="flex items-center gap-2">
                                     {renderIcon(feature1Svg, ShieldCheck, "w-4 h-4 text-rose-300")}
@@ -178,12 +271,12 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                         </div>
 
                         {/* Right Hero Image Column */}
-                        <div className="lg:col-span-6 relative flex justify-center lg:justify-end items-end h-full">
+                        <div className="lg:col-span-6 relative flex justify-end items-end h-full">
                             <div className="absolute bottom-0 right-10 w-96 h-96 bg-rose-400/25 rounded-full blur-3xl pointer-events-none" />
 
                             <motion.div
                                 style={{ y: y1, opacity }}
-                                className="relative z-10 flex items-end justify-center lg:justify-end w-full"
+                                className="relative z-10 flex items-end justify-end w-full"
                             >
                                 <motion.img
                                     initial={{ opacity: 0, y: 40 }}
@@ -191,12 +284,13 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                                     transition={{ duration: 0.8, delay: 0.2 }}
                                     src={heroImageSrc}
                                     alt="Tim Pelayanan Dancell"
-                                    className="h-[460px] sm:h-[540px] lg:h-[600px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)] transition-transform duration-500 hover:scale-[1.01]"
+                                    className="h-[540px] lg:h-[600px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)] transition-transform duration-500 hover:scale-[1.01]"
                                 />
                             </motion.div>
                         </div>
 
                     </div>
+
                 </div>
 
             </motion.div>

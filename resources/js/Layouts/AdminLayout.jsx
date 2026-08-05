@@ -54,7 +54,6 @@ export default function AdminLayout({ children, activeMenu = 'dashboard' }) {
                     {/* Brand Logo - Clean Vector Typography without box */}
                     <div className="flex items-center justify-between">
                         <Link href="/" className="flex items-center gap-2.5 group">
-                            <Store className="w-6 h-6 text-rose-400 group-hover:scale-110 transition-transform duration-300" />
                             <div className="flex flex-col">
                                 <div className="flex items-center gap-1.5">
                                     <span className="font-semibold text-xl tracking-tight text-white font-['Raleway']">
@@ -173,7 +172,7 @@ export default function AdminLayout({ children, activeMenu = 'dashboard' }) {
                                         {auth?.user?.name || 'Administrator'}
                                     </span>
                                     <span className="text-[10px] text-slate-500 font-normal">
-                                        {auth?.user?.email || 'admin@dancell.id'}
+                                        {auth?.user?.email || 'admin@dancell-official.com'}
                                     </span>
                                 </div>
                                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
@@ -187,7 +186,7 @@ export default function AdminLayout({ children, activeMenu = 'dashboard' }) {
                                 >
                                     <div className="px-4 py-2 border-b border-slate-100">
                                         <div className="font-semibold text-slate-900">{auth?.user?.name || 'Administrator'}</div>
-                                        <div className="text-[11px] text-slate-500">{auth?.user?.email || 'admin@dancell.id'}</div>
+                                        <div className="text-[11px] text-slate-500">{auth?.user?.email || 'admin@dancell-official.com'}</div>
                                     </div>
                                     <Link
                                         href={route('profile.edit')}

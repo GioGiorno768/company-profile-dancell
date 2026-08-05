@@ -73,7 +73,7 @@ export default function Register() {
                                 type="email"
                                 name="email"
                                 value={data.email}
-                                placeholder="nama@dancell.id"
+                                placeholder="nama@dancell-official.com"
                                 autoComplete="username"
                                 required
                                 onChange={(e) => setData('email', e.target.value)}

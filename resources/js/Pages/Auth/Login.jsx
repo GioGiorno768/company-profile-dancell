@@ -61,7 +61,7 @@ export default function Login({ status, canResetPassword }) {
                                 type="email"
                                 name="email"
                                 value={data.email}
-                                placeholder="admin@dancell.id"
+                                placeholder="Masukkan email..."
                                 autoComplete="username"
                                 autoFocus
                                 required
