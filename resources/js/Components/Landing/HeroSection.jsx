@@ -146,7 +146,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                                 {descText}
                             </p>
 
-                            <div className="flex flex-col gap-2.5 pt-1">
+                            <div className="flex sm:flex-row flex-col gap-2.5 pt-1">
                                 <a
                                     href={primaryBtnLink}
                                     className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-white text-[#800020] font-semibold text-xs shadow-md active:scale-[0.98] transition-transform"

@@ -62,7 +62,7 @@ export default function HistoryTimeline({ historyTimeline }) {
                             }`}
                         >
                             <TrendingUp className="w-3.5 h-3.5" />
-                            <span>Pertumbuhan Cabang ({branchHistory.length} Tahun)</span>
+                            <span>Pertumbuhan Cabang</span>
                         </button>
 
                         <button
@@ -74,7 +74,7 @@ export default function HistoryTimeline({ historyTimeline }) {
                             }`}
                         >
                             <Award className="w-3.5 h-3.5" />
-                            <span>Momen Penting ({milestones.length} Item)</span>
+                            <span>Momen Penting</span>
                         </button>
                     </div>
                 </div>

@@ -38,10 +38,9 @@ export default function Navbar() {
     }, [mobileMenuOpen]);
 
     const navLinks = [
-        { name: 'Tentang Kami', href: '/#about' },
         { name: 'Visi & Misi', href: '/#visimisi' },
         { name: 'Sejarah Dancell', href: '/#history' },
-        { name: 'Cabang Ritel', href: '/#branches' },
+        { name: 'Cabang Ritel', href: '#branches' },
     ];
 
     return (
@@ -80,7 +79,7 @@ export default function Navbar() {
                         </Link>
 
                         {/* Desktop Nav Links (Tentang Kami | Visi & Misi | Sejarah Dancell | Cabang Ritel) */}
-                        <nav className="hidden md:flex items-center gap-8">
+                        <nav className="hidden lg:flex items-center gap-8">
                             {navLinks.map((link) => {
                                 const isExternalOrAnchor = link.href.includes('#');
                                 if (isExternalOrAnchor) {
@@ -121,7 +120,7 @@ export default function Navbar() {
                         </nav>
 
                         {/* Far Right CTA Button (Cabang Ritel without '56') */}
-                        <div className="hidden md:flex items-center">
+                        <div className="hidden lg:flex items-center">
                             <Link
                                 href={route('branches.public')}
                                 className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-xs shadow-xs transition-all duration-200 ${
@@ -137,7 +136,7 @@ export default function Navbar() {
                         </div>
 
                         {/* Mobile Hamburger Button */}
-                        <div className="md:hidden flex items-center">
+                        <div className="lg:hidden flex items-center">
                             <button
                                 onClick={() => setMobileMenuOpen(true)}
                                 className={`p-2 rounded-xl transition-all ${
