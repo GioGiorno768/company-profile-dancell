@@ -37,6 +37,12 @@ export default function BranchIndex({ branches = [], cities = [], branchSection 
     const [showSectionSettings, setShowSectionSettings] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
+    // Auto-detect distinct cities directly from branch list
+    const availableCities = React.useMemo(() => {
+        const fromBranches = branches.map(b => b.city).filter(Boolean);
+        return Array.from(new Set([...(cities || []), ...fromBranches])).sort();
+    }, [cities, branches]);
+
     useEffect(() => {
         setIsMounted(true);
     }, []);
@@ -379,7 +385,7 @@ export default function BranchIndex({ branches = [], cities = [], branchSection 
                     <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs flex items-center justify-between">
                         <div>
                             <div className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Kota Terjangkau</div>
-                            <div className="text-2xl font-bold text-slate-900 mt-1">{cities.length} <span className="text-xs font-normal text-slate-400">Kota/Kab</span></div>
+                            <div className="text-2xl font-bold text-slate-900 mt-1">{availableCities.length} <span className="text-xs font-normal text-slate-400">Kota/Kab</span></div>
                         </div>
                         <Building2 className="w-6 h-6 text-blue-600" />
                     </div>
@@ -423,7 +429,7 @@ export default function BranchIndex({ branches = [], cities = [], branchSection 
                                 className="w-full px-3.5 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 flex items-center justify-between transition-colors cursor-pointer"
                             >
                                 <span className="truncate">
-                                    {selectedCity === 'all' ? `Semua Kota (${cities.length})` : `Kota: ${selectedCity}`}
+                                    {selectedCity === 'all' ? `Semua Kota (${availableCities.length})` : `Kota: ${selectedCity}`}
                                 </span>
                                 <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isCityOpen ? 'rotate-180' : ''}`} />
                             </button>
@@ -437,13 +443,13 @@ export default function BranchIndex({ branches = [], cities = [], branchSection 
                                             selectedCity === 'all' ? 'bg-rose-50 text-[#800020] font-semibold' : 'text-slate-700 hover:bg-slate-50'
                                         }`}
                                     >
-                                        <span>Semua Kota ({cities.length})</span>
+                                        <span>Semua Kota ({availableCities.length})</span>
                                         {selectedCity === 'all' && <Check className="w-3.5 h-3.5 text-[#800020]" />}
                                     </button>
 
                                     <div className="my-1 border-t border-slate-100" />
 
-                                    {cities.map((city) => (
+                                    {availableCities.map((city) => (
                                         <button
                                             key={city}
                                             type="button"

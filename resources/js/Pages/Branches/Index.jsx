@@ -29,6 +29,12 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
     const [selectedCity, setSelectedCity] = useState(filters.city || 'all');
     const [selectedBranchModal, setSelectedBranchModal] = useState(null);
 
+    // Auto-detect distinct cities directly from branch list so new cities appear instantly
+    const availableCities = React.useMemo(() => {
+        const fromBranches = branches.map(b => b.city).filter(Boolean);
+        return Array.from(new Set([...(cities || []), ...fromBranches])).sort();
+    }, [cities, branches]);
+
     // Hero Sticky Scroll Transforms
     const containerRef = useRef(null);
     const gridRef = useRef(null);
@@ -172,7 +178,7 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
                                     Semua Kota ({branches.length})
                                 </button>
 
-                                {cities.map((c) => (
+                                {availableCities.map((c) => (
                                     <button
                                         key={c}
                                         onClick={() => handleCitySelect(c)}
@@ -253,7 +259,7 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
                                 Semua Kota ({branches.length})
                             </button>
 
-                            {cities.map((city) => (
+                            {availableCities.map((city) => (
                                 <button
                                     key={city}
                                     onClick={() => setSelectedCity(city)}

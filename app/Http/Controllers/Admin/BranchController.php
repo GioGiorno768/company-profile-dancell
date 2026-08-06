@@ -20,6 +20,7 @@ class BranchController extends Controller
     {
         Cache::forget('active_branches_list');
         Cache::forget('admin_branches_cities');
+        Cache::forget('public_branches_cities');
         Cache::forget('branch_section_setting_content');
     }
 
