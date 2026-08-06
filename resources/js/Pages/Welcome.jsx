@@ -18,6 +18,12 @@ export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerB
     return (
         <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
             <Head>
+                {/* Preconnect Candidates for 140ms LCP savings */}
+                <link rel="preconnect" href="https://api.iconify.design" />
+                <link rel="dns-prefetch" href="https://api.iconify.design" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
                 {/* Preload Hero Image for instant LCP rendering */}
                 <link rel="preload" as="image" href="/images/hero.webp" type="image/webp" fetchPriority="high" />
 
