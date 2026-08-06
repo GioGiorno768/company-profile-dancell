@@ -83,9 +83,9 @@ export default function VisiMisiSection({ visiMisi }) {
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.6 }}
-                        className="mb-14 p-8 sm:p-10 rounded-3xl bg-slate-900 text-white shadow-xl relative overflow-hidden border border-slate-800"
+                        className="mb-14 p-8 sm:p-10 rounded-3xl bg-slate-900 text-white shadow-xl relative overflow-hidden border border-slate-800 transform-gpu"
                     >
                         <div className="relative z-10 max-w-4xl space-y-5 flex flex-col justify-center items-center m-auto">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/80 border border-rose-800/60 text-rose-200 text-xs font-normal uppercase tracking-wider">

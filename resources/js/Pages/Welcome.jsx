@@ -18,6 +18,9 @@ export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerB
     return (
         <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
             <Head>
+                {/* Preload Hero Image for instant LCP rendering */}
+                <link rel="preload" as="image" href="/images/hero.webp" type="image/webp" fetchPriority="high" />
+
                 {/* 1. Core Meta Tags */}
                 <title>{seo?.site_title || "Dancell — Official Company Profile | Ritel Gadget Terkemuka Jawa Timur"}</title>
                 <meta name="description" content={seo?.meta_description || "Dancell adalah jaringan toko ritel gadget, HP, smartphone, & aksesori resmi terpercaya di Jawa Timur."} />

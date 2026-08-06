@@ -9,7 +9,7 @@ import {
     ChevronRight
 } from "lucide-react";
 
-export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" }) {
+export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }) {
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -62,33 +62,34 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                     scale,
                     opacity,
                     borderRadius,
+                    willChange: "transform, opacity",
                 }}
-                className="sticky top-0 left-0 h-screen w-full flex flex-col justify-between pt-16 sm:pt-24 lg:pt-32 pb-4 lg:pb-0 overflow-hidden origin-center"
+                className="sticky top-0 left-0 h-screen w-full flex flex-col justify-between pt-16 sm:pt-24 lg:pt-32 pb-4 lg:pb-0 overflow-hidden origin-center transform-gpu"
             >
-                {/* Animated Ambient Background Glows */}
+                {/* Animated Ambient Background Glows (GPU Accelerated) */}
                 <motion.div
                     animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.5, 0.3],
+                        scale: [1, 1.15, 1],
+                        opacity: [0.3, 0.45, 0.3],
                     }}
                     transition={{
                         duration: 8,
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-rose-500/20 rounded-full blur-3xl pointer-events-none"
+                    className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] sm:w-[700px] h-[600px] sm:h-[700px] bg-rose-500/20 rounded-full blur-3xl pointer-events-none transform-gpu will-change-transform"
                 />
                 <motion.div
                     animate={{
-                        y: [0, -25, 0],
-                        opacity: [0.2, 0.4, 0.2],
+                        y: [0, -20, 0],
+                        opacity: [0.2, 0.35, 0.2],
                     }}
                     transition={{
                         duration: 10,
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="absolute bottom-0 right-10 w-[500px] h-[500px] bg-amber-400/15 rounded-full blur-3xl pointer-events-none"
+                    className="absolute bottom-0 right-10 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-amber-400/15 rounded-full blur-3xl pointer-events-none transform-gpu will-change-transform"
                 />
 
                 {/* Subtle Texture Grid */}
@@ -121,6 +122,8 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                                 transition={{ duration: 0.6 }}
                                 src={heroImageSrc}
                                 alt="Tim Pelayanan Dancell"
+                                fetchPriority="high"
+                                decoding="async"
                                 className="h-[260px] sm:h-[380px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)] relative z-0 -mb-6"
                             />
 
@@ -284,6 +287,8 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.png" })
                                     transition={{ duration: 0.8, delay: 0.2 }}
                                     src={heroImageSrc}
                                     alt="Tim Pelayanan Dancell"
+                                    fetchPriority="high"
+                                    decoding="async"
                                     className="h-[540px] lg:h-[600px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)] transition-transform duration-500 hover:scale-[1.01]"
                                 />
                             </motion.div>

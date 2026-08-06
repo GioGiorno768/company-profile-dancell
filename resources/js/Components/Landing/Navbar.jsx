@@ -156,7 +156,7 @@ export default function Navbar() {
             {/* Ultra-Clean Elegant Mobile Menu Sheet */}
             <AnimatePresence>
                 {mobileMenuOpen && (
-                    <div className="fixed inset-0 z-50 md:hidden flex flex-col justify-start">
+                    <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-start">
                         
                         {/* Backdrop Blur */}
                         <motion.div

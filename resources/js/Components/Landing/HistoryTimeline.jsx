@@ -88,7 +88,7 @@ export default function HistoryTimeline({ historyTimeline }) {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.4 }}
-                            className="space-y-6"
+                            className="space-y-6 transform-gpu"
                         >
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                                 {branchHistory.map((item, idx) => (
@@ -96,9 +96,9 @@ export default function HistoryTimeline({ historyTimeline }) {
                                         key={item.id || item.year || idx}
                                         initial={{ opacity: 0, y: 20 }}
                                         whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
+                                        viewport={{ once: true, margin: "-30px" }}
                                         transition={{ duration: 0.4, delay: idx * 0.05 }}
-                                        className={`rounded-3xl p-6 relative overflow-hidden transition-all duration-300 ${
+                                        className={`rounded-3xl p-6 relative overflow-hidden transition-all duration-300 transform-gpu ${
                                             item.current
                                                 ? 'bg-slate-900 text-white shadow-lg border border-slate-800'
                                                 : 'bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:border-rose-200'
