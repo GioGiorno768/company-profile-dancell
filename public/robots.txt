@@ -1,2 +1,17 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /confirm-password
+Disallow: /email/verification-notification
+Disallow: /logout
+Disallow: /sanctum/csrf-cookie
+
+# Sitemap
+Sitemap: https://dancell-official.com/sitemap.xml

@@ -392,8 +392,12 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                         >
                                             <div className="flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
                                                 <div className="flex items-center gap-2">
-                                                    <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0">
-                                                        <Icon icon={b.icon || 'simple-icons:apple'} className="w-4 h-4" />
+                                                    <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1">
+                                                        {b.image && b.image.trim() !== '' ? (
+                                                            <img src={b.image} alt={b.name} className="w-full h-full object-contain" />
+                                                        ) : (
+                                                            <Icon icon={b.icon || 'simple-icons:apple'} className="w-4 h-4" />
+                                                        )}
                                                     </div>
                                                     <span className="text-xs font-bold text-slate-900">
                                                         {b.name || `Brand #${index + 1}`}
@@ -413,7 +417,7 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                                 )}
                                             </div>
 
-                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
                                                 <div>
                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Nama Brand</label>
                                                     <input
@@ -425,7 +429,17 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Kode Iconify / Icon</label>
+                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">URL / Path Logo Gambar (Opsional)</label>
+                                                    <input
+                                                        type="text"
+                                                        value={b.image || ''}
+                                                        onChange={(e) => handleUpdateSmartphoneBrand(index, 'image', e.target.value)}
+                                                        placeholder="/images/brands/apple.png atau URL"
+                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-[11px] text-slate-800"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Kode Iconify (Fallback)</label>
                                                     <input
                                                         type="text"
                                                         value={b.icon}
@@ -471,8 +485,12 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                         >
                                             <div className="flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
                                                 <div className="flex items-center gap-2">
-                                                    <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0">
-                                                        <Icon icon={b.icon || 'simple-icons:sony'} className="w-4 h-4" />
+                                                    <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1">
+                                                        {b.image && b.image.trim() !== '' ? (
+                                                            <img src={b.image} alt={b.name} className="w-full h-full object-contain" />
+                                                        ) : (
+                                                            <Icon icon={b.icon || 'simple-icons:sony'} className="w-4 h-4" />
+                                                        )}
                                                     </div>
                                                     <span className="text-xs font-bold text-slate-900">
                                                         {b.name || `Brand #${index + 1}`}
@@ -492,7 +510,7 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                                 )}
                                             </div>
 
-                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
                                                 <div>
                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Nama Brand</label>
                                                     <input
@@ -504,7 +522,17 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Kode Iconify / Icon</label>
+                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">URL / Path Logo Gambar (Opsional)</label>
+                                                    <input
+                                                        type="text"
+                                                        value={b.image || ''}
+                                                        onChange={(e) => handleUpdateAccessoryBrand(index, 'image', e.target.value)}
+                                                        placeholder="/images/brands/sony.png atau URL"
+                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-[11px] text-slate-800"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Kode Iconify (Fallback)</label>
                                                     <input
                                                         type="text"
                                                         value={b.icon}

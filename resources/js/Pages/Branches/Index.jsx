@@ -74,9 +74,53 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
     return (
         <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
             <Head>
-                <title>{`Dara Cabang Outlet Dancell (${branches.length} Toko) — Jaringan Ritel Jawa Timur`}</title>
+                {/* Core Meta */}
+                <title>{`Daftar Cabang Outlet Dancell (${branches.length} Toko) — Jaringan Ritel Jawa Timur`}</title>
                 <meta name="description" content="Temukan lokasi outlet cabang Dancell terdekat di Nganjuk, Kediri, Blitar, Magetan, Madiun, & Mojokerto. Jaringan toko ritel gadget & HP garansi resmi terpercaya." />
                 <meta name="keywords" content="cabang Dancell, toko HP Nganjuk, toko HP Kediri, toko HP Blitar, toko HP Magetan, toko HP Madiun, outlet Dancell Jatim" />
+                <meta name="robots" content="index, follow, max-image-preview:large" />
+                <link rel="canonical" href="https://dancell-official.com/cabang" />
+
+                {/* Open Graph */}
+                <meta property="og:site_name" content="Dancell Indonesia" />
+                <meta property="og:title" content={`Daftar ${branches.length} Outlet Cabang Dancell — Ritel Gadget Jawa Timur`} />
+                <meta property="og:description" content="Temukan lokasi outlet cabang Dancell terdekat. Jaringan toko ritel gadget, HP, smartphone & aksesori garansi resmi terpercaya di Jawa Timur." />
+                <meta property="og:type" content="website" />
+                <meta property="og:locale" content="id_ID" />
+                <meta property="og:url" content="https://dancell-official.com/cabang" />
+
+                {/* Twitter Cards */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={`Daftar ${branches.length} Outlet Cabang Dancell — Ritel Gadget Jawa Timur`} />
+                <meta name="twitter:description" content="Temukan lokasi outlet cabang Dancell terdekat. Jaringan toko ritel gadget & HP garansi resmi terpercaya di Jawa Timur." />
+
+                {/* JSON-LD Structured Data: ItemList */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "ItemList",
+                        "name": "Daftar Cabang Outlet Dancell",
+                        "description": "Jaringan outlet ritel gadget & smartphone Dancell di Jawa Timur",
+                        "numberOfItems": branches.length,
+                        "itemListElement": branches.slice(0, 20).map((branch, idx) => ({
+                            "@type": "ListItem",
+                            "position": idx + 1,
+                            "item": {
+                                "@type": "ElectronicsStore",
+                                "name": branch.name,
+                                "address": {
+                                    "@type": "PostalAddress",
+                                    "addressLocality": branch.city,
+                                    "addressRegion": "Jawa Timur",
+                                    "addressCountry": "ID",
+                                    ...(branch.address && { "streetAddress": branch.address }),
+                                },
+                                ...(branch.phone && { "telephone": branch.phone }),
+                                ...(branch.google_maps_url && { "hasMap": branch.google_maps_url }),
+                            }
+                        }))
+                    })}
+                </script>
             </Head>
 
             <div className="min-h-screen bg-slate-50 font-['Raleway'] text-slate-900 selection:bg-[#800020] selection:text-white antialiased">

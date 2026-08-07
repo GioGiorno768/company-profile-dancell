@@ -145,8 +145,18 @@ export default function SocialImpact({ partnerBrand }) {
                                     whileHover={{ scale: 1.05, y: -4 }}
                                     className="shrink-0 group relative bg-white/5 hover:bg-[#800020] border border-white/10 hover:border-rose-300/80 px-6 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-lg min-w-[210px]"
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white text-white group-hover:text-[#800020] flex items-center justify-center shrink-0 transition-colors shadow-xs">
-                                        <Icon icon={brand.icon || 'simple-icons:apple'} className="w-6 h-6" />
+                                    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white text-white group-hover:text-[#800020] flex items-center justify-center shrink-0 transition-colors shadow-xs overflow-hidden p-2">
+                                        {brand.image && brand.image.trim() !== '' ? (
+                                            <img 
+                                                src={brand.image} 
+                                                alt={brand.name} 
+                                                className="w-full h-full object-contain filter group-hover:brightness-0 transition-all" 
+                                            />
+                                        ) : brand.icon && brand.icon.includes('<svg') ? (
+                                            <span dangerouslySetInnerHTML={{ __html: brand.icon }} className="w-6 h-6 flex items-center justify-center" />
+                                        ) : (
+                                            <Icon icon={brand.icon || 'simple-icons:apple'} className="w-6 h-6" />
+                                        )}
                                     </div>
 
                                     <div>
@@ -176,8 +186,18 @@ export default function SocialImpact({ partnerBrand }) {
                                     whileHover={{ scale: 1.05, y: -4 }}
                                     className="shrink-0 group relative bg-white/5 hover:bg-[#800020] border border-white/10 hover:border-rose-300/80 px-6 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-lg min-w-[210px]"
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white text-white group-hover:text-[#800020] flex items-center justify-center shrink-0 transition-colors shadow-xs">
-                                        <Icon icon={brand.icon || 'simple-icons:sony'} className="w-6 h-6" />
+                                    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white text-white group-hover:text-[#800020] flex items-center justify-center shrink-0 transition-colors shadow-xs overflow-hidden p-2">
+                                        {brand.image && brand.image.trim() !== '' ? (
+                                            <img 
+                                                src={brand.image} 
+                                                alt={brand.name} 
+                                                className="w-full h-full object-contain filter group-hover:brightness-0 transition-all" 
+                                            />
+                                        ) : brand.icon && brand.icon.includes('<svg') ? (
+                                            <span dangerouslySetInnerHTML={{ __html: brand.icon }} className="w-6 h-6 flex items-center justify-center" />
+                                        ) : (
+                                            <Icon icon={brand.icon || 'simple-icons:sony'} className="w-6 h-6" />
+                                        )}
                                     </div>
 
                                     <div>
