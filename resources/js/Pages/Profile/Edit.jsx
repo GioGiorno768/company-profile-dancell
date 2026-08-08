@@ -29,20 +29,20 @@ import {
 
 export default function Edit({ mustVerifyEmail, status, seo }) {
     const [activeTab, setActiveTab] = useState('seo'); // 'seo' | 'account'
-    const [imagePreview, setImagePreview] = useState(seo?.og_image || '');
+    const [imagePreview, setImagePreview] = useState(seo?.og_image || '/images/hero.webp');
 
     // Form Hook for Global SEO Settings (with File Upload & Social Links)
     const { data: seoData, setData: setSeoData, post: postSeo, processing: processingSeo, errors: seoErrors } = useForm({
         site_title: seo?.site_title || 'Dancell — Jaringan Outlet Ritel Gadget & Smartphone Terbesar di Jawa Timur',
         site_name: seo?.site_name || 'Dancell Indonesia',
-        meta_description: seo?.meta_description || 'Dancell adalah toko ritel gadget, HP, smartphone, & aksesori resmi terpercaya di Jawa Timur dengan 56 outlet aktif.',
+        meta_description: seo?.meta_description || 'Dancell adalah toko ritel gadget, HP, smartphone, & aksesori resmi terpercaya di Jawa Timur dengan 58 outlet aktif.',
         meta_keywords: seo?.meta_keywords || 'Dancell, toko hp Nganjuk, toko gadget Kediri, toko hp Blitar, toko hp Magetan, toko hp Madiun, toko hp Mojokerto',
         author: seo?.author || 'Dancell Indonesia',
         locale: seo?.locale || 'id_ID',
         canonical_url: seo?.canonical_url || 'https://dancell-official.com',
-        og_title: seo?.og_title || 'Dancell — 56 Outlet Ritel Gadget Terpercaya Jawa Timur',
+        og_title: seo?.og_title || 'Dancell — 58 Outlet Ritel Gadget Terpercaya Jawa Timur',
         og_description: seo?.og_description || 'Temukan cabang toko HP Dancell terdekat di Nganjuk, Kediri, Blitar, Magetan, Madiun, & Mojokerto.',
-        og_image: seo?.og_image || 'https://dancell-official.com/assets/images/og-dancell.jpg',
+        og_image: seo?.og_image || '/images/hero.webp',
         og_image_file: null,
         og_image_alt: seo?.og_image_alt || 'Dancell Indonesia — Outlet Ritel Gadget Terkemuka Jawa Timur',
         og_type: seo?.og_type || 'website',
@@ -50,19 +50,26 @@ export default function Edit({ mustVerifyEmail, status, seo }) {
         twitter_site: seo?.twitter_site || '@dancell_official',
         twitter_creator: seo?.twitter_creator || '@dancell_official',
         robots: seo?.robots || 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
-        google_site_verification: seo?.google_site_verification || 'google-site-verification-dancell-2026-demo-token',
+        google_site_verification: seo?.google_site_verification || '',
         bing_site_verification: seo?.bing_site_verification || '',
         yandex_site_verification: seo?.yandex_site_verification || '',
         facebook_app_id: seo?.facebook_app_id || '',
         facebook_page_url: seo?.facebook_page_url || 'https://facebook.com/dancell.official',
         instagram_account_url: seo?.instagram_account_url || 'https://instagram.com/dancell_official',
         tiktok_profile_url: seo?.tiktok_profile_url || 'https://tiktok.com/@dancell_official',
-        whatsapp_cs_url: seo?.whatsapp_cs_url || 'https://wa.me/6281234567890',
+        whatsapp_cs_url: seo?.whatsapp_cs_url || 'https://wa.me/6285230855400',
         geo_region: seo?.geo_region || 'ID-JI',
         geo_placename: seo?.geo_placename || 'Nganjuk, Jawa Timur',
         geo_position: seo?.geo_position || '-7.604214;112.029845',
         structured_data_json: seo?.structured_data_json || '',
     });
+
+    React.useEffect(() => {
+        if (seo?.og_image) {
+            setImagePreview(seo.og_image);
+            setSeoData(d => ({ ...d, og_image: seo.og_image, og_image_file: null }));
+        }
+    }, [seo]);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];

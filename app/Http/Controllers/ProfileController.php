@@ -88,7 +88,7 @@ class ProfileController extends Controller
 
         if ($request->hasFile('og_image_file')) {
             $path = $request->file('og_image_file')->store('seo', 'public');
-            $validated['og_image'] = url('storage/' . $path);
+            $validated['og_image'] = '/storage/' . $path;
         }
 
         unset($validated['og_image_file']);
