@@ -91,12 +91,17 @@ class ProfileController extends Controller
             $validated['og_image'] = '/storage/' . $path;
         }
 
-        unset($validated['og_image_file']);
+        if (!empty($validated['google_site_verification']) && str_contains($validated['google_site_verification'], 'content=')) {
+            if (preg_match('/content="([^"]+)"/', $validated['google_site_verification'], $matches)) {
+                $validated['google_site_verification'] = $matches[1];
+            }
+        }
 
         $seo->update($validated);
 
-        // Clear Redis Cache so Landing Page reflects updated SEO metadata instantly
+        // Clear Redis Cache so Landing Page & Sitemap reflect updated SEO metadata instantly
         Cache::forget('seo_setting_content');
+        Cache::forget('sitemap_xml');
 
         return Redirect::route('profile.edit')->with('status', 'Pengaturan SEO Global 100% & File Gambar OG Share Berhasil Diperbarui!');
     }

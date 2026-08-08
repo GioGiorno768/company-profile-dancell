@@ -17,12 +17,12 @@ class PartnerBrandSettingSeeder extends Seeder
             [
                 'header_badge' => 'Mitra Resmi Brand Dunia',
                 'header_title' => 'Official Brand Partner & Distributor Ritel',
-                'header_description' => 'Dancell bekerja sama langsung dengan produsen smartphone dan aksesori teknologi terkemuka dunia untuk menjamin keaslian 100% & garansi resmi di 56 cabang.',
+                'header_description' => 'Dancell bekerja sama langsung dengan produsen smartphone dan aksesori teknologi terkemuka dunia untuk menjamin keaslian 100% & garansi resmi di 58 cabang.',
                 'stat_1_val' => '15+',
                 'stat_1_label' => 'Brand Global Resmi',
                 'stat_2_val' => '100%',
                 'stat_2_label' => 'Produk Original',
-                'stat_3_val' => '56',
+                'stat_3_val' => '58',
                 'stat_3_label' => 'Outlet Ritel Aktif',
                 'stat_4_val' => 'Garansi',
                 'stat_4_label' => 'Resmi Indonesia',
@@ -46,7 +46,7 @@ class PartnerBrandSettingSeeder extends Seeder
                     ['name' => 'Marshall', 'icon' => 'simple-icons:marshall', 'tag' => 'Official Audio', 'desc' => 'Emberton & Major Headphones'],
                     ['name' => 'Nokia', 'icon' => 'simple-icons:nokia', 'tag' => 'Official Partner', 'desc' => 'Nokia Tough & Smart Series'],
                 ],
-                'footer_note' => 'Seluruh produk brand di atas bergaransi resmi & tersedia di 56 outlet Dancell Jawa Timur.',
+                'footer_note' => 'Seluruh produk brand di atas bergaransi resmi & tersedia di 58 outlet Dancell Jawa Timur.',
                 'cta_btn_text' => 'Temukan Outlet Terdekat',
                 'cta_btn_link' => '#branches',
             ]

@@ -17,6 +17,19 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+        <!-- Search Engine Verification Meta Tags (Direct Server-Side HTML for Googlebot) -->
+        @php
+            $seoProp = $page['props']['seo'] ?? null;
+            $googleToken = is_array($seoProp) ? ($seoProp['google_site_verification'] ?? null) : ($seoProp->google_site_verification ?? null);
+            if ($googleToken && str_contains($googleToken, 'content="')) {
+                preg_match('/content="([^"]+)"/', $googleToken, $matches);
+                $googleToken = $matches[1] ?? $googleToken;
+            }
+        @endphp
+        @if(!empty($googleToken))
+            <meta name="google-site-verification" content="{{ $googleToken }}">
+        @endif
+
         <!-- Scripts -->
         @routes
         @viteReactRefresh

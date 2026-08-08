@@ -17,7 +17,7 @@ class HistoryTimelineSettingSeeder extends Seeder
             [
                 'header_badge' => 'Perjalanan & Rekam Jejak',
                 'header_title' => 'Sejarah Pertumbuhan Dancell',
-                'header_description' => 'Dari toko pertama di Warujayeng pada tahun 2008, bertransformasi menjadi jaringan ritel 56 cabang terdepan di Jawa Timur.',
+                'header_description' => 'Dari toko pertama di Warujayeng pada tahun 2008, bertransformasi menjadi jaringan ritel 58 cabang terdepan di Jawa Timur.',
                 'expansions' => [
                     [
                         'id' => 'exp-2020',
@@ -76,10 +76,10 @@ class HistoryTimelineSettingSeeder extends Seeder
                     [
                         'id' => 'exp-2026',
                         'year' => '2026',
-                        'count' => 56,
-                        'added' => '+3 Cabang',
-                        'highlight' => '56 Cabang Terkini',
-                        'desc' => 'Kondisi terkini 56 outlet aktif siap melayani pelanggan Jawa Timur.',
+                        'count' => 58,
+                        'added' => '+5 Cabang',
+                        'highlight' => '58 Cabang Terkini',
+                        'desc' => 'Kondisi terkini 58 outlet aktif siap melayani pelanggan Jawa Timur.',
                         'current' => true,
                     ],
                 ],
