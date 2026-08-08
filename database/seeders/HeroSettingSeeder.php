@@ -15,10 +15,10 @@ class HeroSettingSeeder extends Seeder
         HeroSetting::firstOrCreate(
             ['id' => 1],
             [
-                'badge_text' => 'Pusat Ritel Gadget, Laptop & Aksesori — 56 Outlet Jawa Timur',
+                'badge_text' => 'Pusat Ritel Gadget, Laptop & Aksesori — 58 Outlet Jawa Timur',
                 'badge_icon_svg' => null,
                 'title' => 'Pusat Ritel Gadget & Laptop, Terlengkap & Bergaransi Resmi',
-                'description' => 'Dancell (Dan Group) adalah jaringan ritel gadget, smartphone, laptop, hingga aksesori terlengkap di Jawa Timur. Berdiri sejak 2008, kini siap melayani Anda di 56 outlet resmi dengan jaminan 100% original, garansi resmi, dan tukar tambah tepercaya.',
+                'description' => 'Dancell (Dan Group) adalah jaringan ritel gadget, smartphone, laptop, hingga aksesori terlengkap di Jawa Timur. Berdiri sejak 2008, kini siap melayani Anda di 58 outlet resmi dengan jaminan 100% original, garansi resmi, dan tukar tambah tepercaya.',
                 'primary_btn_text' => 'Temukan Outlet Terdekat',
                 'primary_btn_link' => '#branches',
                 'primary_btn_icon_svg' => null,
@@ -29,7 +29,7 @@ class HeroSettingSeeder extends Seeder
                 'feature_1_icon_svg' => null,
                 'feature_2_text' => 'Gadget, Laptop & Aksesori',
                 'feature_2_icon_svg' => null,
-                'feature_3_text' => '56 Outlet Jawa Timur',
+                'feature_3_text' => '58 Outlet Jawa Timur',
                 'feature_3_icon_svg' => null,
             ]
         );

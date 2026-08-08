@@ -22,10 +22,10 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
     const y1 = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
     // Data fallbacks if hero prop is missing or empty
-    const badgeText = hero?.badge_text || "Pusat Ritel Gadget, Laptop & Aksesori — 56 Outlet Jawa Timur";
+    const badgeText = hero?.badge_text || "Pusat Ritel Gadget, Laptop & Aksesori — 58 Outlet Jawa Timur";
     const badgeSvg = hero?.badge_icon_svg;
     const titleText = hero?.title || "Pusat Ritel Gadget & Laptop, Terlengkap & Bergaransi Resmi";
-    const descText = hero?.description || "Dancell (Dan Group) adalah jaringan ritel gadget, smartphone, laptop, hingga aksesori terlengkap di Jawa Timur. Berdiri sejak 2008, kini siap melayani Anda di 56 outlet resmi dengan jaminan 100% original, garansi resmi, dan tukar tambah tepercaya.";
+    const descText = hero?.description || "Dancell (Dan Group) adalah jaringan ritel gadget, smartphone, laptop, hingga aksesori terlengkap di Jawa Timur. Berdiri sejak 2008, kini siap melayani Anda di 58 outlet resmi dengan jaminan 100% original, garansi resmi, dan tukar tambah tepercaya.";
     const primaryBtnText = hero?.primary_btn_text || "Temukan Outlet Terdekat";
     const primaryBtnLink = hero?.primary_btn_link || "#branches";
     const primaryBtnSvg = hero?.primary_btn_icon_svg;
@@ -37,7 +37,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
     const feature1Svg = hero?.feature_1_icon_svg;
     const feature2Text = hero?.feature_2_text || "Gadget, Laptop & Aksesori";
     const feature2Svg = hero?.feature_2_icon_svg;
-    const feature3Text = hero?.feature_3_text || "56 Outlet Jawa Timur";
+    const feature3Text = hero?.feature_3_text || "58 Outlet Jawa Timur";
     const feature3Svg = hero?.feature_3_icon_svg;
 
     const renderIcon = (svgCode, FallbackIcon, defaultClasses) => {
