@@ -8,7 +8,11 @@ import { createRoot } from 'react-dom/client';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => {
+        if (!title) return 'Dancell — Ritel Gadget & Smartphone Jawa Timur';
+        if (title.includes('Dancell')) return title;
+        return `${title} — Dancell`;
+    },
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.jsx`,

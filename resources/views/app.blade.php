@@ -23,6 +23,14 @@
                 $ogImg = 'https://dancell-official.com/images/hero.webp';
                 $googleToken = '';
             }
+
+            // Determine accurate self-referencing canonical URL for all pages (/ and /cabang)
+            $requestPath = request()->path();
+            if ($requestPath === '/' || $requestPath === '') {
+                $canonicalUrl = $s->canonical_url ?? 'https://dancell-official.com';
+            } else {
+                $canonicalUrl = 'https://dancell-official.com/' . ltrim($requestPath, '/');
+            }
         @endphp
 
         <title inertia>{{ $s->site_title ?? config('app.name', 'Dancell') }}</title>
@@ -48,9 +56,7 @@
             <meta name="keywords" content="{{ $s->meta_keywords ?? '' }}" head-key="keywords">
             <meta name="author" content="{{ $s->author ?? 'Dancell Indonesia' }}" head-key="author">
             <meta name="robots" content="{{ $s->robots ?? 'index, follow' }}" head-key="robots">
-            @if(!empty($s->canonical_url))
-                <link rel="canonical" href="{{ $s->canonical_url }}" head-key="canonical">
-            @endif
+            <link rel="canonical" href="{{ $canonicalUrl }}" head-key="canonical">
 
             {{-- Open Graph (WhatsApp, Facebook, LINE, Telegram) --}}
             <meta property="og:site_name" content="{{ $s->site_name ?? 'Dancell Indonesia' }}" head-key="og:site_name">
@@ -58,9 +64,7 @@
             <meta property="og:description" content="{{ $s->og_description ?? $s->meta_description ?? '' }}" head-key="og:description">
             <meta property="og:type" content="{{ $s->og_type ?? 'website' }}" head-key="og:type">
             <meta property="og:locale" content="{{ $s->locale ?? 'id_ID' }}" head-key="og:locale">
-            @if(!empty($s->canonical_url))
-                <meta property="og:url" content="{{ $s->canonical_url }}" head-key="og:url">
-            @endif
+            <meta property="og:url" content="{{ $canonicalUrl }}" head-key="og:url">
             <meta property="og:image" content="{{ $ogImg }}" head-key="og:image">
             <meta property="og:image:secure_url" content="{{ $ogImg }}" head-key="og:image:secure_url">
             <meta property="og:image:width" content="1200" head-key="og:image:width">

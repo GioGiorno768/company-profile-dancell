@@ -75,7 +75,7 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
         <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>
             <Head>
                 {/* Core Meta */}
-                <title>{`Daftar Cabang Outlet Dancell (${branches.length} Toko) — Jaringan Ritel Jawa Timur`}</title>
+                <title>{`Daftar ${branches.length || 58} Outlet Cabang Dancell — Ritel Gadget Jatim`}</title>
                 <meta name="description" content="Temukan lokasi outlet cabang Dancell terdekat di Nganjuk, Kediri, Blitar, Magetan, Madiun, & Mojokerto. Jaringan toko ritel gadget & HP garansi resmi terpercaya." head-key="description" />
                 <meta name="keywords" content="cabang Dancell, toko HP Nganjuk, toko HP Kediri, toko HP Blitar, toko HP Magetan, toko HP Madiun, outlet Dancell Jatim" head-key="keywords" />
                 <meta name="robots" content="index, follow, max-image-preview:large" head-key="robots" />
