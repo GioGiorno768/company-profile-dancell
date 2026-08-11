@@ -26,14 +26,17 @@ use Illuminate\Support\Facades\Response;
 Route::get('/sitemap.xml', function () {
     $content = Cache::remember('sitemap_xml', 86400, function () {
         $baseUrl = 'https://dancell-official.com';
-        $now = now()->toW3cString();
+
+        // Use actual content modification dates for reliable lastmod
+        $homepageLastmod = SeoSetting::max('updated_at') ?? now();
+        $cabangLastmod = Branch::max('updated_at') ?? now();
 
         $urls = [];
 
         // Homepage
         $urls[] = [
             'loc'        => $baseUrl,
-            'lastmod'    => $now,
+            'lastmod'    => $homepageLastmod->toW3cString(),
             'changefreq' => 'weekly',
             'priority'   => '1.0',
         ];
@@ -41,7 +44,7 @@ Route::get('/sitemap.xml', function () {
         // Cabang page
         $urls[] = [
             'loc'        => $baseUrl . '/cabang',
-            'lastmod'    => $now,
+            'lastmod'    => $cabangLastmod->toW3cString(),
             'changefreq' => 'weekly',
             'priority'   => '0.8',
         ];

@@ -76,23 +76,27 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
             <Head>
                 {/* Core Meta */}
                 <title>{`Daftar Cabang Outlet Dancell (${branches.length} Toko) — Jaringan Ritel Jawa Timur`}</title>
-                <meta name="description" content="Temukan lokasi outlet cabang Dancell terdekat di Nganjuk, Kediri, Blitar, Magetan, Madiun, & Mojokerto. Jaringan toko ritel gadget & HP garansi resmi terpercaya." />
-                <meta name="keywords" content="cabang Dancell, toko HP Nganjuk, toko HP Kediri, toko HP Blitar, toko HP Magetan, toko HP Madiun, outlet Dancell Jatim" />
-                <meta name="robots" content="index, follow, max-image-preview:large" />
-                <link rel="canonical" href="https://dancell-official.com/cabang" />
+                <meta name="description" content="Temukan lokasi outlet cabang Dancell terdekat di Nganjuk, Kediri, Blitar, Magetan, Madiun, & Mojokerto. Jaringan toko ritel gadget & HP garansi resmi terpercaya." head-key="description" />
+                <meta name="keywords" content="cabang Dancell, toko HP Nganjuk, toko HP Kediri, toko HP Blitar, toko HP Magetan, toko HP Madiun, outlet Dancell Jatim" head-key="keywords" />
+                <meta name="robots" content="index, follow, max-image-preview:large" head-key="robots" />
+                <link rel="canonical" href="https://dancell-official.com/cabang" head-key="canonical" />
 
                 {/* Open Graph */}
-                <meta property="og:site_name" content="Dancell Indonesia" />
-                <meta property="og:title" content={`Daftar ${branches.length} Outlet Cabang Dancell — Ritel Gadget Jawa Timur`} />
-                <meta property="og:description" content="Temukan lokasi outlet cabang Dancell terdekat. Jaringan toko ritel gadget, HP, smartphone & aksesori garansi resmi terpercaya di Jawa Timur." />
-                <meta property="og:type" content="website" />
-                <meta property="og:locale" content="id_ID" />
-                <meta property="og:url" content="https://dancell-official.com/cabang" />
+                <meta property="og:site_name" content="Dancell Indonesia" head-key="og:site_name" />
+                <meta property="og:title" content={`Daftar ${branches.length} Outlet Cabang Dancell — Ritel Gadget Jawa Timur`} head-key="og:title" />
+                <meta property="og:description" content="Temukan lokasi outlet cabang Dancell terdekat. Jaringan toko ritel gadget, HP, smartphone & aksesori garansi resmi terpercaya di Jawa Timur." head-key="og:description" />
+                <meta property="og:type" content="website" head-key="og:type" />
+                <meta property="og:locale" content="id_ID" head-key="og:locale" />
+                <meta property="og:url" content="https://dancell-official.com/cabang" head-key="og:url" />
+                <meta property="og:image" content={seo?.og_image?.startsWith('http') ? seo.og_image : `https://dancell-official.com${seo?.og_image || '/images/hero.webp'}`} head-key="og:image" />
+                <meta property="og:image:width" content="1200" head-key="og:image:width" />
+                <meta property="og:image:height" content="630" head-key="og:image:height" />
 
                 {/* Twitter Cards */}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={`Daftar ${branches.length} Outlet Cabang Dancell — Ritel Gadget Jawa Timur`} />
-                <meta name="twitter:description" content="Temukan lokasi outlet cabang Dancell terdekat. Jaringan toko ritel gadget & HP garansi resmi terpercaya di Jawa Timur." />
+                <meta name="twitter:card" content="summary_large_image" head-key="twitter:card" />
+                <meta name="twitter:title" content={`Daftar ${branches.length} Outlet Cabang Dancell — Ritel Gadget Jawa Timur`} head-key="twitter:title" />
+                <meta name="twitter:description" content="Temukan lokasi outlet cabang Dancell terdekat. Jaringan toko ritel gadget & HP garansi resmi terpercaya di Jawa Timur." head-key="twitter:description" />
+                <meta name="twitter:image" content={seo?.og_image?.startsWith('http') ? seo.og_image : `https://dancell-official.com${seo?.og_image || '/images/hero.webp'}`} head-key="twitter:image" />
 
                 {/* JSON-LD Structured Data: ItemList */}
                 <script type="application/ld+json">

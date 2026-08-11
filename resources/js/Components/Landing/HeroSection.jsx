@@ -181,7 +181,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                                 </div>
                                 <div className="flex flex-col items-center gap-1">
                                     {renderIcon(feature3Svg, MapPin, "w-3.5 h-3.5 text-rose-300")}
-                                    <span>56 Outlet</span>
+                                    <span>{feature3Text}</span>
                                 </div>
                             </div>
                         </motion.div>
