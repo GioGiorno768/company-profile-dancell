@@ -52,25 +52,25 @@ export default function Navbar() {
                         : 'bg-transparent py-5 border-b border-white/10'
                 }`}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20">
                     <div className="flex items-center justify-between">
                         
                         {/* Brand Typography Logo */}
                         <Link href="/" className="flex items-center gap-2.5 group">
                             <div className="flex flex-col leading-tight">
                                 <div className="flex items-center gap-1.5">
-                                    <span className={`font-semibold text-xl tracking-tight font-['Raleway'] transition-colors duration-300 ${
+                                    <span className={`font-semibold text-xl xl:text-2xl 2xl:text-3xl tracking-tight font-['Raleway'] transition-colors duration-300 ${
                                         scrolled ? 'text-slate-900' : 'text-white'
                                     }`}>
                                         DANCELL
                                     </span>
-                                    <span className={`px-1.5 py-0.5 text-[9px] font-semibold rounded-md tracking-wider uppercase transition-colors duration-300 ${
+                                    <span className={`px-1.5 py-0.5 text-[9px] xl:text-[11px] 2xl:text-xs font-semibold rounded-md tracking-wider uppercase transition-colors duration-300 ${
                                         scrolled ? 'bg-[#800020] text-white' : 'bg-white/20 text-white backdrop-blur-xs'
                                     }`}>
                                         Official
                                     </span>
                                 </div>
-                                <span className={`text-[10px] font-normal tracking-wider transition-colors duration-300 ${
+                                <span className={`text-[10px] xl:text-[12px] 2xl:text-sm font-normal tracking-wider transition-colors duration-300 ${
                                     scrolled ? 'text-slate-500' : 'text-rose-100/80'
                                 }`}>
                                     Retail Gadget Jawa Timur
@@ -79,7 +79,7 @@ export default function Navbar() {
                         </Link>
 
                         {/* Desktop Nav Links (Tentang Kami | Visi & Misi | Sejarah Dancell | Cabang Ritel) */}
-                        <nav className="hidden lg:flex items-center gap-8">
+                        <nav className="hidden lg:flex items-center gap-8 xl:gap-12 2xl:gap-16">
                             {navLinks.map((link) => {
                                 const isExternalOrAnchor = link.href.includes('#');
                                 if (isExternalOrAnchor) {
@@ -87,7 +87,7 @@ export default function Navbar() {
                                         <Link
                                             key={link.name}
                                             href={link.href}
-                                            className={`text-sm font-medium transition-colors relative py-1 group ${
+                                            className={`text-sm xl:text-base 2xl:text-lg font-medium transition-colors relative py-1 group ${
                                                 scrolled 
                                                     ? 'text-slate-600 hover:text-[#800020]' 
                                                     : 'text-white/90 hover:text-white'
@@ -104,7 +104,7 @@ export default function Navbar() {
                                     <Link
                                         key={link.name}
                                         href={link.href}
-                                        className={`text-sm font-medium transition-colors relative py-1 group ${
+                                        className={`text-sm xl:text-base 2xl:text-lg font-medium transition-colors relative py-1 group ${
                                             scrolled 
                                                 ? 'text-slate-600 hover:text-[#800020]' 
                                                 : 'text-white/90 hover:text-white'
@@ -123,15 +123,15 @@ export default function Navbar() {
                         <div className="hidden lg:flex items-center">
                             <Link
                                 href={route('branches.public')}
-                                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-xs shadow-xs transition-all duration-200 ${
+                                className={`inline-flex items-center gap-2 px-5 py-2.5 xl:px-6 xl:py-3 2xl:px-8 2xl:py-3.5 rounded-full font-medium text-xs xl:text-sm 2xl:text-base shadow-xs transition-all duration-200 ${
                                     scrolled
                                         ? 'bg-[#800020] text-white hover:bg-[#5c0017]'
                                         : 'bg-white text-[#800020] hover:bg-rose-50 hover:shadow-md'
                                 }`}
                             >
-                                <MapPin className="w-3.5 h-3.5" />
+                                <MapPin className="w-3.5 h-3.5 xl:w-4 xl:h-4 2xl:w-5 2xl:h-5" />
                                 <span>Cabang Ritel</span>
-                                <ChevronRight className="w-3.5 h-3.5" />
+                                <ChevronRight className="w-3.5 h-3.5 xl:w-4 xl:h-4 2xl:w-5 2xl:h-5" />
                             </Link>
                         </div>
 

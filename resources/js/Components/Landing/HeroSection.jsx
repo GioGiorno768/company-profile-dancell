@@ -93,9 +93,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                 />
 
                 {/* Subtle Texture Grid */}
-                <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex-1 flex flex-col justify-center">
+                <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />                <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 relative z-10 w-full flex-1 flex flex-col justify-center">
                     
                     {/* ========================================================== */}
                     {/* MOBILE SIMKOPDES-STYLE OVERLAY LAYOUT (Visible on Mobile)  */}
@@ -106,7 +104,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                         <motion.div
                             initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="lg:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-rose-100 text-[11px] font-normal backdrop-blur-xs max-w-full truncate  hidden"
+                            className="lg:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-rose-100 text-[11px] font-normal backdrop-blur-xs max-w-full truncate hidden"
                         >
                             <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
                             {renderIcon(badgeSvg, Store, "w-3 h-3 text-rose-200 shrink-0")}
@@ -192,20 +190,20 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                     {/* ========================================================== */}
                     {/* DESKTOP 2-COLUMN LAYOUT (Visible on Desktop lg:grid)       */}
                     {/* ========================================================== */}
-                    <div className="hidden lg:grid lg:grid-cols-12 gap-8 items-end">
+                    <div className="hidden lg:grid lg:grid-cols-12 gap-8 xl:gap-12 2xl:gap-16 items-end">
                         
                         {/* Left Hero Text Column */}
-                        <div className="lg:col-span-6 space-y-7 text-left pb-24">
+                        <div className="lg:col-span-6 space-y-6 xl:space-y-8 2xl:space-y-10 text-left pb-16 lg:pb-24 xl:pb-16 2xl:pb-20">
                             
                             {/* Pill Badge */}
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5 }}
-                                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-rose-100 text-xs font-normal tracking-wide backdrop-blur-xs"
+                                className="inline-flex items-center gap-2 px-4 py-1.5 xl:px-5 xl:py-2 rounded-full bg-white/10 border border-white/20 text-rose-100 text-xs xl:text-sm 2xl:text-base font-normal tracking-wide backdrop-blur-xs"
                             >
-                                <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
-                                {renderIcon(badgeSvg, Store, "w-3.5 h-3.5 text-rose-200")}
+                                <span className="flex h-1.5 w-1.5 xl:h-2 xl:w-2 rounded-full bg-emerald-400 animate-ping" />
+                                {renderIcon(badgeSvg, Store, "w-3.5 h-3.5 xl:w-4 xl:h-4 text-rose-200")}
                                 <span>{badgeText}</span>
                             </motion.div>
 
@@ -214,7 +212,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                                 initial={{ opacity: 0, y: 25 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.1 }}
-                                className="text-4xl lg:text-5xl font-normal text-white leading-[1.16] tracking-tight font-['Raleway']"
+                                className="text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl 3xl:text-[5rem] font-normal text-white leading-[1.14] tracking-tight font-['Raleway']"
                             >
                                 {titleText}
                             </motion.h1>
@@ -224,7 +222,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
-                                className="text-base text-rose-100/90 font-normal leading-relaxed max-w-2xl whitespace-pre-line"
+                                className="text-base xl:text-lg 2xl:text-xl 3xl:text-2xl text-rose-100/90 font-normal leading-relaxed max-w-2xl xl:max-w-3xl 2xl:max-w-4xl whitespace-pre-line"
                             >
                                 {descText}
                             </motion.p>
@@ -234,20 +232,20 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
-                                className="flex items-center justify-start gap-4 pt-2"
+                                className="flex items-center justify-start gap-4 xl:gap-6 pt-2"
                             >
                                 <a
                                     href={primaryBtnLink}
-                                    className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-white text-[#800020] font-medium text-sm shadow-lg hover:bg-rose-50 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                                    className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 xl:px-9 xl:py-4 2xl:px-11 2xl:py-5 rounded-xl 2xl:rounded-2xl bg-white text-[#800020] font-semibold text-sm xl:text-base 2xl:text-lg shadow-lg hover:bg-rose-50 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                                 >
-                                    {renderIcon(primaryBtnSvg, MapPin, "w-4 h-4 text-[#800020]")}
+                                    {renderIcon(primaryBtnSvg, MapPin, "w-4 h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 text-[#800020]")}
                                     <span>{primaryBtnText}</span>
                                 </a>
                                 <a
                                     href={secondaryBtnLink}
-                                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 border border-white/25 text-white font-medium text-sm hover:bg-white/20 backdrop-blur-xs transition-all duration-200"
+                                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 xl:px-8 xl:py-4 2xl:px-10 2xl:py-5 rounded-xl 2xl:rounded-2xl bg-white/10 border border-white/25 text-white font-medium text-sm xl:text-base 2xl:text-lg hover:bg-white/20 backdrop-blur-xs transition-all duration-200"
                                 >
-                                    {renderIcon(secondaryBtnSvg, ShoppingBag, "w-4 h-4 text-rose-300")}
+                                    {renderIcon(secondaryBtnSvg, ShoppingBag, "w-4 h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 text-rose-300")}
                                     <span>{secondaryBtnText}</span>
                                 </a>
                             </motion.div>
@@ -257,18 +255,18 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
-                                className="pt-6 border-t border-white/15 flex flex-wrap items-center justify-start gap-6 text-xs font-normal text-rose-100/90"
+                                className="pt-6 xl:pt-8 border-t border-white/15 flex flex-wrap items-center justify-start gap-6 xl:gap-10 2xl:gap-12 text-xs xl:text-sm 2xl:text-base font-normal text-rose-100/90"
                             >
-                                <div className="flex items-center gap-2">
-                                    {renderIcon(feature1Svg, ShieldCheck, "w-4 h-4 text-rose-300")}
+                                <div className="flex items-center gap-2 xl:gap-3">
+                                    {renderIcon(feature1Svg, ShieldCheck, "w-4 h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 text-rose-300")}
                                     <span>{feature1Text}</span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    {renderIcon(feature2Svg, Laptop, "w-4 h-4 text-rose-300")}
+                                <div className="flex items-center gap-2 xl:gap-3">
+                                    {renderIcon(feature2Svg, Laptop, "w-4 h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 text-rose-300")}
                                     <span>{feature2Text}</span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    {renderIcon(feature3Svg, MapPin, "w-4 h-4 text-rose-300")}
+                                <div className="flex items-center gap-2 xl:gap-3">
+                                    {renderIcon(feature3Svg, MapPin, "w-4 h-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6 text-rose-300")}
                                     <span>{feature3Text}</span>
                                 </div>
                             </motion.div>
@@ -277,7 +275,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
 
                         {/* Right Hero Image Column */}
                         <div className="lg:col-span-6 relative flex justify-end items-end h-full">
-                            <div className="absolute bottom-0 right-10 w-96 h-96 bg-rose-400/25 rounded-full blur-3xl pointer-events-none" />
+                            <div className="absolute bottom-0 right-10 w-96 h-96 xl:w-[500px] xl:h-[500px] 2xl:w-[680px] 2xl:h-[680px] bg-rose-400/25 rounded-full blur-3xl pointer-events-none" />
 
                             <motion.div
                                 style={{ y: y1, opacity }}
@@ -293,7 +291,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                                     height={1277}
                                     fetchPriority="high"
                                     decoding="async"
-                                    className="h-[540px] lg:h-[600px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)] transition-transform duration-500 hover:scale-[1.01]"
+                                    className="h-[540px] lg:h-[600px] xl:h-[680px] 2xl:h-[780px] 3xl:h-[880px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)] transition-transform duration-500 hover:scale-[1.01]"
                                 />
                             </motion.div>
                         </div>
