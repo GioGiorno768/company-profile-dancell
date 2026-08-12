@@ -53,7 +53,7 @@ Route::get('/seo/og-image', function () {
 
     return Response::make($binary, 200, [
         'Content-Type'  => $imageData['mime'],
-        'Cache-Control' => 'public, max-age=86400, s-maxage=86400',
+        'Cache-Control' => 'public, max-age=86400, must-revalidate',
     ]);
 })->name('seo.og_image');
 

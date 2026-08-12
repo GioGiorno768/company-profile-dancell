@@ -93,7 +93,7 @@ class ProfileController extends Controller
 
             $validated['og_image_data'] = base64_encode($binaryContent);
             $validated['og_image_mime'] = $mime;
-            $validated['og_image'] = route('seo.og_image');
+            $validated['og_image'] = route('seo.og_image') . '?v=' . time();
         }
 
         if (!empty($validated['google_site_verification']) && str_contains($validated['google_site_verification'], 'content=')) {
