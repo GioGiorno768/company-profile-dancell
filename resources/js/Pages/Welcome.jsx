@@ -10,10 +10,7 @@ import BranchNetwork from '../Components/Landing/BranchNetwork';
 import ContactFooter from '../Components/Landing/ContactFooter';
 
 export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerBrand, footer, branchSection, branches = [], canLogin, canRegister }) {
-    const rawOgImage = seo?.og_image || 'https://dancell-official.com/assets/images/og-dancell.jpg';
-    const ogImageUrl = rawOgImage.startsWith('http')
-        ? rawOgImage
-        : `https://dancell-official.com${rawOgImage.startsWith('/') ? '' : '/'}${rawOgImage}`;
+    const ogImageUrl = 'https://dancell-official.com/seo/og-image';
 
     return (
         <ReactLenis root options={{ lerp: 0.08, duration: 1.2, smoothWheel: true }}>

@@ -22,6 +22,41 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
+// ─── Dynamic OG Image Route (Stored in DB + Cache) ─────────────
+Route::get('/seo/og-image', function () {
+    $imageData = Cache::remember('seo_og_image_payload', 86400, function () {
+        $seo = SeoSetting::first();
+        if ($seo && !empty($seo->og_image_data)) {
+            return [
+                'data' => $seo->og_image_data,
+                'mime' => $seo->og_image_mime ?: 'image/jpeg',
+            ];
+        }
+
+        // Fallback: serve /images/hero.webp if DB blob does not exist yet
+        $fallbackPath = public_path('images/hero.webp');
+        if (file_exists($fallbackPath)) {
+            return [
+                'data' => base64_encode(file_get_contents($fallbackPath)),
+                'mime' => 'image/webp',
+            ];
+        }
+
+        return null;
+    });
+
+    if (!$imageData) {
+        abort(404);
+    }
+
+    $binary = base64_decode($imageData['data']);
+
+    return Response::make($binary, 200, [
+        'Content-Type'  => $imageData['mime'],
+        'Cache-Control' => 'public, max-age=86400, s-maxage=86400',
+    ]);
+})->name('seo.og_image');
+
 // ─── Dynamic XML Sitemap ───────────────────────────────────────────
 Route::get('/sitemap.xml', function () {
     $content = Cache::remember('sitemap_xml', 86400, function () {

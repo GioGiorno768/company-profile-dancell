@@ -87,8 +87,13 @@ class ProfileController extends Controller
         $seo = SeoSetting::firstOrCreate(['id' => 1]);
 
         if ($request->hasFile('og_image_file')) {
-            $path = $request->file('og_image_file')->store('seo', 'public');
-            $validated['og_image'] = '/storage/' . $path;
+            $file = $request->file('og_image_file');
+            $mime = $file->getClientMimeType() ?: 'image/jpeg';
+            $binaryContent = file_get_contents($file->getRealPath());
+
+            $validated['og_image_data'] = base64_encode($binaryContent);
+            $validated['og_image_mime'] = $mime;
+            $validated['og_image'] = route('seo.og_image');
         }
 
         if (!empty($validated['google_site_verification']) && str_contains($validated['google_site_verification'], 'content=')) {
@@ -99,9 +104,10 @@ class ProfileController extends Controller
 
         $seo->update($validated);
 
-        // Clear Redis Cache so Landing Page & Sitemap reflect updated SEO metadata instantly
+        // Clear Redis Cache so Landing Page, Sitemap & Dynamic OG Image Route reflect updated SEO metadata instantly
         Cache::forget('seo_setting_content');
         Cache::forget('sitemap_xml');
+        Cache::forget('seo_og_image_payload');
 
         return Redirect::route('profile.edit')->with('status', 'Pengaturan SEO Global 100% & File Gambar OG Share Berhasil Diperbarui!');
     }

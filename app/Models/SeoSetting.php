@@ -20,6 +20,8 @@ class SeoSetting extends Model
         'og_title',
         'og_description',
         'og_image',
+        'og_image_data',
+        'og_image_mime',
         'og_image_alt',
         'og_type',
         'twitter_card',

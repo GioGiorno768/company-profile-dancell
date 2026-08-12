@@ -9,10 +9,7 @@
             $seo = $page['props']['seo'] ?? null;
             if ($seo) {
                 $s = is_array($seo) ? (object) $seo : $seo;
-                $ogImg = $s->og_image ?? '/images/hero.webp';
-                if (!str_starts_with($ogImg, 'http')) {
-                    $ogImg = 'https://dancell-official.com' . (str_starts_with($ogImg, '/') ? '' : '/') . $ogImg;
-                }
+                $ogImg = 'https://dancell-official.com/seo/og-image';
                 $googleToken = $s->google_site_verification ?? '';
                 if ($googleToken && str_contains($googleToken, 'content="')) {
                     preg_match('/content="([^"]+)"/', $googleToken, $m);
@@ -20,7 +17,7 @@
                 }
             } else {
                 $s = null;
-                $ogImg = 'https://dancell-official.com/images/hero.webp';
+                $ogImg = 'https://dancell-official.com/seo/og-image';
                 $googleToken = '';
             }
 

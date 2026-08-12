@@ -88,15 +88,15 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
                 <meta property="og:type" content="website" head-key="og:type" />
                 <meta property="og:locale" content="id_ID" head-key="og:locale" />
                 <meta property="og:url" content="https://dancell-official.com/cabang" head-key="og:url" />
-                <meta property="og:image" content={seo?.og_image?.startsWith('http') ? seo.og_image : `https://dancell-official.com${seo?.og_image || '/images/hero.webp'}`} head-key="og:image" />
+                <meta property="og:image" content="https://dancell-official.com/seo/og-image" head-key="og:image" />
                 <meta property="og:image:width" content="1200" head-key="og:image:width" />
                 <meta property="og:image:height" content="630" head-key="og:image:height" />
 
                 {/* Twitter Cards */}
                 <meta name="twitter:card" content="summary_large_image" head-key="twitter:card" />
-                <meta name="twitter:title" content={`Daftar ${branches.length} Outlet Cabang Dancell — Ritel Gadget Jawa Timur`} head-key="twitter:title" />
+                <meta name="twitter:title" content={`Daftar ${branches.length || 58} Outlet Cabang Dancell — Ritel Gadget Jawa Timur`} head-key="twitter:title" />
                 <meta name="twitter:description" content="Temukan lokasi outlet cabang Dancell terdekat. Jaringan toko ritel gadget & HP garansi resmi terpercaya di Jawa Timur." head-key="twitter:description" />
-                <meta name="twitter:image" content={seo?.og_image?.startsWith('http') ? seo.og_image : `https://dancell-official.com${seo?.og_image || '/images/hero.webp'}`} head-key="twitter:image" />
+                <meta name="twitter:image" content="https://dancell-official.com/seo/og-image" head-key="twitter:image" />
 
                 {/* JSON-LD Structured Data: ItemList */}
                 <script type="application/ld+json">

@@ -82,6 +82,9 @@ class SeoSettingSeeder extends Seeder
             ],
         ];
 
+        $heroImagePath = public_path('images/hero.webp');
+        $defaultImageData = file_exists($heroImagePath) ? base64_encode(file_get_contents($heroImagePath)) : null;
+
         SeoSetting::updateOrCreate(
             ['id' => 1],
             [
@@ -94,7 +97,9 @@ class SeoSettingSeeder extends Seeder
                 'canonical_url' => 'https://dancell-official.com',
                 'og_title' => 'Dancell — 58 Outlet Ritel Gadget & Smartphone Terpercaya Jawa Timur',
                 'og_description' => 'Temukan cabang toko HP Dancell terdekat di Nganjuk, Kediri, Blitar, Jombang, Mojokerto, Sidoarjo, Lamongan, Madiun, & kota lainnya. Produk gadget original, garansi resmi, & promo spesial!',
-                'og_image' => 'https://dancell-official.com/images/hero.webp',
+                'og_image' => 'https://dancell-official.com/seo/og-image',
+                'og_image_data' => $defaultImageData,
+                'og_image_mime' => 'image/webp',
                 'og_image_alt' => 'Dancell Indonesia — Jaringan Outlet Ritel Gadget & Smartphone Terkemuka di Jawa Timur',
                 'og_type' => 'website',
                 'twitter_card' => 'summary_large_image',
