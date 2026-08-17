@@ -78,11 +78,13 @@ class PartnerBrandSettingController extends Controller
             'stat_4_label' => 'nullable|string|max:100',
             'smartphone_brands' => 'nullable|array',
             'smartphone_brands.*.name' => 'nullable|string|max:255',
+            'smartphone_brands.*.image' => 'nullable|string',
             'smartphone_brands.*.icon' => 'nullable|string',
             'smartphone_brands.*.tag' => 'nullable|string|max:100',
             'smartphone_brands.*.desc' => 'nullable|string',
             'accessory_brands' => 'nullable|array',
             'accessory_brands.*.name' => 'nullable|string|max:255',
+            'accessory_brands.*.image' => 'nullable|string',
             'accessory_brands.*.icon' => 'nullable|string',
             'accessory_brands.*.tag' => 'nullable|string|max:100',
             'accessory_brands.*.desc' => 'nullable|string',
@@ -92,7 +94,51 @@ class PartnerBrandSettingController extends Controller
         ]);
 
         $partnerBrand = PartnerBrandSetting::firstOrCreate(['id' => 1]);
-        $partnerBrand->update($validated);
+
+        $smartphoneBrands = $request->input('smartphone_brands', []);
+        if (is_array($smartphoneBrands)) {
+            foreach ($smartphoneBrands as $index => &$brand) {
+                // Check if a file was uploaded for this brand item
+                if ($request->hasFile("smartphone_brands.{$index}.image_file")) {
+                    $file = $request->file("smartphone_brands.{$index}.image_file");
+                    $path = $file->store('brands', 'public');
+                    $brand['image'] = '/storage/' . $path;
+                }
+                unset($brand['image_file']);
+            }
+        }
+
+        $accessoryBrands = $request->input('accessory_brands', []);
+        if (is_array($accessoryBrands)) {
+            foreach ($accessoryBrands as $index => &$brand) {
+                // Check if a file was uploaded for this brand item
+                if ($request->hasFile("accessory_brands.{$index}.image_file")) {
+                    $file = $request->file("accessory_brands.{$index}.image_file");
+                    $path = $file->store('brands', 'public');
+                    $brand['image'] = '/storage/' . $path;
+                }
+                unset($brand['image_file']);
+            }
+        }
+
+        $partnerBrand->update([
+            'header_badge' => $validated['header_badge'] ?? null,
+            'header_title' => $validated['header_title'] ?? null,
+            'header_description' => $validated['header_description'] ?? null,
+            'stat_1_val' => $validated['stat_1_val'] ?? null,
+            'stat_1_label' => $validated['stat_1_label'] ?? null,
+            'stat_2_val' => $validated['stat_2_val'] ?? null,
+            'stat_2_label' => $validated['stat_2_label'] ?? null,
+            'stat_3_val' => $validated['stat_3_val'] ?? null,
+            'stat_3_label' => $validated['stat_3_label'] ?? null,
+            'stat_4_val' => $validated['stat_4_val'] ?? null,
+            'stat_4_label' => $validated['stat_4_label'] ?? null,
+            'smartphone_brands' => $smartphoneBrands,
+            'accessory_brands' => $accessoryBrands,
+            'footer_note' => $validated['footer_note'] ?? null,
+            'cta_btn_text' => $validated['cta_btn_text'] ?? null,
+            'cta_btn_link' => $validated['cta_btn_link'] ?? null,
+        ]);
 
         // Invalidate Redis Cache
         Cache::forget('partner_brand_setting_content');

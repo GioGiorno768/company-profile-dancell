@@ -59,7 +59,55 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('admin.content.mitra.update'));
+        post(route('admin.content.mitra.update'), {
+            forceFormData: true,
+        });
+    };
+
+    // Helper to upload image file for smartphone brand
+    const handleUploadSmartphoneBrandLogo = (index, file) => {
+        if (!file) return;
+        const updated = [...data.smartphone_brands];
+        updated[index] = {
+            ...updated[index],
+            image_file: file,
+            image_preview: URL.createObjectURL(file),
+        };
+        setData('smartphone_brands', updated);
+    };
+
+    const handleClearSmartphoneBrandImage = (index) => {
+        const updated = [...data.smartphone_brands];
+        updated[index] = {
+            ...updated[index],
+            image: '',
+            image_file: null,
+            image_preview: null,
+        };
+        setData('smartphone_brands', updated);
+    };
+
+    // Helper to upload image file for accessory brand
+    const handleUploadAccessoryBrandLogo = (index, file) => {
+        if (!file) return;
+        const updated = [...data.accessory_brands];
+        updated[index] = {
+            ...updated[index],
+            image_file: file,
+            image_preview: URL.createObjectURL(file),
+        };
+        setData('accessory_brands', updated);
+    };
+
+    const handleClearAccessoryBrandImage = (index) => {
+        const updated = [...data.accessory_brands];
+        updated[index] = {
+            ...updated[index],
+            image: '',
+            image_file: null,
+            image_preview: null,
+        };
+        setData('accessory_brands', updated);
     };
 
     // Smartphone Brand CRUD
@@ -392,177 +440,211 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                         >
                                             <div className="flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
                                                 <div className="flex items-center gap-2">
-                                                    <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1">
-                                                        {b.image && b.image.trim() !== '' ? (
-                                                            <img src={b.image} alt={b.name} className="w-full h-full object-contain" />
-                                                        ) : (
-                                                            <Icon icon={b.icon || 'simple-icons:apple'} className="w-4 h-4" />
-                                                        )}
-                                                    </div>
-                                                    <span className="text-xs font-bold text-slate-900">
-                                                        {b.name || `Brand #${index + 1}`}
-                                                    </span>
-                                                </div>
+                                                    <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1 border border-slate-700">
+                                                        {b.image_preview ? (
+                                                             <img src={b.image_preview} alt={b.name} className="w-full h-full object-contain" />
+                                                         ) : b.image && b.image.trim() !== '' ? (
+                                                             <img src={b.image} alt={b.name} className="w-full h-full object-contain" />
+                                                         ) : (
+                                                             <Icon icon={b.icon || 'simple-icons:apple'} className="w-5 h-5" />
+                                                         )}
+                                                     </div>
+                                                     <span className="text-xs font-bold text-slate-900">
+                                                         {b.name || `Brand #${index + 1}`}
+                                                     </span>
+                                                 </div>
 
-                                                {/* Delete Button */}
-                                                {data.smartphone_brands.length > 1 && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleRemoveSmartphoneBrand(index)}
-                                                        className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/50 transition-colors"
-                                                        title="Hapus Brand"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
-                                                )}
-                                            </div>
+                                                 {/* Delete Button */}
+                                                 {data.smartphone_brands.length > 1 && (
+                                                     <button
+                                                         type="button"
+                                                         onClick={() => handleRemoveSmartphoneBrand(index)}
+                                                         className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/50 transition-colors"
+                                                         title="Hapus Brand"
+                                                     >
+                                                         <Trash2 className="w-4 h-4" />
+                                                     </button>
+                                                 )}
+                                             </div>
 
-                                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                                                <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Nama Brand</label>
-                                                    <input
-                                                        type="text"
-                                                        value={b.name}
-                                                        onChange={(e) => handleUpdateSmartphoneBrand(index, 'name', e.target.value)}
-                                                        placeholder="Apple"
-                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-900"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">URL / Path Logo Gambar (Opsional)</label>
-                                                    <input
-                                                        type="text"
-                                                        value={b.image || ''}
-                                                        onChange={(e) => handleUpdateSmartphoneBrand(index, 'image', e.target.value)}
-                                                        placeholder="/images/brands/apple.png atau URL"
-                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-[11px] text-slate-800"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Kode Iconify (Fallback)</label>
-                                                    <input
-                                                        type="text"
-                                                        value={b.icon}
-                                                        onChange={(e) => handleUpdateSmartphoneBrand(index, 'icon', e.target.value)}
-                                                        placeholder="simple-icons:apple"
-                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-mono text-slate-800"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Badge Tag</label>
-                                                    <input
-                                                        type="text"
-                                                        value={b.tag}
-                                                        onChange={(e) => handleUpdateSmartphoneBrand(index, 'tag', e.target.value)}
-                                                        placeholder="Official Partner"
-                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
-                                                    />
-                                                </div>
-                                            </div>
+                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                                 <div>
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Nama Brand</label>
+                                                     <input
+                                                         type="text"
+                                                         value={b.name}
+                                                         onChange={(e) => handleUpdateSmartphoneBrand(index, 'name', e.target.value)}
+                                                         placeholder="Apple"
+                                                         className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-900"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Upload File Logo Gambar</label>
+                                                     <div className="flex items-center gap-1.5">
+                                                         <label className="flex-1 cursor-pointer inline-flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs overflow-hidden">
+                                                             <span className="truncate">
+                                                                 {b.image_file ? b.image_file.name : (b.image ? 'Ganti Logo File' : 'Pilih File Gambar')}
+                                                             </span>
+                                                             <input
+                                                                 type="file"
+                                                                 accept="image/*"
+                                                                 className="hidden"
+                                                                 onChange={(e) => handleUploadSmartphoneBrandLogo(index, e.target.files[0])}
+                                                             />
+                                                         </label>
+                                                         {(b.image_preview || (b.image && b.image.trim() !== '')) && (
+                                                             <button
+                                                                 type="button"
+                                                                 onClick={() => handleClearSmartphoneBrandImage(index)}
+                                                                 className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-slate-200"
+                                                                 title="Reset/Hapus Gambar"
+                                                             >
+                                                                 <Trash2 className="w-3.5 h-3.5" />
+                                                             </button>
+                                                         )}
+                                                     </div>
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Kode Iconify (Fallback)</label>
+                                                     <input
+                                                         type="text"
+                                                         value={b.icon}
+                                                         onChange={(e) => handleUpdateSmartphoneBrand(index, 'icon', e.target.value)}
+                                                         placeholder="simple-icons:apple"
+                                                         className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-mono text-slate-800"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Badge Tag</label>
+                                                     <input
+                                                         type="text"
+                                                         value={b.tag}
+                                                         onChange={(e) => handleUpdateSmartphoneBrand(index, 'tag', e.target.value)}
+                                                         placeholder="Official Partner"
+                                                         className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
+                                                     />
+                                                 </div>
+                                                 <div className="sm:col-span-2">
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Deskripsi Ringkas Ekosistem</label>
+                                                     <input
+                                                         type="text"
+                                                         value={b.desc}
+                                                         onChange={(e) => handleUpdateSmartphoneBrand(index, 'desc', e.target.value)}
+                                                         placeholder="iPhone, iPad & Mac ecosystem"
+                                                         className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
+                                                     />
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     ))}
+                                 </div>
+                             )}
 
-                                            <div>
-                                                <label className="block text-[11px] font-medium text-slate-700 mb-1">Deskripsi Ringkas Ekosistem</label>
-                                                <input
-                                                    type="text"
-                                                    value={b.desc}
-                                                    onChange={(e) => handleUpdateSmartphoneBrand(index, 'desc', e.target.value)}
-                                                    placeholder="iPhone, iPad & Mac ecosystem"
-                                                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                             {/* BARIS 2: ACCESSORY BRANDS */}
+                             {brandTab === 'accessory' && (
+                                 <div className="space-y-4">
+                                     {data.accessory_brands.map((b, index) => (
+                                         <div
+                                             key={`ac-${index}`}
+                                             className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 transition-all duration-200 space-y-3"
+                                         >
+                                             <div className="flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
+                                                 <div className="flex items-center gap-2">
+                                                     <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1 border border-slate-700">
+                                                         {b.image_preview ? (
+                                                             <img src={b.image_preview} alt={b.name} className="w-full h-full object-contain" />
+                                                         ) : b.image && b.image.trim() !== '' ? (
+                                                             <img src={b.image} alt={b.name} className="w-full h-full object-contain" />
+                                                         ) : (
+                                                             <Icon icon={b.icon || 'simple-icons:sony'} className="w-5 h-5" />
+                                                         )}
+                                                     </div>
+                                                     <span className="text-xs font-bold text-slate-900">
+                                                         {b.name || `Brand #${index + 1}`}
+                                                     </span>
+                                                 </div>
 
-                            {/* BARIS 2: ACCESSORY BRANDS */}
-                            {brandTab === 'accessory' && (
-                                <div className="space-y-4">
-                                    {data.accessory_brands.map((b, index) => (
-                                        <div
-                                            key={`ac-${index}`}
-                                            className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 transition-all duration-200 space-y-3"
-                                        >
-                                            <div className="flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1">
-                                                        {b.image && b.image.trim() !== '' ? (
-                                                            <img src={b.image} alt={b.name} className="w-full h-full object-contain" />
-                                                        ) : (
-                                                            <Icon icon={b.icon || 'simple-icons:sony'} className="w-4 h-4" />
-                                                        )}
-                                                    </div>
-                                                    <span className="text-xs font-bold text-slate-900">
-                                                        {b.name || `Brand #${index + 1}`}
-                                                    </span>
-                                                </div>
+                                                 {/* Delete Button */}
+                                                 {data.accessory_brands.length > 1 && (
+                                                     <button
+                                                         type="button"
+                                                         onClick={() => handleRemoveAccessoryBrand(index)}
+                                                         className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/50 transition-colors"
+                                                         title="Hapus Brand"
+                                                     >
+                                                         <Trash2 className="w-4 h-4" />
+                                                     </button>
+                                                 )}
+                                             </div>
 
-                                                {/* Delete Button */}
-                                                {data.accessory_brands.length > 1 && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleRemoveAccessoryBrand(index)}
-                                                        className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/50 transition-colors"
-                                                        title="Hapus Brand"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
-                                                )}
-                                            </div>
-
-                                            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                                                <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Nama Brand</label>
-                                                    <input
-                                                        type="text"
-                                                        value={b.name}
-                                                        onChange={(e) => handleUpdateAccessoryBrand(index, 'name', e.target.value)}
-                                                        placeholder="Sony"
-                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-900"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">URL / Path Logo Gambar (Opsional)</label>
-                                                    <input
-                                                        type="text"
-                                                        value={b.image || ''}
-                                                        onChange={(e) => handleUpdateAccessoryBrand(index, 'image', e.target.value)}
-                                                        placeholder="/images/brands/sony.png atau URL"
-                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-[11px] text-slate-800"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Kode Iconify (Fallback)</label>
-                                                    <input
-                                                        type="text"
-                                                        value={b.icon}
-                                                        onChange={(e) => handleUpdateAccessoryBrand(index, 'icon', e.target.value)}
-                                                        placeholder="simple-icons:sony"
-                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-mono text-slate-800"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[11px] font-medium text-slate-700 mb-1">Badge Tag</label>
-                                                    <input
-                                                        type="text"
-                                                        value={b.tag}
-                                                        onChange={(e) => handleUpdateAccessoryBrand(index, 'tag', e.target.value)}
-                                                        placeholder="Official Audio"
-                                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <label className="block text-[11px] font-medium text-slate-700 mb-1">Deskripsi Ringkas Ekosistem</label>
-                                                <input
-                                                    type="text"
-                                                    value={b.desc}
-                                                    onChange={(e) => handleUpdateAccessoryBrand(index, 'desc', e.target.value)}
-                                                    placeholder="WH-1000XM & WF Series"
-                                                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
-                                                />
-                                            </div>
+                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                                 <div>
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Nama Brand</label>
+                                                     <input
+                                                         type="text"
+                                                         value={b.name}
+                                                         onChange={(e) => handleUpdateAccessoryBrand(index, 'name', e.target.value)}
+                                                         placeholder="Sony"
+                                                         className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-900"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Upload File Logo Gambar</label>
+                                                     <div className="flex items-center gap-1.5">
+                                                         <label className="flex-1 cursor-pointer inline-flex items-center justify-center gap-1 px-2.5 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs overflow-hidden">
+                                                             <span className="truncate">
+                                                                 {b.image_file ? b.image_file.name : (b.image ? 'Ganti Logo File' : 'Pilih File Gambar')}
+                                                             </span>
+                                                             <input
+                                                                 type="file"
+                                                                 accept="image/*"
+                                                                 className="hidden"
+                                                                 onChange={(e) => handleUploadAccessoryBrandLogo(index, e.target.files[0])}
+                                                             />
+                                                         </label>
+                                                         {(b.image_preview || (b.image && b.image.trim() !== '')) && (
+                                                             <button
+                                                                 type="button"
+                                                                 onClick={() => handleClearAccessoryBrandImage(index)}
+                                                                 className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-slate-200"
+                                                                 title="Reset/Hapus Gambar"
+                                                             >
+                                                                 <Trash2 className="w-3.5 h-3.5" />
+                                                             </button>
+                                                         )}
+                                                     </div>
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Kode Iconify (Fallback)</label>
+                                                     <input
+                                                         type="text"
+                                                         value={b.icon}
+                                                         onChange={(e) => handleUpdateAccessoryBrand(index, 'icon', e.target.value)}
+                                                         placeholder="simple-icons:sony"
+                                                         className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-mono text-slate-800"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Badge Tag</label>
+                                                     <input
+                                                         type="text"
+                                                         value={b.tag}
+                                                         onChange={(e) => handleUpdateAccessoryBrand(index, 'tag', e.target.value)}
+                                                         placeholder="Official Audio"
+                                                         className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
+                                                     />
+                                                 </div>
+                                                 <div className="sm:col-span-2">
+                                                     <label className="block text-[11px] font-medium text-slate-700 mb-1">Deskripsi Ringkas Ekosistem</label>
+                                                     <input
+                                                         type="text"
+                                                         value={b.desc}
+                                                         onChange={(e) => handleUpdateAccessoryBrand(index, 'desc', e.target.value)}
+                                                         placeholder="WH-1000XM & WF Series"
+                                                         className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900"
+                                                     />
+                                                 </div>
+                                             </div>
                                         </div>
                                     ))}
                                 </div>
