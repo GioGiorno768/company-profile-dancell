@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Layers, 
     Award, 
@@ -18,7 +19,8 @@ import {
 import { Icon } from '@iconify/react';
 
 export default function PartnerBrandSetting({ partnerBrand, status }) {
-    const [brandTab, setBrandTab] = useState('smartphone'); // 'smartphone' | 'accessory'
+    const [brandTab, setBrandTab] = useState('smartphone');
+    const [brandLogoModal, setBrandLogoModal] = useState(null); // 'smartphone' | 'accessory'
 
     const { data, setData, post, processing } = useForm({
         header_badge: partnerBrand?.header_badge || 'Mitra Resmi Brand Dunia',
@@ -64,16 +66,22 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
         });
     };
 
-    // Helper to upload image file for smartphone brand
+    // Helper to upload image file for smartphone brand using robust Base64 Data URL
     const handleUploadSmartphoneBrandLogo = (index, file) => {
         if (!file) return;
-        const updated = [...data.smartphone_brands];
-        updated[index] = {
-            ...updated[index],
-            image_file: file,
-            image_preview: URL.createObjectURL(file),
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64Data = e.target.result;
+            const updated = [...data.smartphone_brands];
+            updated[index] = {
+                ...updated[index],
+                image: base64Data,
+                image_file: file,
+                image_preview: base64Data,
+            };
+            setData('smartphone_brands', updated);
         };
-        setData('smartphone_brands', updated);
+        reader.readAsDataURL(file);
     };
 
     const handleClearSmartphoneBrandImage = (index) => {
@@ -87,16 +95,22 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
         setData('smartphone_brands', updated);
     };
 
-    // Helper to upload image file for accessory brand
+    // Helper to upload image file for accessory brand using robust Base64 Data URL
     const handleUploadAccessoryBrandLogo = (index, file) => {
         if (!file) return;
-        const updated = [...data.accessory_brands];
-        updated[index] = {
-            ...updated[index],
-            image_file: file,
-            image_preview: URL.createObjectURL(file),
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64Data = e.target.result;
+            const updated = [...data.accessory_brands];
+            updated[index] = {
+                ...updated[index],
+                image: base64Data,
+                image_file: file,
+                image_preview: base64Data,
+            };
+            setData('accessory_brands', updated);
         };
-        setData('accessory_brands', updated);
+        reader.readAsDataURL(file);
     };
 
     const handleClearAccessoryBrandImage = (index) => {
@@ -440,11 +454,9 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                         >
                                             <div className="flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
                                                 <div className="flex items-center gap-2">
-                                                    <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1 border border-slate-700">
-                                                        {b.image_preview ? (
-                                                             <img src={b.image_preview} alt={b.name} className="w-full h-full object-contain" />
-                                                         ) : b.image && b.image.trim() !== '' ? (
-                                                             <img src={b.image} alt={b.name} className="w-full h-full object-contain" />
+                                                    <div onClick={() => setBrandLogoModal(b)} className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1 border border-slate-700 cursor-pointer hover:border-rose-400 hover:scale-105 transition-all" title="Klik untuk lihat gambar logo jelas">
+                                                        {b.image && b.image.trim() !== '' && !b.image.startsWith('blob:') ? (
+                                                             <img src={b.image} alt={b.name} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
                                                          ) : (
                                                              <Icon icon={b.icon || 'simple-icons:apple'} className="w-5 h-5" />
                                                          )}
@@ -492,6 +504,14 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                                                  onChange={(e) => handleUploadSmartphoneBrandLogo(index, e.target.files[0])}
                                                              />
                                                          </label>
+                                                         <button
+                                                             type="button"
+                                                             onClick={() => setBrandLogoModal(b)}
+                                                             className="p-2 rounded-xl text-slate-600 hover:text-[#800020] hover:bg-rose-50 border border-slate-200 transition-colors cursor-pointer"
+                                                             title="Lihat Pratinjau Logo"
+                                                         >
+                                                             <Eye className="w-3.5 h-3.5" />
+                                                         </button>
                                                          {(b.image_preview || (b.image && b.image.trim() !== '')) && (
                                                              <button
                                                                  type="button"
@@ -550,11 +570,9 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                          >
                                              <div className="flex items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
                                                  <div className="flex items-center gap-2">
-                                                     <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1 border border-slate-700">
-                                                         {b.image_preview ? (
-                                                             <img src={b.image_preview} alt={b.name} className="w-full h-full object-contain" />
-                                                         ) : b.image && b.image.trim() !== '' ? (
-                                                             <img src={b.image} alt={b.name} className="w-full h-full object-contain" />
+                                                     <div onClick={() => setBrandLogoModal(b)} className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 overflow-hidden p-1 border border-slate-700 cursor-pointer hover:border-rose-400 hover:scale-105 transition-all" title="Klik untuk lihat gambar logo jelas">
+                                                         {b.image && b.image.trim() !== '' && !b.image.startsWith('blob:') ? (
+                                                             <img src={b.image} alt={b.name} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
                                                          ) : (
                                                              <Icon icon={b.icon || 'simple-icons:sony'} className="w-5 h-5" />
                                                          )}
@@ -602,6 +620,14 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                                                  onChange={(e) => handleUploadAccessoryBrandLogo(index, e.target.files[0])}
                                                              />
                                                          </label>
+                                                         <button
+                                                             type="button"
+                                                             onClick={() => setBrandLogoModal(b)}
+                                                             className="p-2 rounded-xl text-slate-600 hover:text-[#800020] hover:bg-rose-50 border border-slate-200 transition-colors cursor-pointer"
+                                                             title="Lihat Pratinjau Logo"
+                                                         >
+                                                             <Eye className="w-3.5 h-3.5" />
+                                                         </button>
                                                          {(b.image_preview || (b.image && b.image.trim() !== '')) && (
                                                              <button
                                                                  type="button"
@@ -778,7 +804,7 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                         <span className="text-[9px] font-bold text-rose-300 uppercase block">Baris 1 ({data.smartphone_brands.length} Brand):</span>
                                         <div className="flex flex-wrap gap-1.5">
                                             {data.smartphone_brands.map((b, idx) => (
-                                                <span key={`sm-p-${idx}`} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/10 text-[9px] font-medium text-white border border-white/10">
+                                                <span key={`sm-p-${idx}`} onClick={() => setBrandLogoModal(b)} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/10 hover:bg-[#800020] text-[9px] font-medium text-white border border-white/10 hover:border-rose-300 transition-all cursor-pointer" title="Klik untuk lihat pratinjau">
                                                     <Icon icon={b.icon || 'simple-icons:apple'} className="w-3 h-3 text-rose-300" />
                                                     {b.name}
                                                 </span>
@@ -791,7 +817,7 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                                         <span className="text-[9px] font-bold text-amber-300 uppercase block">Baris 2 ({data.accessory_brands.length} Brand):</span>
                                         <div className="flex flex-wrap gap-1.5">
                                             {data.accessory_brands.map((b, idx) => (
-                                                <span key={`ac-p-${idx}`} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/10 text-[9px] font-medium text-white border border-white/10">
+                                                <span key={`ac-p-${idx}`} onClick={() => setBrandLogoModal(b)} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/10 hover:bg-[#800020] text-[9px] font-medium text-white border border-white/10 hover:border-amber-300 transition-all cursor-pointer" title="Klik untuk lihat pratinjau">
                                                     <Icon icon={b.icon || 'simple-icons:sony'} className="w-3 h-3 text-amber-300" />
                                                     {b.name}
                                                 </span>
@@ -828,6 +854,73 @@ export default function PartnerBrandSetting({ partnerBrand, status }) {
                 </form>
 
             </div>
+        
+            {/* BRAND LOGO LIGHTBOX MODAL */}
+            <AnimatePresence>
+                {brandLogoModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setBrandLogoModal(null)}
+                            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity"
+                        />
+
+                        {/* Modal Box */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 15 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 15 }}
+                            className="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 text-slate-900 shadow-2xl z-10 overflow-hidden text-center"
+                        >
+                            <button
+                                type="button"
+                                onClick={() => setBrandLogoModal(null)}
+                                className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                            >
+                                <Trash2 className="w-4 h-4 hidden" />
+                                ✕
+                            </button>
+
+                            <div className="space-y-4">
+                                <span className="inline-block px-3 py-1 rounded-full bg-rose-50 text-[#800020] text-xs font-semibold border border-rose-100">
+                                    {brandLogoModal.tag || 'Official Partner'}
+                                </span>
+
+                                <div className="w-32 h-32 mx-auto rounded-2xl bg-slate-900 p-4 flex items-center justify-center border border-slate-800 shadow-xl overflow-hidden">
+                                    {brandLogoModal.image && brandLogoModal.image.trim() !== '' && !brandLogoModal.image.startsWith('blob:') ? (
+                                        <img src={brandLogoModal.image} alt={brandLogoModal.name} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                    ) : (
+                                        <Icon icon={brandLogoModal.icon || 'simple-icons:apple'} className="w-16 h-16 text-white" />
+                                    )}
+                                </div>
+
+                                <div>
+                                    <h3 className="text-2xl font-bold font-['Raleway'] text-slate-900">
+                                        {brandLogoModal.name || 'Detail Logo Brand'}
+                                    </h3>
+                                    {brandLogoModal.desc && (
+                                        <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                                            {brandLogoModal.desc}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setBrandLogoModal(null)}
+                                    className="w-full py-2.5 rounded-xl bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors"
+                                >
+                                    Tutup Pratinjau
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </AdminLayout>
+
     );
 }

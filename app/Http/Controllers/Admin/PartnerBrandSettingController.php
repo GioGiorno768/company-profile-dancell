@@ -101,10 +101,14 @@ class PartnerBrandSettingController extends Controller
                 // Check if a file was uploaded for this brand item
                 if ($request->hasFile("smartphone_brands.{$index}.image_file")) {
                     $file = $request->file("smartphone_brands.{$index}.image_file");
-                    $path = $file->store('brands', 'public');
-                    $brand['image'] = '/storage/' . $path;
+                    $mime = $file->getClientMimeType() ?: 'image/png';
+                    $binary = file_get_contents($file->getRealPath());
+                    $base64 = base64_encode($binary);
+                    $brand['image'] = 'data:' . $mime . ';base64,' . $base64;
                 }
                 unset($brand['image_file']);
+                unset($brand['image_preview']);
+                unset($brand['image_preview']);
             }
         }
 
@@ -114,8 +118,10 @@ class PartnerBrandSettingController extends Controller
                 // Check if a file was uploaded for this brand item
                 if ($request->hasFile("accessory_brands.{$index}.image_file")) {
                     $file = $request->file("accessory_brands.{$index}.image_file");
-                    $path = $file->store('brands', 'public');
-                    $brand['image'] = '/storage/' . $path;
+                    $mime = $file->getClientMimeType() ?: 'image/png';
+                    $binary = file_get_contents($file->getRealPath());
+                    $base64 = base64_encode($binary);
+                    $brand['image'] = 'data:' . $mime . ';base64,' . $base64;
                 }
                 unset($brand['image_file']);
             }

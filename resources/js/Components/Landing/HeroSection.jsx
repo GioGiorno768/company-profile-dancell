@@ -122,7 +122,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                                 alt="Tim Pelayanan Dancell"
                                 width={1200}
                                 height={1277}
-                                fetchPriority="high"
+                                fetchpriority="high"
                                 decoding="async"
                                 className="h-[260px] sm:h-[380px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)] relative z-0 -mb-6"
                             />
@@ -289,7 +289,7 @@ export default function HeroSection({ hero, heroImageSrc = "/images/hero.webp" }
                                     alt="Tim Pelayanan Dancell"
                                     width={1200}
                                     height={1277}
-                                    fetchPriority="high"
+                                    fetchpriority="high"
                                     decoding="async"
                                     className="h-[540px] lg:h-[600px] xl:h-[680px] 2xl:h-[780px] 3xl:h-[880px] w-auto object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)] transition-transform duration-500 hover:scale-[1.01]"
                                 />

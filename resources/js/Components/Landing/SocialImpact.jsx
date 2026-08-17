@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import { 
     Award, 
     ShieldCheck, 
-    ExternalLink
+    ExternalLink,
+    X,
+    Sparkles,
+    MapPin,
+    CheckCircle2,
+    Check
 } from 'lucide-react';
 
 export default function SocialImpact({ partnerBrand }) {
     const [activeBrand, setActiveBrand] = useState(null);
+    const [selectedBrandModal, setSelectedBrandModal] = useState(null);
 
     const headerBadge = partnerBrand?.header_badge || 'Mitra Resmi Brand Dunia';
     const headerTitle = partnerBrand?.header_title || 'Official Brand Partner & Distributor Ritel';
@@ -137,11 +143,12 @@ export default function SocialImpact({ partnerBrand }) {
                         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-slate-900 to-transparent z-20" />
                         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-slate-900 to-transparent z-20" />
 
-                        <div className="animate-marquee gap-5 flex items-center">
+                        <div className="animate-marquee gap-5 flex items-center relative z-30 pointer-events-auto">
                             {marqueeRow1.map((brand, idx) => (
                                 <motion.div
                                     key={`r1-${idx}`}
                                     onMouseEnter={() => setActiveBrand(brand)}
+                                    onClick={() => setSelectedBrandModal(brand)}
                                     whileHover={{ scale: 1.05, y: -4 }}
                                     className="shrink-0 group relative bg-white/5 hover:bg-[#800020] border border-white/10 hover:border-rose-300/80 px-6 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-lg min-w-[210px]"
                                 >
@@ -178,11 +185,12 @@ export default function SocialImpact({ partnerBrand }) {
                         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-slate-900 to-transparent z-20" />
                         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-slate-900 to-transparent z-20" />
 
-                        <div className="animate-marquee-reverse gap-5 flex items-center">
+                        <div className="animate-marquee-reverse gap-5 flex items-center relative z-30 pointer-events-auto">
                             {marqueeRow2.map((brand, idx) => (
                                 <motion.div
                                     key={`r2-${idx}`}
                                     onMouseEnter={() => setActiveBrand(brand)}
+                                    onClick={() => setSelectedBrandModal(brand)}
                                     whileHover={{ scale: 1.05, y: -4 }}
                                     className="shrink-0 group relative bg-white/5 hover:bg-[#800020] border border-white/10 hover:border-rose-300/80 px-6 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-lg min-w-[210px]"
                                 >
@@ -231,6 +239,127 @@ export default function SocialImpact({ partnerBrand }) {
 
                 </div>
             </div>
+        
+            {/* BRAND DETAIL MODAL LIGHTBOX */}
+            <AnimatePresence>
+                {selectedBrandModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+                        
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setSelectedBrandModal(null)}
+                            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity"
+                        />
+
+                        {/* Modal Dialog Card */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+                            className="relative w-full max-w-lg bg-gradient-to-br from-slate-900 via-slate-900 to-[#36000d] border border-white/15 rounded-3xl p-6 sm:p-8 text-white shadow-2xl z-10 overflow-hidden"
+                        >
+                            {/* Ambient Glows */}
+                            <div className="absolute top-0 right-0 w-48 h-48 bg-rose-600/20 rounded-full blur-3xl pointer-events-none" />
+                            <div className="absolute bottom-0 left-0 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                            {/* Close Button */}
+                            <button
+                                onClick={() => setSelectedBrandModal(null)}
+                                className="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors border border-white/10 z-20"
+                                title="Tutup Modal"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+
+                            {/* Content Layout */}
+                            <div className="space-y-6 relative z-10 text-center sm:text-left">
+                                
+                                {/* Badge Tag Top Header */}
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-200 text-xs font-semibold tracking-wide">
+                                    <Sparkles className="w-3.5 h-3.5 text-rose-300" />
+                                    <span>{selectedBrandModal.tag || 'Official Brand Partner'}</span>
+                                </div>
+
+                                {/* Logo Presentation Showcase Box */}
+                                <div className="flex flex-col sm:flex-row items-center gap-5 pt-2">
+                                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white p-4 flex items-center justify-center shrink-0 shadow-xl border border-white/20 overflow-hidden group">
+                                        {selectedBrandModal.image && selectedBrandModal.image.trim() !== '' ? (
+                                            <img 
+                                                src={selectedBrandModal.image} 
+                                                alt={selectedBrandModal.name} 
+                                                className="w-full h-full object-contain filter group-hover:scale-105 transition-transform duration-300" 
+                                            />
+                                        ) : selectedBrandModal.icon && selectedBrandModal.icon.includes('<svg') ? (
+                                            <span dangerouslySetInnerHTML={{ __html: selectedBrandModal.icon }} className="w-12 h-12 flex items-center justify-center text-slate-900" />
+                                        ) : (
+                                            <Icon icon={selectedBrandModal.icon || 'simple-icons:apple'} className="w-12 h-12 text-slate-900" />
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-1.5 text-center sm:text-left">
+                                        <h3 className="text-2xl sm:text-3xl font-bold font-['Raleway'] tracking-tight text-white">
+                                            {selectedBrandModal.name}
+                                        </h3>
+                                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs text-rose-200/90 font-medium">
+                                            <span className="flex items-center gap-1">
+                                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                                                100% Produk Original
+                                            </span>
+                                            <span className="text-white/30">•</span>
+                                            <span>Garansi Resmi</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Ecosystem & Product Description Box */}
+                                {selectedBrandModal.desc && (
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+                                        <span className="text-[11px] font-semibold text-rose-200 uppercase tracking-wider block">
+                                            Lini Produk & Ekosistem
+                                        </span>
+                                        <p className="text-sm text-slate-200 leading-relaxed font-normal">
+                                            {selectedBrandModal.desc}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Trust Highlight */}
+                                <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300 flex items-center gap-2.5">
+                                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                                    <span>Tersedia lengkap dengan promo spesial & garansi resmi di 58 outlet Dancell Jawa Timur.</span>
+                                </div>
+
+                                {/* Modal Action Buttons */}
+                                <div className="flex sm:flex-row flex-col gap-3 pt-2">
+                                    <a
+                                        href={ctaBtnLink}
+                                        onClick={() => setSelectedBrandModal(null)}
+                                        className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white text-[#800020] hover:bg-rose-50 font-semibold text-xs shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                                    >
+                                        <MapPin className="w-4 h-4 text-[#800020]" />
+                                        <span>Temukan Outlet Dancell Terdekat</span>
+                                    </a>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSelectedBrandModal(null)}
+                                        className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-medium text-xs hover:bg-white/20 transition-colors"
+                                    >
+                                        Tutup
+                                    </button>
+                                </div>
+
+                            </div>
+                        </motion.div>
+
+                    </div>
+                )}
+            </AnimatePresence>
+
         </section>
+
     );
 }
