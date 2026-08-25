@@ -1,9 +1,12 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from '@inertiajs/react';
-import { MapPin, Store, Navigation, ShieldCheck, ArrowRight } from 'lucide-react';
+import { MapPin, Store, Navigation, ShieldCheck, ArrowRight, Map as MapIcon, LayoutGrid } from 'lucide-react';
+import BranchMap from './BranchMap';
 
 export default function BranchNetwork({ branchSection = null, branches = [] }) {
+    const [viewMode, setViewMode] = useState('map'); // 'map' | 'grid' (default: 'map' to immediately showcase the Leaflet map)
+    
     const defaultBranches = [
         { name: 'Dancell Warujayeng (HQ)', city: 'Nganjuk', area: 'Pusat Nganjuk', year: '2008', opening_hours: 'Buka Setiap Hari', is_hq: true, isHQ: true },
         { name: 'Dancell Mojoroto', city: 'Kediri', area: 'Mojoroto', year: '2020', opening_hours: 'Buka Setiap Hari' },
@@ -30,13 +33,13 @@ export default function BranchNetwork({ branchSection = null, branches = [] }) {
     const ctaLink = branchSection?.cta_btn_link || '#contact';
 
     return (
-        <section id="branches" className="py-20 bg-slate-50 relative overflow-hidden">
+        <section id="branches" className="py-20 bg-slate-50 relative overflow-hidden font-['Raleway']">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
                     <div className="space-y-3 max-w-2xl">
-                        <span className="px-3.5 py-1 rounded-full bg-rose-100/80 text-[#800020] text-xs font-normal uppercase tracking-wider">
+                        <span className="px-3.5 py-1 rounded-full bg-rose-100/80 text-[#800020] text-xs font-semibold uppercase tracking-wider">
                             {badge}
                         </span>
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-slate-900 tracking-tight font-['Raleway']">
@@ -47,86 +50,138 @@ export default function BranchNetwork({ branchSection = null, branches = [] }) {
                         </p>
                     </div>
 
-                    {/* Tombol Lihat Selengkapnya */}
-                    <Link
-                        href={route('branches.public')}
-                        className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-[#800020] hover:bg-[#600018] text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all shrink-0 self-start md:self-auto group cursor-pointer"
-                    >
-                        <span>Lihat Selengkapnya ({allBranches.length} Outlet)</span>
-                        <ArrowRight className="w-4 h-4 text-rose-200 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                </div>
-
-                {/* Branches Grid (Maksimal 8 Cabang) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                    {limitedBranches.map((branch, index) => {
-                        const isHQ = branch.is_hq || branch.isHQ;
-                        const year = branch.year || '2008';
-                        const areaName = branch.area || branch.city;
-
-                        return (
-                            <motion.div
-                                key={branch.id || index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: index * 0.05 }}
-                                className={`rounded-3xl p-5 transition-all duration-300 ${
-                                    isHQ 
-                                        ? 'bg-slate-900 text-white shadow-md border-2 border-[#800020]'
-                                        : 'bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:border-rose-200'
+                    {/* Right Controls: View Mode Switcher & See All Link */}
+                    <div className="flex flex-wrap items-center gap-3 shrink-0 self-start md:self-auto">
+                        {/* Segmented Switcher */}
+                        <div className="flex items-center p-1 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                            <button
+                                type="button"
+                                onClick={() => setViewMode('grid')}
+                                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                                    viewMode === 'grid'
+                                        ? 'bg-[#800020] text-white shadow-2xs'
+                                        : 'text-slate-600 hover:text-slate-900'
                                 }`}
                             >
-                                <div className="flex items-center justify-between mb-3">
-                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-normal ${
-                                        isHQ ? 'bg-[#800020] text-white' : 'bg-rose-50 text-[#800020]'
-                                    }`}>
-                                        <Store className="w-4 h-4" />
-                                    </div>
-                                    <span className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${
-                                        isHQ ? 'bg-[#800020] text-white font-bold border border-rose-400/40' : 'bg-rose-50 text-[#800020]'
-                                    }`}>
-                                        {isHQ ? `Kantor Pusat (${year})` : `Berdiri ${year}`}
-                                    </span>
-                                </div>
+                                <LayoutGrid className="w-3.5 h-3.5" />
+                                <span>Card Grid</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setViewMode('map')}
+                                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                                    viewMode === 'map'
+                                        ? 'bg-[#800020] text-white shadow-2xs'
+                                        : 'text-slate-600 hover:text-slate-900'
+                                }`}
+                            >
+                                <MapIcon className="w-3.5 h-3.5 text-rose-300" />
+                                <span>Peta Interaktif</span>
+                            </button>
+                        </div>
 
-                                <h3 className={`text-base font-semibold font-['Raleway'] mb-1 ${
-                                    isHQ ? 'text-white' : 'text-slate-900'
-                                }`}>
-                                    {branch.name}
-                                </h3>
-
-                                <div className={`flex items-center gap-1 text-xs font-normal mb-3 ${
-                                    isHQ ? 'text-slate-300' : 'text-slate-500'
-                                }`}>
-                                    <MapPin className="w-3.5 h-3.5 shrink-0 text-rose-500" />
-                                    <span className="line-clamp-1">{areaName}, Kota {branch.city}</span>
-                                </div>
-
-                                <div className={`pt-3 border-t flex items-center justify-between text-xs font-normal ${
-                                    isHQ ? 'border-slate-800 text-slate-300' : 'border-slate-100 text-[#800020]'
-                                }`}>
-                                    <span className="flex items-center gap-1 text-[11px]">
-                                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                                        <span>{branch.opening_hours || 'Buka Setiap Hari'}</span>
-                                    </span>
-                                    {branch.google_maps_url ? (
-                                        <a 
-                                            href={branch.google_maps_url} 
-                                            target="_blank" 
-                                            rel="noreferrer" 
-                                            className="underline font-medium hover:text-rose-600 transition-colors"
-                                        >
-                                            Lokasi
-                                        </a>
-                                    ) : (
-                                        <span className="underline cursor-pointer">Lokasi</span>
-                                    )}
-                                </div>
-                            </motion.div>
-                        );
-                    })}
+                        {/* Tombol Lihat Selengkapnya */}
+                        <Link
+                            href={route('branches.public')}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-all group cursor-pointer"
+                        >
+                            <span>Semua ({allBranches.length})</span>
+                            <ArrowRight className="w-3.5 h-3.5 text-rose-300 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
                 </div>
+
+                {/* Dynamic Content: Map View or Grid View */}
+                <AnimatePresence mode="wait">
+                    {viewMode === 'map' ? (
+                        <motion.div
+                            key="map-view"
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -15 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <BranchMap branches={allBranches} />
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="grid-view"
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -15 }}
+                            transition={{ duration: 0.3 }}
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
+                        >
+                            {limitedBranches.map((branch, index) => {
+                                const isHQ = branch.is_hq || branch.isHQ;
+                                const year = branch.year || '2008';
+                                const areaName = branch.area || branch.city;
+
+                                return (
+                                    <motion.div
+                                        key={branch.id || index}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.4, delay: index * 0.05 }}
+                                        className={`rounded-3xl p-5 transition-all duration-300 ${
+                                            isHQ 
+                                                ? 'bg-slate-900 text-white shadow-md border-2 border-[#800020]'
+                                                : 'bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:border-rose-200'
+                                        }`}
+                                    >
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-normal ${
+                                                isHQ ? 'bg-[#800020] text-white' : 'bg-rose-50 text-[#800020]'
+                                            }`}>
+                                                <Store className="w-4 h-4" />
+                                            </div>
+                                            <span className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${
+                                                isHQ ? 'bg-[#800020] text-white font-bold border border-rose-400/40' : 'bg-rose-50 text-[#800020]'
+                                            }`}>
+                                                {isHQ ? `Kantor Pusat (${year})` : `Berdiri ${year}`}
+                                            </span>
+                                        </div>
+
+                                        <h3 className={`text-base font-semibold font-['Raleway'] mb-1 ${
+                                            isHQ ? 'text-white' : 'text-slate-900'
+                                        }`}>
+                                            {branch.name}
+                                        </h3>
+
+                                        <div className={`flex items-center gap-1 text-xs font-normal mb-3 ${
+                                            isHQ ? 'text-slate-300' : 'text-slate-500'
+                                        }`}>
+                                            <MapPin className="w-3.5 h-3.5 shrink-0 text-rose-500" />
+                                            <span className="line-clamp-1">{areaName}, Kota {branch.city}</span>
+                                        </div>
+
+                                        <div className={`pt-3 border-t flex items-center justify-between text-xs font-normal ${
+                                            isHQ ? 'border-slate-800 text-slate-300' : 'border-slate-100 text-[#800020]'
+                                        }`}>
+                                            <span className="flex items-center gap-1 text-[11px]">
+                                                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                                                <span>{branch.opening_hours || 'Buka Setiap Hari'}</span>
+                                            </span>
+                                            {branch.google_maps_url ? (
+                                                <a 
+                                                    href={branch.google_maps_url} 
+                                                    target="_blank" 
+                                                    rel="noreferrer" 
+                                                    className="underline font-medium hover:text-rose-600 transition-colors"
+                                                >
+                                                    Lokasi
+                                                </a>
+                                            ) : (
+                                                <span className="underline cursor-pointer">Lokasi</span>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Total Network Banner */}
                 <div className="mt-10 p-6 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col md:flex-row items-center justify-between gap-5">

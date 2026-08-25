@@ -17,6 +17,8 @@ class Branch extends Model
         'year',
         'is_hq',
         'address',
+        'latitude',
+        'longitude',
         'phone',
         'whatsapp',
         'google_maps_url',

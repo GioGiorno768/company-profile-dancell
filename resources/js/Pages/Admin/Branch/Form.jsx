@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
+import BranchLocationPicker from '@/Components/Admin/BranchLocationPicker';
 import {
     ArrowLeft,
     Store,
@@ -27,6 +28,8 @@ export default function BranchForm({ branch = null, cities = [], nextOrder = 1 }
         year: branch?.year || '2026',
         is_hq: branch?.is_hq ?? false,
         address: branch?.address || '',
+        latitude: branch?.latitude || '',
+        longitude: branch?.longitude || '',
         phone: branch?.phone || '',
         whatsapp: branch?.whatsapp || '',
         google_maps_url: branch?.google_maps_url || '',
@@ -223,6 +226,22 @@ export default function BranchForm({ branch = null, cities = [], nextOrder = 1 }
                                 />
                             </div>
 
+                            {/* Interactive Leaflet Location Picker with Two-Way Sync */}
+                            <BranchLocationPicker
+                                latitude={data.latitude}
+                                longitude={data.longitude}
+                                onChangeCoordinates={(lat, lng) => {
+                                    setData((prev) => ({
+                                        ...prev,
+                                        latitude: lat,
+                                        longitude: lng,
+                                    }));
+                                }}
+                                isHQ={data.is_hq}
+                                branchName={data.name}
+                                address={data.address}
+                            />
+
                             {/* Options: HQ Flag & Active Switch */}
                             <div className="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <label className="flex items-center gap-3 p-3.5 rounded-2xl border border-rose-200 bg-rose-50/50 cursor-pointer hover:bg-rose-50 transition-colors">
@@ -302,11 +321,22 @@ export default function BranchForm({ branch = null, cities = [], nextOrder = 1 }
                                 }`}>
                                     <Store className="w-4 h-4" />
                                 </div>
-                                <span className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${
-                                    data.is_hq ? 'bg-[#800020] text-white font-bold border border-rose-400/40' : 'bg-rose-50 text-[#800020]'
-                                }`}>
-                                    {data.is_hq ? `Kantor Pusat (${data.year || '2008'})` : `Berdiri ${data.year || '2026'}`}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    {data.latitude && data.longitude ? (
+                                        <span className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            📍 Ada di Peta
+                                        </span>
+                                    ) : (
+                                        <span className="text-[9px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                                            ⚠️ Belum ada di peta
+                                        </span>
+                                    )}
+                                    <span className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${
+                                        data.is_hq ? 'bg-[#800020] text-white font-bold border border-rose-400/40' : 'bg-rose-50 text-[#800020]'
+                                    }`}>
+                                        {data.is_hq ? `Kantor Pusat (${data.year || '2008'})` : `Berdiri ${data.year || '2026'}`}
+                                    </span>
+                                </div>
                             </div>
 
                             <h3 className={`text-base font-semibold font-['Raleway'] mb-1 ${
@@ -323,6 +353,13 @@ export default function BranchForm({ branch = null, cities = [], nextOrder = 1 }
                                     {data.area || 'Area'}, Kota {data.city || 'Kota'}
                                 </span>
                             </div>
+
+                            {data.latitude && data.longitude && (
+                                <div className="mb-3 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[10px] font-mono text-slate-600 flex items-center justify-between">
+                                    <span>Lat: {data.latitude}</span>
+                                    <span>Lng: {data.longitude}</span>
+                                </div>
+                            )}
 
                             <div className={`pt-3 border-t flex items-center justify-between text-xs font-normal ${
                                 data.is_hq ? 'border-slate-800 text-slate-300' : 'border-slate-100 text-[#800020]'
@@ -350,7 +387,7 @@ export default function BranchForm({ branch = null, cities = [], nextOrder = 1 }
                         <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 text-rose-950 text-xs flex items-start gap-2.5">
                             <Info className="w-4 h-4 text-[#800020] shrink-0 mt-0.5" />
                             <p className="leading-relaxed">
-                                💡 Pratinjau di atas menggunakan desain komponen <code>BranchNetwork.jsx</code> yang sama persis dengan yang tampil di landing page website utama.
+                                💡 Cabang yang memiliki titik <strong>Latitude &amp; Longitude</strong> akan langsung otomatis memiliki pin aktif di Peta Interaktif Leaflet pada landing page dan halaman <code>/cabang</code>.
                             </p>
                         </div>
 

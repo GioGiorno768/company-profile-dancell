@@ -4,6 +4,7 @@ import { ReactLenis } from 'lenis/react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import Navbar from '@/Components/Landing/Navbar';
 import ContactFooter from '@/Components/Landing/ContactFooter';
+import BranchMap from '@/Components/Landing/BranchMap';
 import {
     Store,
     MapPin,
@@ -21,10 +22,13 @@ import {
     Sparkles,
     Navigation,
     Info,
-    ArrowRight
+    ArrowRight,
+    Map as MapIcon,
+    LayoutGrid
 } from 'lucide-react';
 
 export default function PublicBranchIndex({ branches = [], cities = [], branchSection = null, seo = null, filters = {}, footer = null }) {
+    const [viewMode, setViewMode] = useState('map'); // 'map' | 'grid'
     const [searchQuery, setSearchQuery] = useState(filters.search || '');
     const [selectedCity, setSelectedCity] = useState(filters.city || 'all');
     const [selectedBranchModal, setSelectedBranchModal] = useState(null);
@@ -262,7 +266,7 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
                     {/* Filter & Live Search Bar Container */}
                     <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-xs space-y-5">
                         
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                             <div>
                                 <h2 className="text-xl font-bold text-slate-900 tracking-tight font-['Raleway']">
                                     Daftar Outlet Ritel Cabang
@@ -272,24 +276,54 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
                                 </p>
                             </div>
 
-                            {/* Live Search Input */}
-                            <div className="relative w-full md:w-80">
-                                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                                <input
-                                    type="text"
-                                    placeholder="Cari nama toko, kota, area, alamat..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-10 pr-9 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#800020] focus:ring-1 focus:ring-[#800020] transition-all outline-none"
-                                />
-                                {searchQuery && (
+                            <div className="flex flex-wrap items-center gap-3">
+                                {/* View Mode Segmented Switcher */}
+                                <div className="flex items-center p-1 rounded-2xl bg-slate-100/90 border border-slate-200 shadow-2xs">
                                     <button
-                                        onClick={() => setSearchQuery('')}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                        type="button"
+                                        onClick={() => setViewMode('grid')}
+                                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                                            viewMode === 'grid'
+                                                ? 'bg-[#800020] text-white shadow-2xs'
+                                                : 'text-slate-600 hover:text-slate-900'
+                                        }`}
                                     >
-                                        <X className="w-3.5 h-3.5" />
+                                        <LayoutGrid className="w-3.5 h-3.5" />
+                                        <span>Grid Card</span>
                                     </button>
-                                )}
+                                    <button
+                                        type="button"
+                                        onClick={() => setViewMode('map')}
+                                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                                            viewMode === 'map'
+                                                ? 'bg-[#800020] text-white shadow-2xs'
+                                                : 'text-slate-600 hover:text-slate-900'
+                                        }`}
+                                    >
+                                        <MapIcon className="w-3.5 h-3.5 text-rose-300" />
+                                        <span>Peta Interaktif</span>
+                                    </button>
+                                </div>
+
+                                {/* Live Search Input */}
+                                <div className="relative w-full sm:w-72">
+                                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                                    <input
+                                        type="text"
+                                        placeholder="Cari nama toko, kota, alamat..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="w-full pl-10 pr-9 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#800020] focus:ring-1 focus:ring-[#800020] transition-all outline-none"
+                                    />
+                                    {searchQuery && (
+                                        <button
+                                            onClick={() => setSearchQuery('')}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                        >
+                                            <X className="w-3.5 h-3.5" />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -337,134 +371,162 @@ export default function PublicBranchIndex({ branches = [], cities = [], branchSe
 
                     </div>
 
-                    {/* Branch Grid Showcase */}
-                    {filteredBranches.length === 0 ? (
-                        <div className="bg-white rounded-3xl border border-slate-200/80 p-16 text-center space-y-4 shadow-2xs">
-                            <Store className="w-12 h-12 text-slate-300 mx-auto" />
-                            <h3 className="text-base font-bold text-slate-800">Tidak ada outlet cabang ditemukan</h3>
-                            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                                Coba sesuaikan kata kunci pencarian atau ubah filter kota untuk menemukan cabang Dancell.
-                            </p>
-                            <button
-                                onClick={() => {
-                                    setSearchQuery('');
-                                    setSelectedCity('all');
-                                }}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#800020] text-white text-xs font-semibold hover:bg-[#600018] transition-colors cursor-pointer"
+                    {/* Dynamic Showcase: Interactive Map or Card Grid */}
+                    <AnimatePresence mode="wait">
+                        {viewMode === 'map' ? (
+                            <motion.div
+                                key="page-map-view"
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -15 }}
+                                transition={{ duration: 0.3 }}
                             >
-                                <RotateCcw className="w-3.5 h-3.5" />
-                                <span>Tampilkan Semua Cabang</span>
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {filteredBranches.map((branch) => (
-                                <div
-                                    key={branch.id}
-                                    className={`bg-white rounded-3xl border ${
-                                        branch.is_hq
-                                            ? 'border-2 border-[#800020] ring-4 ring-rose-500/10 shadow-md'
-                                            : 'border-slate-200/80 hover:border-rose-300 shadow-2xs hover:shadow-md'
-                                    } p-6 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden`}
+                                <BranchMap 
+                                    branches={filteredBranches} 
+                                    selectedCity={selectedCity}
+                                />
+                            </motion.div>
+                        ) : filteredBranches.length === 0 ? (
+                            <motion.div 
+                                key="empty-state"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="bg-white rounded-3xl border border-slate-200/80 p-16 text-center space-y-4 shadow-2xs"
+                            >
+                                <Store className="w-12 h-12 text-slate-300 mx-auto" />
+                                <h3 className="text-base font-bold text-slate-800">Tidak ada outlet cabang ditemukan</h3>
+                                <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                                    Coba sesuaikan kata kunci pencarian atau ubah filter kota untuk menemukan cabang Dancell.
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        setSearchQuery('');
+                                        setSelectedCity('all');
+                                    }}
+                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#800020] text-white text-xs font-semibold hover:bg-[#600018] transition-colors cursor-pointer"
                                 >
-                                    <div className="space-y-4">
-                                        
-                                        {/* Card Top Badges */}
-                                        <div className="flex items-center justify-between gap-2">
-                                            <div className="flex items-center gap-1.5">
-                                                <span className="px-3 py-1 rounded-xl bg-rose-50 text-[#800020] text-[11px] font-semibold tracking-wider uppercase border border-rose-100">
-                                                    {branch.city}
-                                                </span>
-                                                {branch.is_hq && (
-                                                    <span className="px-3 py-1 rounded-xl bg-[#800020] text-white text-[11px] font-bold tracking-wider uppercase flex items-center gap-1 shadow-2xs">
-                                                        <Crown className="w-3.5 h-3.5 text-rose-200" />
-                                                        <span>Pusat (HQ)</span>
+                                    <RotateCcw className="w-3.5 h-3.5" />
+                                    <span>Tampilkan Semua Cabang</span>
+                                </button>
+                            </motion.div>
+                        ) : (
+                            <motion.div 
+                                key="page-grid-view"
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -15 }}
+                                transition={{ duration: 0.3 }}
+                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                            >
+                                {filteredBranches.map((branch) => (
+                                    <div
+                                        key={branch.id}
+                                        className={`bg-white rounded-3xl border ${
+                                            branch.is_hq
+                                                ? 'border-2 border-[#800020] ring-4 ring-rose-500/10 shadow-md'
+                                                : 'border-slate-200/80 hover:border-rose-300 shadow-2xs hover:shadow-md'
+                                        } p-6 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden`}
+                                    >
+                                        <div className="space-y-4">
+                                            
+                                            {/* Card Top Badges */}
+                                            <div className="flex items-center justify-between gap-2">
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className="px-3 py-1 rounded-xl bg-rose-50 text-[#800020] text-[11px] font-semibold tracking-wider uppercase border border-rose-100">
+                                                        {branch.city}
                                                     </span>
+                                                    {branch.is_hq && (
+                                                        <span className="px-3 py-1 rounded-xl bg-[#800020] text-white text-[11px] font-bold tracking-wider uppercase flex items-center gap-1 shadow-2xs">
+                                                            <Crown className="w-3.5 h-3.5 text-rose-200" />
+                                                            <span>Pusat (HQ)</span>
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <span className="text-[11px] text-slate-400 font-medium">
+                                                    {branch.year ? `Est. ${branch.year}` : ''}
+                                                </span>
+                                            </div>
+
+                                            {/* Branch Name & Area */}
+                                            <div>
+                                                <h3 className="font-bold text-slate-900 text-lg group-hover:text-[#800020] transition-colors leading-snug">
+                                                    {branch.name}
+                                                </h3>
+                                                <p className="text-xs text-slate-400 mt-0.5 font-medium">
+                                                    Area: {branch.area || branch.city}
+                                                </p>
+                                            </div>
+
+                                            {/* Full Address */}
+                                            <div className="flex items-start gap-2.5 text-xs text-slate-600 leading-relaxed pt-1">
+                                                <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                                                <p>{branch.address}</p>
+                                            </div>
+
+                                            {/* Operating Hours & Contact */}
+                                            <div className="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                                                <div className="flex items-center justify-between text-slate-500">
+                                                    <div className="flex items-center gap-2">
+                                                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                                                        <span>{branch.opening_hours || 'Buka Setiap Hari'}</span>
+                                                    </div>
+                                                    {branch.whatsapp && (
+                                                        <a
+                                                            href={`https://wa.me/${branch.whatsapp.replace(/[^0-9]/g, '')}`}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            className="inline-flex items-center gap-1 font-semibold text-emerald-600 hover:underline text-[11px]"
+                                                        >
+                                                            <MessageCircle className="w-3.5 h-3.5" />
+                                                            <span>WA CS</span>
+                                                        </a>
+                                                    )}
+                                                </div>
+
+                                                {branch.phone && (
+                                                    <div className="flex items-center gap-2 text-slate-500 text-[11px]">
+                                                        <Phone className="w-3.5 h-3.5 text-slate-400" />
+                                                        <span>{branch.phone}</span>
+                                                    </div>
                                                 )}
                                             </div>
 
-                                            <span className="text-[11px] text-slate-400 font-medium">
-                                                {branch.year ? `Est. ${branch.year}` : ''}
-                                            </span>
                                         </div>
 
-                                        {/* Branch Name & Area */}
-                                        <div>
-                                            <h3 className="font-bold text-slate-900 text-lg group-hover:text-[#800020] transition-colors leading-snug">
-                                                {branch.name}
-                                            </h3>
-                                            <p className="text-xs text-slate-400 mt-0.5 font-medium">
-                                                Area: {branch.area || branch.city}
-                                            </p>
-                                        </div>
-
-                                        {/* Full Address */}
-                                        <div className="flex items-start gap-2.5 text-xs text-slate-600 leading-relaxed pt-1">
-                                            <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                                            <p>{branch.address}</p>
-                                        </div>
-
-                                        {/* Operating Hours & Contact */}
-                                        <div className="pt-3 border-t border-slate-100 space-y-2 text-xs">
-                                            <div className="flex items-center justify-between text-slate-500">
-                                                <div className="flex items-center gap-2">
-                                                    <Clock className="w-3.5 h-3.5 text-slate-400" />
-                                                    <span>{branch.opening_hours || 'Buka Setiap Hari'}</span>
-                                                </div>
-                                                {branch.whatsapp && (
-                                                    <a
-                                                        href={`https://wa.me/${branch.whatsapp.replace(/[^0-9]/g, '')}`}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        className="inline-flex items-center gap-1 font-semibold text-emerald-600 hover:underline text-[11px]"
-                                                    >
-                                                        <MessageCircle className="w-3.5 h-3.5" />
-                                                        <span>WA CS</span>
-                                                    </a>
-                                                )}
-                                            </div>
-
-                                            {branch.phone && (
-                                                <div className="flex items-center gap-2 text-slate-500 text-[11px]">
-                                                    <Phone className="w-3.5 h-3.5 text-slate-400" />
-                                                    <span>{branch.phone}</span>
-                                                </div>
+                                        {/* Card Footer Action Buttons */}
+                                        <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                                            
+                                            {branch.google_maps_url ? (
+                                                <a
+                                                    href={branch.google_maps_url}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
+                                                >
+                                                    <Navigation className="w-3.5 h-3.5 text-[#800020]" />
+                                                    <span>Google Maps</span>
+                                                </a>
+                                            ) : (
+                                                <span className="text-[11px] text-slate-400 italic">No Map</span>
                                             )}
+
+                                            <button
+                                                onClick={() => setSelectedBranchModal(branch)}
+                                                className="inline-flex items-center gap-1 px-4 py-2 rounded-xl bg-[#800020] hover:bg-[#600018] text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                                            >
+                                                <span>Detail Toko</span>
+                                                <ArrowRight className="w-3.5 h-3.5" />
+                                            </button>
+
                                         </div>
 
                                     </div>
-
-                                    {/* Card Footer Action Buttons */}
-                                    <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
-                                        
-                                        {branch.google_maps_url ? (
-                                            <a
-                                                href={branch.google_maps_url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
-                                            >
-                                                <Navigation className="w-3.5 h-3.5 text-[#800020]" />
-                                                <span>Google Maps</span>
-                                            </a>
-                                        ) : (
-                                            <span className="text-[11px] text-slate-400 italic">No Map</span>
-                                        )}
-
-                                        <button
-                                            onClick={() => setSelectedBranchModal(branch)}
-                                            className="inline-flex items-center gap-1 px-4 py-2 rounded-xl bg-[#800020] hover:bg-[#600018] text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
-                                        >
-                                            <span>Detail Toko</span>
-                                            <ArrowRight className="w-3.5 h-3.5" />
-                                        </button>
-
-                                    </div>
-
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
                 </main>
 
