@@ -1,202 +1,354 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, Award, CheckCircle2, Building2, Store, Users } from 'lucide-react';
-import DynamicIcon from '@/Components/Common/DynamicIcon';
+import { Award } from 'lucide-react';
 
 export default function HistoryTimeline({ historyTimeline }) {
-    const [activeTab, setActiveTab] = useState('expansion');
-
+    // 1. Dynamic Header Content from Database
     const headerBadge = historyTimeline?.header_badge || 'Perjalanan & Rekam Jejak';
     const headerTitle = historyTimeline?.header_title || 'Sejarah Pertumbuhan Dancell';
-    const headerDesc = historyTimeline?.header_description || 'Dari toko pertama di Warujayeng pada tahun 2008, bertransformasi menjadi jaringan ritel 56 cabang terdepan di Jawa Timur.';
+    const headerDesc = historyTimeline?.header_description || 'Dari toko pertama di Warujayeng pada tahun 2008, bertransformasi menjadi jaringan ritel 58 cabang terdepan di Jawa Timur.';
 
-    const branchHistory = historyTimeline?.expansions && historyTimeline.expansions.length > 0
-        ? historyTimeline.expansions
-        : [
-            { year: '2020', count: 14, added: '14 Cabang', highlight: 'Dancell 2020 – Mojoroto', desc: 'Awal ekspansi multi-cabang terstruktur di area Kediri & Mojoroto.' },
-            { year: '2021', count: 25, added: '+11 Cabang', highlight: 'Dancell 2021 – Srengat', desc: 'Pertumbuhan pesat merambah area Blitar & Srengat.' },
-            { year: '2022', count: 34, added: '+9 Cabang', highlight: 'Dancell 2022 – Magetan', desc: 'Melebarkan jaringan ritel ke wilayah Barat Jawa Timur (Magetan).' },
-            { year: '2023', count: 41, added: '+7 Cabang', highlight: 'Dancell 2023 – Semen', desc: 'Tersebar kokoh hampir di seluruh wilayah strategis Jawa Timur.' },
-            { year: '2024', count: 48, added: '+7 Cabang', highlight: 'Dancell 2024 – Uteran', desc: 'Memperkuat jaringan outlet di kawasan Uteran dan sekitarnya.' },
-            { year: '2025', count: 53, added: '+5 Cabang', highlight: 'Dancell 2025 – Mojosari', desc: 'Penambahan cabang berlanjut secara masif di Mojosari.' },
-            { year: '2026', count: 56, added: '+3 Cabang', highlight: '56 Cabang Terkini', desc: 'Kondisi terkini 56 outlet aktif siap melayani pelanggan Jawa Timur.', current: true },
-        ];
+    // Default aesthetic fallback images & color accents
+    const defaultVisuals = [
+        { imageSrc: '/images/hero.webp', gradientColor: 'from-amber-600/15 via-[#800020]/20 to-transparent' },
+        { imageSrc: '/images/smartphone_hero.png', gradientColor: 'from-rose-600/15 via-[#800020]/20 to-transparent' },
+        { imageSrc: '/images/hero.webp', gradientColor: 'from-blue-600/15 via-[#800020]/20 to-transparent' },
+        { imageSrc: '/images/smartphone_hero.png', gradientColor: 'from-purple-600/15 via-[#800020]/20 to-transparent' },
+        { imageSrc: '/images/hero.webp', gradientColor: 'from-emerald-600/15 via-[#800020]/20 to-transparent' },
+        { imageSrc: '/images/hero.webp', gradientColor: 'from-[#800020]/30 via-rose-900/20 to-transparent' },
+    ];
 
-    const milestones = historyTimeline?.milestones && historyTimeline.milestones.length > 0
-        ? historyTimeline.milestones
-        : [
-            { year: '2008', title: 'Berdiri Pertama Kali', desc: 'Dancell pertama kali berdiri di Warujayeng, Nganjuk.', icon_svg: '' },
-            { year: '2012', title: 'Awal Perjalanan Toko', desc: 'Perjalanan awal toko dengan pembentukan tim kecil yang solid.', icon_svg: '' },
-            { year: '2013', title: 'Pengembangan Layanan', desc: 'Pengembangan kapasitas tim dan standar pelayanan ritel.', icon_svg: '' },
-            { year: '2015', title: 'Pembukaan Dancell 2', desc: 'Pembukaan outlet Dancell 2, tim operasional mulai membesar.', icon_svg: '' },
-            { year: '2017', title: 'Budaya Kerja Solid', desc: 'Pematangan suasana kerja yang semakin terstruktur dan kompak.', icon_svg: '' },
-            { year: '2018', title: 'Pertumbuhan Pesat', desc: 'Tim besar dengan seragam khas, menandai era pertumbuhan cepat.', icon_svg: '' },
-        ];
+    // Fallback static slides in case DB is empty
+    const fallbackSlides = [
+        {
+            year: '2008',
+            title: 'Kelahiran Toko Pertama di Warujayeng',
+            subtitle: 'Awal Mula Perjalanan Ritel Gadget Terpercaya',
+            description: 'Dancell pertama kali didirikan di Warujayeng, Nganjuk. Dimulai dari toko ritel sederhana dengan satu visi utama: menyediakan ponsel original dengan harga jujur serta pelayanan yang ramah dan bersahaja kepada masyarakat.',
+            stat1Val: 'Toko Pertama',
+            stat1Label: 'Warujayeng, Nganjuk',
+            stat2Val: '100% Produk Original',
+            stat2Label: 'Fondasi Kejujuran & Pelayanan',
+            imageSrc: '/images/hero.webp',
+            imageAlt: 'Toko Pertama Dancell Warujayeng',
+            gradientColor: 'from-amber-600/15 via-[#800020]/20 to-transparent',
+        },
+        {
+            year: '2012 - 2015',
+            title: 'Pembukaan Dancell 2 & Penguatan Fondasi',
+            subtitle: 'Ekspansi Tahap Awal & Standar Layanan Unggul',
+            description: 'Tingginya antusiasme dan kepercayaan pelanggan mendorong pembukaan cabang Dancell 2. Kapasitas tim diperkuat melalui standarisasi pelayanan terstruktur, penyediaan garansi resmi, dan komitmen purnajual prima.',
+            stat1Val: 'Dancell 2',
+            stat1Label: 'Cabang Kedua Dibuka',
+            stat2Val: 'Garansi Resmi',
+            stat2Label: 'Standar Operasional Ritel',
+            imageSrc: '/images/smartphone_hero.png',
+            imageAlt: 'Pembukaan Dancell 2',
+            gradientColor: 'from-rose-600/15 via-[#800020]/20 to-transparent',
+        },
+        {
+            year: '2018',
+            title: 'Era Transformasi & Standarisasi Modern',
+            subtitle: 'Penerapan Sistem Digital & Seragam Profesional',
+            description: 'Dancell berevolusi menerapkan tata kelola toko ritel modern dengan seragam profesional khas Dancell, standarisasi tata letak toko yang nyaman, serta integrasi teknologi stok untuk menyambut lonjakan tren smartphone di Jawa Timur.',
+            stat1Val: 'Ritel Modern',
+            stat1Label: 'Sistem Manajemen Digital',
+            stat2Val: 'Tim Terlatih',
+            stat2Label: 'Standar Pelayanan Konsisten',
+            imageSrc: '/images/hero.webp',
+            imageAlt: 'Era Ritel Modern Dancell',
+            gradientColor: 'from-blue-600/15 via-[#800020]/20 to-transparent',
+        },
+        {
+            year: '2020 - 2022',
+            title: 'Ekspansi Masif Kediri Raya & Mataraman',
+            subtitle: 'Menembus 34 Outlet di Berbagai Wilayah Strategis',
+            description: 'Strategi ekspansi multi-cabang terstruktur menjangkau Kediri, Mojoroto, Srengat Blitar, hingga Magetan. Dancell resmi menjadi rujukan utama masyarakat dengan ketersediaan produk brand global terlengkap.',
+            stat1Val: '34 Cabang',
+            stat1Label: 'Kediri, Blitar, Magetan',
+            stat2Val: 'Mitra Resmi',
+            stat2Label: 'Apple, Samsung, Xiaomi, Oppo, Vivo',
+            imageSrc: '/images/smartphone_hero.png',
+            imageAlt: 'Ekspansi Multi Cabang Dancell',
+            gradientColor: 'from-purple-600/15 via-[#800020]/20 to-transparent',
+        },
+        {
+            year: '2023 - 2025',
+            title: 'Penetrasi Jaringan Menyeluruh Jawa Timur',
+            subtitle: 'Jangkauan Menembus 53 Outlet Aktif',
+            description: 'Dancell memperluas penetrasi ke kawasan Uteran, Mojosari, Jombang, hingga Sidoarjo. Penguatan rantai pasok dan sinergi promosi digital menjadikan Dancell destinasi belanja gadget nomor satu di Jawa Timur.',
+            stat1Val: '53 Cabang',
+            stat1Label: 'Jangkauan Luas Jawa Timur',
+            stat2Val: 'Distribusi Cepat',
+            stat2Label: 'Ready Stock Semua Tipe',
+            imageSrc: '/images/hero.webp',
+            imageAlt: 'Penetrasi Jawa Timur',
+            gradientColor: 'from-emerald-600/15 via-[#800020]/20 to-transparent',
+        },
+        {
+            year: '2026',
+            title: '58 Outlet Aktif — Pemimpin Ritel Jatim',
+            subtitle: 'Jaringan Outlet Gadget Terbesar di Jawa Timur',
+            description: 'Kondisi terkini dengan 58 outlet aktif yang tersebar di Nganjuk, Kediri, Blitar, Jombang, Mojokerto, Sidoarjo, dan sekitarnya. Terus melangkah maju memberikan pengalaman belanja gadget terbaik bergaransi resmi.',
+            stat1Val: '58 Outlet Aktif',
+            stat1Label: 'Kondisi Terkini di Jawa Timur',
+            stat2Val: '100% Bergaransi',
+            stat2Label: 'Garansi Resmi Indonesia',
+            imageSrc: '/images/hero.webp',
+            imageAlt: '58 Outlet Dancell Terkini',
+            gradientColor: 'from-[#800020]/30 via-rose-900/20 to-transparent',
+        },
+    ];
+
+    // 2. Dynamic Database Binding
+    let slides = fallbackSlides;
+    const dbMilestones = historyTimeline?.milestones;
+
+    if (Array.isArray(dbMilestones) && dbMilestones.length > 0) {
+        slides = dbMilestones.map((ms, idx) => {
+            const visual = defaultVisuals[idx % defaultVisuals.length];
+            return {
+                year: ms.year || `200${8 + idx * 2}`,
+                title: ms.title || 'Momen Bersejarah',
+                subtitle: ms.subtitle || 'Perjalanan & Pertumbuhan Dancell',
+                description: ms.desc || 'Dedikasi terbaik dalam menghadirkan produk original dan layanan terpercaya.',
+                stat1Val: ms.stat_badge || 'Toko Utama',
+                stat1Label: ms.stat_label || 'Jawa Timur',
+                stat2Val: ms.highlight_tag || (ms.current ? 'Kondisi Terkini' : '100% Resmi'),
+                stat2Label: 'Garansi Resmi Indonesia',
+                imageSrc: ms.image || visual.imageSrc,
+                imageAlt: ms.title || 'Sejarah Dancell',
+                gradientColor: visual.gradientColor,
+            };
+        });
+    }
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [direction, setDirection] = useState(1);
+    const [isPaused, setIsPaused] = useState(false);
+
+    const SLIDE_DURATION = 6000;
+
+    const handleNext = () => {
+        setDirection(1);
+        setCurrentIndex((prev) => (prev + 1) % slides.length);
+    };
+
+    const handleJumpTo = (idx) => {
+        setDirection(idx > currentIndex ? 1 : -1);
+        setCurrentIndex(idx);
+    };
+
+    useEffect(() => {
+        if (isPaused) return;
+
+        const timer = setInterval(() => {
+            handleNext();
+        }, SLIDE_DURATION);
+
+        return () => clearInterval(timer);
+    }, [currentIndex, isPaused, slides.length]);
+
+    const activeSlide = slides[currentIndex] || slides[0];
+
+    // Smooth subtle typography transition
+    const textVariants = {
+        enter: (dir) => ({
+            x: dir > 0 ? 20 : -20,
+            opacity: 0,
+        }),
+        center: {
+            x: 0,
+            opacity: 1,
+            transition: {
+                duration: 0.45,
+                ease: [0.25, 1, 0.5, 1],
+            },
+        },
+        exit: (dir) => ({
+            x: dir > 0 ? -20 : 20,
+            opacity: 0,
+            transition: {
+                duration: 0.25,
+                ease: [0.25, 1, 0.5, 1],
+            },
+        }),
+    };
+
+    const imageVariants = {
+        enter: {
+            opacity: 0,
+            scale: 1.04,
+        },
+        center: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                duration: 0.7,
+                ease: "easeOut",
+            },
+        },
+        exit: {
+            opacity: 0,
+            scale: 0.98,
+            transition: {
+                duration: 0.4,
+                ease: "easeIn",
+            },
+        },
+    };
 
     return (
-        <section id="history" className="py-20 bg-slate-50 relative overflow-hidden font-['Raleway']">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <section 
+            id="history" 
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            className="relative w-full bg-slate-950 overflow-hidden font-['Raleway'] py-16 sm:py-20 lg:py-28"
+        >
+            {/* Ambient Background Glows */}
+            <div className="absolute top-1/4 left-1/4 w-[450px] h-[450px] bg-[#800020]/15 rounded-full blur-[140px] pointer-events-none" />
+            <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] bg-rose-600/10 rounded-full blur-[160px] pointer-events-none" />
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+            {/* SEAMLESS BACKGROUND PICTURE WITH ELEGANT ANGLED DIAGONAL GRADIENT BLEND */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <AnimatePresence custom={direction} mode="wait">
+                    <motion.div
+                        key={'angled-img-' + currentIndex}
+                        variants={imageVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        className="relative w-full h-full"
+                    >
+                        <img 
+                            src={activeSlide.imageSrc} 
+                            alt={activeSlide.imageAlt}
+                            className="w-full h-full object-cover object-center lg:object-right filter brightness-95 contrast-105"
+                        />
+                        <div className={'absolute inset-0 bg-gradient-to-br ' + activeSlide.gradientColor} />
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* 1. MOBILE GRADIENT OVERLAY (Subtle, Clean & Deep) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/92 via-slate-950/85 to-slate-950/75 z-10 lg:hidden" />
+
+                {/* 2. DESKTOP ELEGANT ANGLED / DIAGONAL GRADIENT (115deg sweep from dark slate left to transparent right) */}
+                <div 
+                    className="absolute inset-0 z-10 hidden lg:block"
+                    style={{
+                        background: 'linear-gradient(115deg, #020617 0%, #020617 38%, rgba(2,6,23,0.95) 48%, rgba(2,6,23,0.7) 62%, rgba(2,6,23,0.2) 80%, transparent 100%)'
+                    }}
+                />
+
+                {/* Desktop Top & Bottom Smooth Edge Vignettes */}
+                <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-slate-950 via-slate-950/80 to-transparent z-10 hidden lg:block" />
+                <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent z-10 hidden lg:block" />
+                <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-950/80 to-transparent z-10 hidden lg:block" />
+            </div>
+
+            {/* FOREGROUND MAIN CONTENT (Aligned to standard max-w-7xl) */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
                 
-                {/* Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
-                    <span className="px-3.5 py-1 rounded-full bg-rose-100/80 text-[#800020] text-xs font-normal uppercase tracking-wider">
-                        {headerBadge}
-                    </span>
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-slate-900 tracking-tight font-['Raleway']">
-                        {headerTitle}
-                    </h2>
-                    <p className="text-slate-600 text-base sm:text-lg font-normal">
-                        {headerDesc}
-                    </p>
-                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[380px] sm:min-h-[420px] lg:min-h-[460px]">
+                    
+                    {/* LEFT COLUMN: ELEGANT THIN TYPOGRAPHY & NARRATIVE (7 Cols) */}
+                    <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
+                        
+                        <AnimatePresence custom={direction} mode="wait">
+                            <motion.div
+                                key={'clean-text-' + currentIndex}
+                                custom={direction}
+                                variants={textVariants}
+                                initial="enter"
+                                animate="center"
+                                exit="exit"
+                                className="space-y-4 sm:space-y-5"
+                            >
+                                {/* 1. Header Badge & Era Pill */}
+                                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 text-rose-200 text-xs font-normal tracking-wide backdrop-blur-xs">
+                                        <Award className="w-3.5 h-3.5 text-rose-300 shrink-0" />
+                                        <span>{headerBadge}</span>
+                                    </span>
 
-                {/* Interactive View Switcher Tabs */}
-                <div className="flex justify-center mb-14">
-                    <div className="inline-flex p-1 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-                        <button
-                            onClick={() => setActiveTab('expansion')}
-                            className={`px-5 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 flex items-center gap-2 ${
-                                activeTab === 'expansion'
-                                    ? 'bg-[#800020] text-white shadow-xs'
-                                    : 'text-slate-600 hover:text-[#800020]'
-                            }`}
-                        >
-                            <TrendingUp className="w-3.5 h-3.5" />
-                            <span>Pertumbuhan Cabang</span>
-                        </button>
+                                    <span className="px-3.5 py-1 rounded-full bg-[#800020]/30 border border-rose-400/25 text-rose-200 text-xs font-normal font-mono tracking-wider backdrop-blur-xs">
+                                        ERA {activeSlide.year}
+                                    </span>
+                                </div>
 
-                        <button
-                            onClick={() => setActiveTab('milestones')}
-                            className={`px-5 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 flex items-center gap-2 ${
-                                activeTab === 'milestones'
-                                    ? 'bg-[#800020] text-white shadow-xs'
-                                    : 'text-slate-600 hover:text-[#800020]'
-                            }`}
-                        >
-                            <Award className="w-3.5 h-3.5" />
-                            <span>Momen Penting</span>
-                        </button>
-                    </div>
-                </div>
+                                {/* 2. Main Title (Thin, Clean & Elegant Typography) */}
+                                <div className="space-y-1">
+                                    <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-white tracking-tight font-['Raleway'] leading-snug">
+                                        {activeSlide.title}
+                                    </h2>
+                                    <p className="text-xs sm:text-sm font-light text-rose-200/80 font-['Raleway'] tracking-wide">
+                                        {activeSlide.subtitle}
+                                    </p>
+                                </div>
 
-                {/* Tab Content Display */}
-                <AnimatePresence mode="wait">
-                    {activeTab === 'expansion' ? (
-                        <motion.div
-                            key="expansion"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.4 }}
-                            className="space-y-6 transform-gpu"
-                        >
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                                {branchHistory.map((item, idx) => (
-                                    <motion.div
-                                        key={item.id || item.year || idx}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true, margin: "-30px" }}
-                                        transition={{ duration: 0.4, delay: idx * 0.05 }}
-                                        className={`rounded-3xl p-6 relative overflow-hidden transition-all duration-300 transform-gpu ${
-                                            item.current
-                                                ? 'bg-slate-900 text-white shadow-lg border border-slate-800'
-                                                : 'bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:border-rose-200'
-                                        }`}
-                                    >
-                                        <div className="flex items-center justify-between mb-3">
-                                            <span className={`text-xl font-semibold font-['Raleway'] ${
-                                                item.current ? 'text-white' : 'text-[#800020]'
-                                            }`}>
-                                                {item.year}
+                                {/* 3. Narrative Description Paragraph */}
+                                <p className="text-slate-300/90 text-xs sm:text-sm lg:text-base font-light leading-relaxed max-w-2xl">
+                                    {activeSlide.description}
+                                </p>
+
+                                {/* 4. Clean Minimalist Key Metrics */}
+                                <div className="pt-3 border-t border-white/10 grid grid-cols-2 gap-4 text-xs sm:text-sm max-w-lg">
+                                    <div className="flex items-start gap-2.5">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0 shadow-xs shadow-rose-400/50" />
+                                        <div>
+                                            <span className="font-normal text-white text-sm sm:text-base block font-['Raleway'] tracking-tight">
+                                                {activeSlide.stat1Val}
                                             </span>
-                                            {item.added && (
-                                                <span className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full ${
-                                                    item.current
-                                                        ? 'bg-rose-950 text-rose-200 border border-rose-800'
-                                                        : 'bg-rose-50 text-[#800020]'
-                                                }`}>
-                                                    {item.added}
-                                                </span>
-                                            )}
+                                            <span className="text-[10px] sm:text-xs text-slate-400 font-light block">
+                                                {activeSlide.stat1Label}
+                                            </span>
                                         </div>
+                                    </div>
 
-                                        <div className="space-y-1.5">
-                                            <div className={`text-2xl font-medium font-['Raleway'] ${
-                                                item.current ? 'text-white' : 'text-slate-900'
-                                            }`}>
-                                                {item.count} <span className="text-xs font-normal text-slate-500">Cabang</span>
-                                            </div>
-                                            <h4 className={`font-semibold text-sm ${item.current ? 'text-rose-100' : 'text-slate-800'}`}>
-                                                {item.highlight}
-                                            </h4>
-                                            <p className={`text-xs leading-relaxed font-normal ${item.current ? 'text-slate-300' : 'text-slate-500'}`}>
-                                                {item.desc}
-                                            </p>
+                                    <div className="flex items-start gap-2.5 border-l border-white/10 pl-4">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0 shadow-xs shadow-emerald-400/50" />
+                                        <div>
+                                            <span className="font-normal text-white text-sm sm:text-base block font-['Raleway'] tracking-tight">
+                                                {activeSlide.stat2Val}
+                                            </span>
+                                            <span className="text-[10px] sm:text-xs text-slate-400 font-light block">
+                                                {activeSlide.stat2Label}
+                                            </span>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        {item.current && (
-                                            <div className="mt-4 pt-3 border-t border-slate-800 flex items-center gap-1.5 text-xs font-medium text-emerald-400">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                                                <span>Kondisi Terkini</span>
-                                            </div>
+                            </motion.div>
+                        </AnimatePresence>
+
+                    </div>
+
+                    {/* RIGHT COLUMN: ELEGANT MINIMALIST SLIDER DOTS ONLY (5 Cols) */}
+                    <div className="lg:col-span-5 flex flex-col justify-end items-end min-h-0 lg:min-h-[380px] xl:min-h-[420px]">
+                        
+                        {/* SLEEK MINIMALIST DOT INDICATORS (—— • • •) */}
+                        <div className="w-full flex items-center justify-start sm:justify-end gap-2 pt-2 lg:pt-0">
+                            <div className="flex items-center gap-2 bg-slate-900/60 border border-white/10 rounded-full px-4 py-2.5 backdrop-blur-md shadow-lg">
+                                {slides.map((_, idx) => (
+                                    <button
+                                        key={'angled-dot-' + idx}
+                                        onClick={() => handleJumpTo(idx)}
+                                        className={'transition-all duration-300 rounded-full cursor-pointer ' + (
+                                            currentIndex === idx
+                                                ? 'w-7 h-1.5 bg-gradient-to-r from-rose-400 to-amber-300 shadow-xs shadow-rose-500/40'
+                                                : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/70'
                                         )}
-                                    </motion.div>
+                                        title={'Lompat ke Era ' + slides[idx].year}
+                                    />
                                 ))}
                             </div>
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="milestones"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.4 }}
-                            className="max-w-4xl mx-auto"
-                        >
-                            <div className="relative border-l border-rose-200 ml-4 md:ml-32 space-y-8 py-2">
-                                {milestones.map((m, idx) => {
-                                    const fallbackIcon = idx === 0 ? Store : idx === 1 ? Users : idx === 2 ? TrendingUp : idx === 3 ? Building2 : idx === 4 ? CheckCircle2 : Award;
-                                    return (
-                                        <motion.div
-                                            key={m.id || m.year || idx}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
-                                            viewport={{ once: true }}
-                                            transition={{ duration: 0.4, delay: idx * 0.08 }}
-                                            className="relative pl-8 md:pl-10 group"
-                                        >
-                                            <div className="absolute -left-[13px] top-1.5 w-6 h-6 rounded-full bg-white border-2 border-[#800020] flex items-center justify-center text-[#800020] shadow-xs" />
+                        </div>
 
-                                            <div className="hidden md:block absolute -left-32 top-1.5 w-24 text-right">
-                                                <span className="font-semibold text-lg text-[#800020] font-['Raleway']">
-                                                    {m.year}
-                                                </span>
-                                            </div>
+                    </div>
 
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-                                                <div className="md:hidden text-xs font-medium text-[#800020] mb-1">
-                                                    TAHUN {m.year}
-                                                </div>
-                                                <div className="flex items-center gap-2.5 mb-1.5">
-                                                    <div className="p-1.5 rounded-lg bg-rose-50 text-[#800020]">
-                                                        <DynamicIcon svgString={m.icon_svg} fallback={fallbackIcon} className="w-4 h-4 text-[#800020]" />
-                                                    </div>
-                                                    <h3 className="text-base font-semibold text-slate-900 font-['Raleway']">
-                                                        {m.title}
-                                                    </h3>
-                                                </div>
-                                                <p className="text-slate-600 text-xs leading-relaxed font-normal">
-                                                    {m.desc}
-                                                </p>
-                                            </div>
-                                        </motion.div>
-                                    );
-                                })}
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                </div>
 
             </div>
         </section>
