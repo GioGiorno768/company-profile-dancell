@@ -11,7 +11,8 @@ import {
     ExternalLink, 
     ShieldCheck, 
     ChevronDown,
-    Layers
+    Layers,
+    Newspaper
 } from 'lucide-react';
 
 export default function AdminLayout({ children, activeMenu = 'dashboard' }) {
@@ -28,6 +29,7 @@ export default function AdminLayout({ children, activeMenu = 'dashboard' }) {
     const navigation = [
         { id: 'dashboard', name: 'Dashboard Utama', href: route('dashboard'), icon: LayoutDashboard },
         { id: 'content-hero', name: 'Kelola Content Web', href: route('admin.content.hero'), icon: Layers },
+        { id: 'articles', name: 'Kelola Artikel & Berita', href: route('admin.articles.index'), icon: Newspaper },
         { id: 'branches', name: 'Kelola Cabang', href: route('admin.branches.index'), icon: Store },
         // { id: 'products', name: 'Katalog Produk & Brand', href: route('dashboard') + '#products', icon: ShoppingBag },
         // { id: 'settings', name: 'Pengaturan Akun', href: route('profile.edit'), icon: Settings },

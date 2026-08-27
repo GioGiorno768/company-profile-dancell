@@ -7,9 +7,10 @@ import VisiMisiSection from '../Components/Landing/VisiMisiSection';
 import HistoryTimeline from '../Components/Landing/HistoryTimeline';
 import SocialImpact from '../Components/Landing/SocialImpact';
 import BranchNetwork from '../Components/Landing/BranchNetwork';
+import ArticlesSection from '../Components/Landing/ArticlesSection';
 import ContactFooter from '../Components/Landing/ContactFooter';
 
-export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerBrand, footer, branchSection, branches = [], canLogin, canRegister }) {
+export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerBrand, footer, branchSection, branches = [], articles = [], canLogin, canRegister }) {
     const ogImageUrl = 'https://dancell-official.com/seo/og-image';
 
     return (
@@ -104,6 +105,9 @@ export default function Welcome({ seo, hero, visiMisi, historyTimeline, partnerB
 
                     {/* Interactive Branch Outlets & Network Section */}
                     <BranchNetwork branchSection={branchSection} branches={branches} />
+
+                    {/* Curated Tech & Gadget Articles Section */}
+                    <ArticlesSection articles={articles} />
                 </main>
 
                 {/* Contact & Footer Section */}

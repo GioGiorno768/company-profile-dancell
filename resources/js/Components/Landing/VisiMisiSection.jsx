@@ -65,16 +65,16 @@ export default function VisiMisiSection({ visiMisi }) {
         <section id="visimisi" className="-mt-[100vh]">
             <div className="w-full h-8 sm:h-12 bg-white rounded-t-[3rem] -mt-10 relative z-20 shadow-xs pointer-events-none" />
             <div className="py-10 bg-white relative overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 relative z-10">
                     {/* Section Header */}
                     <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
                         <span className="px-3.5 py-1 rounded-full bg-rose-50 text-[#800020] text-xs font-normal uppercase tracking-wider border border-rose-100">
                             {headerBadge}
                         </span>
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-slate-900 tracking-tight font-['Raleway']">
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-normal text-slate-900 tracking-tight font-['Raleway']">
                             {headerTitle}
                         </h2>
-                        <p className="text-slate-600 text-base sm:text-lg font-normal">
+                        <p className="text-slate-600 text-base sm:text-lg lg:text-xl font-light max-w-4xl mx-auto">
                             {headerDesc}
                         </p>
                     </div>
@@ -85,14 +85,14 @@ export default function VisiMisiSection({ visiMisi }) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.6 }}
-                        className="mb-14 p-8 sm:p-10 rounded-3xl bg-slate-900 text-white shadow-xl relative overflow-hidden border border-slate-800 transform-gpu"
+                        className="mb-14 p-8 sm:p-12 lg:p-16 rounded-3xl lg:rounded-[2.5rem] bg-slate-900 text-white shadow-xl relative overflow-hidden border border-slate-800 transform-gpu"
                     >
                         <div className="relative z-10 max-w-4xl space-y-5 flex flex-col justify-center items-center m-auto">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/80 border border-rose-800/60 text-rose-200 text-xs font-normal uppercase tracking-wider">
                                 <DynamicIcon svgString={visiBadgeIcon} fallback={Target} className="w-3.5 h-3.5 text-rose-300" />
                                 <span>{visiBadge}</span>
                             </div>
-                            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-normal leading-relaxed font-['Raleway'] text-rose-50 text-center">
+                            <h3 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-normal leading-relaxed font-['Raleway'] text-rose-50 text-center max-w-5xl mx-auto">
                                 {visiTitle}
                             </h3>
                             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-rose-200/80 pt-1 font-normal">

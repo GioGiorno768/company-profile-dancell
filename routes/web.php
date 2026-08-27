@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\HistoryTimelineSettingController;
 use App\Http\Controllers\Admin\PartnerBrandSettingController;
 use App\Http\Controllers\Admin\VisiMisiSettingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Models\Branch;
 use App\Models\BranchSectionSetting;
 use App\Models\FooterSetting;
@@ -107,6 +109,11 @@ Route::get('/sitemap.xml', function () {
 });
 
 
+// ─── Public Articles Hub & Detail ───────────────────────────────
+Route::get('/artikel', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('/artikel/page/{page}', [ArticleController::class, 'index'])->name('articles.index.page');
+Route::get('/artikel/{slug}', [ArticleController::class, 'show'])->name('articles.show');
+
 Route::get('/', function () {
     $seo = Cache::remember('seo_setting_content', 86400, function () {
         return SeoSetting::first();
@@ -132,12 +139,14 @@ Route::get('/', function () {
     $branches = Cache::remember('active_branches_list', 86400, function () {
         return Branch::where('is_active', true)->orderBy('order', 'asc')->get();
     });
+    $articles = ArticleController::getLandingArticles();
 
     return Inertia::render('Welcome', [
         'seo'             => $seo,
         'hero'            => $hero,
         'visiMisi'        => $visiMisi,
         'historyTimeline' => $historyTimeline,
+        'articles'        => $articles,
         'partnerBrand'    => $partnerBrand,
         'footer'          => $footer,
         'branchSection'   => $branchSection,
@@ -193,6 +202,20 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/content/footer', [FooterSettingController::class, 'edit'])->name('admin.content.footer');
     Route::post('/admin/content/footer', [FooterSettingController::class, 'update'])->name('admin.content.footer.update');
+
+    // Admin Article Management Routes
+    Route::get('/admin/articles', [AdminArticleController::class, 'index'])->name('admin.articles.index');
+    Route::post('/admin/articles/settings', [AdminArticleController::class, 'updateSettings'])->name('admin.articles.settings.update');
+    Route::post('/admin/articles/categories', [AdminArticleController::class, 'storeCategory'])->name('admin.articles.categories.store');
+    Route::post('/admin/articles/categories/{id}/update', [AdminArticleController::class, 'updateCategory'])->name('admin.articles.categories.update');
+    Route::delete('/admin/articles/categories/{id}', [AdminArticleController::class, 'destroyCategory'])->name('admin.articles.categories.destroy');
+    Route::get('/admin/articles/create', [AdminArticleController::class, 'create'])->name('admin.articles.create');
+    Route::post('/admin/articles', [AdminArticleController::class, 'store'])->name('admin.articles.store');
+    Route::get('/admin/articles/{id}/edit', [AdminArticleController::class, 'edit'])->name('admin.articles.edit');
+    Route::post('/admin/articles/{id}/update', [AdminArticleController::class, 'update'])->name('admin.articles.update');
+    Route::post('/admin/articles/{id}/toggle-status', [AdminArticleController::class, 'toggleStatus'])->name('admin.articles.toggle-status');
+    Route::post('/admin/articles/{id}/toggle-featured', [AdminArticleController::class, 'toggleFeatured'])->name('admin.articles.toggle-featured');
+    Route::delete('/admin/articles/{id}', [AdminArticleController::class, 'destroy'])->name('admin.articles.destroy');
 
     // Admin Branch Management Routes
     Route::get('/admin/branches', [BranchController::class, 'index'])->name('admin.branches.index');

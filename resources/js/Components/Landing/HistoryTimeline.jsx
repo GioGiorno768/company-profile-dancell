@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Award } from 'lucide-react';
+import { Award, MoveHorizontal } from 'lucide-react';
 
 export default function HistoryTimeline({ historyTimeline }) {
     // 1. Dynamic Header Content from Database
@@ -108,7 +108,7 @@ export default function HistoryTimeline({ historyTimeline }) {
         slides = dbMilestones.map((ms, idx) => {
             const visual = defaultVisuals[idx % defaultVisuals.length];
             return {
-                year: ms.year || `200${8 + idx * 2}`,
+                year: ms.year || ('200' + (8 + idx * 2)),
                 title: ms.title || 'Momen Bersejarah',
                 subtitle: ms.subtitle || 'Perjalanan & Pertumbuhan Dancell',
                 description: ms.desc || 'Dedikasi terbaik dalam menghadirkan produk original dan layanan terpercaya.',
@@ -127,6 +127,11 @@ export default function HistoryTimeline({ historyTimeline }) {
     const [direction, setDirection] = useState(1);
     const [isPaused, setIsPaused] = useState(false);
 
+    // Interactive Grab / Touch Swipe states
+    const [isDragging, setIsDragging] = useState(false);
+    const dragStartX = useRef(0);
+    const dragThreshold = 40; // minimum pixels dragged to trigger slide transition
+
     const SLIDE_DURATION = 6000;
 
     const handleNext = () => {
@@ -134,27 +139,72 @@ export default function HistoryTimeline({ historyTimeline }) {
         setCurrentIndex((prev) => (prev + 1) % slides.length);
     };
 
+    const handlePrev = () => {
+        setDirection(-1);
+        setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
+    };
+
     const handleJumpTo = (idx) => {
         setDirection(idx > currentIndex ? 1 : -1);
         setCurrentIndex(idx);
     };
 
+    // Grab & Touch Gesture Handlers
+    const handleDragStart = (clientX) => {
+        setIsDragging(true);
+        setIsPaused(true);
+        dragStartX.current = clientX;
+    };
+
+    const handleDragEnd = (clientX) => {
+        if (!isDragging) return;
+        setIsDragging(false);
+        const distance = clientX - dragStartX.current;
+        if (distance < -dragThreshold) {
+            handleNext();
+        } else if (distance > dragThreshold) {
+            handlePrev();
+        }
+    };
+
+    // Mouse Events
+    const onMouseDown = (e) => {
+        handleDragStart(e.clientX);
+    };
+
+    const onMouseUp = (e) => {
+        handleDragEnd(e.clientX);
+    };
+
+    // Touch Events for Mobile
+    const onTouchStart = (e) => {
+        if (e.touches && e.touches[0]) {
+            handleDragStart(e.touches[0].clientX);
+        }
+    };
+
+    const onTouchEnd = (e) => {
+        if (e.changedTouches && e.changedTouches[0]) {
+            handleDragEnd(e.changedTouches[0].clientX);
+        }
+    };
+
     useEffect(() => {
-        if (isPaused) return;
+        if (isPaused || isDragging) return;
 
         const timer = setInterval(() => {
             handleNext();
         }, SLIDE_DURATION);
 
         return () => clearInterval(timer);
-    }, [currentIndex, isPaused, slides.length]);
+    }, [currentIndex, isPaused, isDragging, slides.length]);
 
     const activeSlide = slides[currentIndex] || slides[0];
 
     // Smooth subtle typography transition
     const textVariants = {
         enter: (dir) => ({
-            x: dir > 0 ? 20 : -20,
+            x: dir > 0 ? 25 : -25,
             opacity: 0,
         }),
         center: {
@@ -166,7 +216,7 @@ export default function HistoryTimeline({ historyTimeline }) {
             },
         },
         exit: (dir) => ({
-            x: dir > 0 ? -20 : 20,
+            x: dir > 0 ? -25 : 25,
             opacity: 0,
             transition: {
                 duration: 0.25,
@@ -202,14 +252,24 @@ export default function HistoryTimeline({ historyTimeline }) {
         <section 
             id="history" 
             onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-            className="relative w-full bg-slate-950 overflow-hidden font-['Raleway'] py-16 sm:py-20 lg:py-28"
+            onMouseLeave={() => {
+                if (isDragging) setIsDragging(false);
+                setIsPaused(false);
+            }}
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            className={'relative w-full bg-slate-950 overflow-hidden font-sans py-16 sm:py-20 lg:py-28 select-none transition-colors duration-300 ' + (
+                isDragging ? 'cursor-grabbing' : 'cursor-grab'
+            )}
+            title="Tarik / Geser ke kiri atau kanan untuk beralih era sejarah"
         >
             {/* Ambient Background Glows */}
             <div className="absolute top-1/4 left-1/4 w-[450px] h-[450px] bg-[#800020]/15 rounded-full blur-[140px] pointer-events-none" />
             <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] bg-rose-600/10 rounded-full blur-[160px] pointer-events-none" />
-            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
 
             {/* SEAMLESS BACKGROUND PICTURE WITH ELEGANT ANGLED DIAGONAL GRADIENT BLEND */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -249,7 +309,7 @@ export default function HistoryTimeline({ historyTimeline }) {
             </div>
 
             {/* FOREGROUND MAIN CONTENT (Aligned to standard max-w-7xl) */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
+            <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 w-full relative z-20 pointer-events-auto">
                 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[380px] sm:min-h-[420px] lg:min-h-[460px]">
                     
@@ -280,10 +340,10 @@ export default function HistoryTimeline({ historyTimeline }) {
 
                                 {/* 2. Main Title (Thin, Clean & Elegant Typography) */}
                                 <div className="space-y-1">
-                                    <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-white tracking-tight font-['Raleway'] leading-snug">
+                                    <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-normal text-white tracking-tight font-sans leading-snug">
                                         {activeSlide.title}
                                     </h2>
-                                    <p className="text-xs sm:text-sm font-light text-rose-200/80 font-['Raleway'] tracking-wide">
+                                    <p className="text-xs sm:text-sm font-light text-rose-200/80 font-sans tracking-wide">
                                         {activeSlide.subtitle}
                                     </p>
                                 </div>
@@ -298,7 +358,7 @@ export default function HistoryTimeline({ historyTimeline }) {
                                     <div className="flex items-start gap-2.5">
                                         <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0 shadow-xs shadow-rose-400/50" />
                                         <div>
-                                            <span className="font-normal text-white text-sm sm:text-base block font-['Raleway'] tracking-tight">
+                                            <span className="font-normal text-white text-sm sm:text-base block font-sans tracking-tight">
                                                 {activeSlide.stat1Val}
                                             </span>
                                             <span className="text-[10px] sm:text-xs text-slate-400 font-light block">
@@ -310,7 +370,7 @@ export default function HistoryTimeline({ historyTimeline }) {
                                     <div className="flex items-start gap-2.5 border-l border-white/10 pl-4">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0 shadow-xs shadow-emerald-400/50" />
                                         <div>
-                                            <span className="font-normal text-white text-sm sm:text-base block font-['Raleway'] tracking-tight">
+                                            <span className="font-normal text-white text-sm sm:text-base block font-sans tracking-tight">
                                                 {activeSlide.stat2Val}
                                             </span>
                                             <span className="text-[10px] sm:text-xs text-slate-400 font-light block">
@@ -326,7 +386,7 @@ export default function HistoryTimeline({ historyTimeline }) {
                     </div>
 
                     {/* RIGHT COLUMN: ELEGANT MINIMALIST SLIDER DOTS ONLY (5 Cols) */}
-                    <div className="lg:col-span-5 flex flex-col justify-end items-end min-h-0 lg:min-h-[380px] xl:min-h-[420px]">
+                    <div className="lg:col-span-5 flex flex-col justify-end items-start sm:items-end min-h-0 lg:min-h-[380px] xl:min-h-[420px] gap-2.5">
                         
                         {/* SLEEK MINIMALIST DOT INDICATORS (—— • • •) */}
                         <div className="w-full flex items-center justify-start sm:justify-end gap-2 pt-2 lg:pt-0">
@@ -334,7 +394,11 @@ export default function HistoryTimeline({ historyTimeline }) {
                                 {slides.map((_, idx) => (
                                     <button
                                         key={'angled-dot-' + idx}
-                                        onClick={() => handleJumpTo(idx)}
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleJumpTo(idx);
+                                        }}
                                         className={'transition-all duration-300 rounded-full cursor-pointer ' + (
                                             currentIndex === idx
                                                 ? 'w-7 h-1.5 bg-gradient-to-r from-rose-400 to-amber-300 shadow-xs shadow-rose-500/40'
@@ -344,6 +408,12 @@ export default function HistoryTimeline({ historyTimeline }) {
                                     />
                                 ))}
                             </div>
+                        </div>
+
+                        {/* SUBTLE INTERACTION HINT */}
+                        <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-light text-slate-400/80 tracking-wider">
+                            <MoveHorizontal className="w-3.5 h-3.5 text-rose-300/70" />
+                            <span>Geser / Drag untuk beralih era</span>
                         </div>
 
                     </div>
