@@ -284,10 +284,13 @@ export default function BranchMap({
                 scrollWheelZoom: true,
             });
 
-            // Modern CartoDB Voyager Tile Layer (Clean, crisp, modern contrast)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                subdomains: 'abcd',
+            // Standard Clean Tile Layer (Supports ENV config or free OSM default with zero watermark)
+            const mapTileUrl = import.meta.env.VITE_MAP_TILE_URL || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+            const mapAttribution = import.meta.env.VITE_MAP_ATTRIBUTION || '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+            L.tileLayer(mapTileUrl, {
+                attribution: mapAttribution,
+                subdomains: 'abc',
                 maxZoom: 19
             }).addTo(map);
 
