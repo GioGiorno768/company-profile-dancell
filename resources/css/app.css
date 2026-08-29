@@ -431,3 +431,12 @@ html.lenis, html.lenis body {
   border-top: 1px solid #e2e8f0;
   margin: 2.5rem 0;
 }
+
+/* Hide Scrollbars Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

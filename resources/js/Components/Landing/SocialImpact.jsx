@@ -1,30 +1,275 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Icon } from '@iconify/react';
 import { 
     Award, 
+    CheckCircle2, 
+    Sparkles, 
     ShieldCheck, 
     ExternalLink,
     X,
-    Sparkles,
     MapPin,
-    CheckCircle2,
-    Check
+    MoveHorizontal
 } from 'lucide-react';
+import { Icon } from '@iconify/react';
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Interactive Draggable / Auto-Scrolling Marquee Row
+   - Otomatis scroll perlahan & mulus (Float accumulator)
+   - Berhenti otomatis saat di-hover / di-sentuh
+   - Bisa di-drag / digeser ke kiri & ke kanan dengan bebas
+   - Otomatis jalan lagi dengan mulus saat kursor keluar
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function DraggableMarqueeRow({ brands, direction = 'left', speed = 1.0, onSelectBrand, onHoverBrand }) {
+    const rowRef = useRef(null);
+    const isHoveredRef = useRef(false);
+    const isDraggingRef = useRef(false);
+    const startXRef = useRef(0);
+    const scrollLeftStartRef = useRef(0);
+    const movedRef = useRef(false);
+    const posRef = useRef(0); // Float accumulator to avoid DOM scrollLeft truncation
+    const [cursorGrabbing, setCursorGrabbing] = useState(false);
+
+    // Quadruple items for infinite seamless looping
+    const displayBrands = useMemo(() => {
+        if (!brands || brands.length === 0) return [];
+        return [...brands, ...brands, ...brands, ...brands];
+    }, [brands]);
+
+    // Initial setup: for 'right' direction, start in the middle
+    useEffect(() => {
+        const el = rowRef.current;
+        if (!el) return;
+        const half = el.scrollWidth / 2;
+        if (direction === 'right' && half > 0) {
+            posRef.current = half;
+            el.scrollLeft = half;
+        } else {
+            posRef.current = 0;
+            el.scrollLeft = 0;
+        }
+    }, [direction, displayBrands]);
+
+    // 60FPS Continuous Animation Loop with Float Accumulator
+    useEffect(() => {
+        let animationFrameId;
+        let lastTime = performance.now();
+
+        const step = (now) => {
+            const dt = Math.min((now - lastTime) / 16.666, 3);
+            lastTime = now;
+
+            const el = rowRef.current;
+            if (el && !isHoveredRef.current && !isDraggingRef.current) {
+                const halfWidth = el.scrollWidth / 2;
+                if (halfWidth > 0) {
+                    if (direction === 'left') {
+                        posRef.current += speed * dt;
+                        if (posRef.current >= halfWidth) {
+                            posRef.current -= halfWidth;
+                        }
+                    } else {
+                        posRef.current -= speed * dt;
+                        if (posRef.current <= 0) {
+                            posRef.current += halfWidth;
+                        }
+                    }
+                    el.scrollLeft = posRef.current;
+                }
+            }
+
+            animationFrameId = requestAnimationFrame(step);
+        };
+
+        animationFrameId = requestAnimationFrame(step);
+        return () => cancelAnimationFrame(animationFrameId);
+    }, [direction, speed]);
+
+    // Mouse Handlers
+    const handleMouseDown = (e) => {
+        const el = rowRef.current;
+        if (!el) return;
+        isDraggingRef.current = true;
+        movedRef.current = false;
+        startXRef.current = e.pageX - el.offsetLeft;
+        scrollLeftStartRef.current = el.scrollLeft;
+        posRef.current = el.scrollLeft;
+        setCursorGrabbing(true);
+    };
+
+    const handleMouseMove = (e) => {
+        const el = rowRef.current;
+        if (!isDraggingRef.current || !el) return;
+        e.preventDefault();
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - startXRef.current) * 1.5;
+
+        if (Math.abs(walk) > 4) {
+            movedRef.current = true;
+        }
+
+        const halfWidth = el.scrollWidth / 2;
+        let newScrollLeft = scrollLeftStartRef.current - walk;
+
+        if (halfWidth > 0) {
+            while (newScrollLeft >= halfWidth) {
+                newScrollLeft -= halfWidth;
+                scrollLeftStartRef.current -= halfWidth;
+            }
+            while (newScrollLeft < 0) {
+                newScrollLeft += halfWidth;
+                scrollLeftStartRef.current += halfWidth;
+            }
+        }
+
+        posRef.current = newScrollLeft;
+        el.scrollLeft = newScrollLeft;
+    };
+
+    const handleMouseUp = () => {
+        isDraggingRef.current = false;
+        setCursorGrabbing(false);
+        if (rowRef.current) {
+            posRef.current = rowRef.current.scrollLeft;
+        }
+    };
+
+    const handleMouseEnter = () => {
+        isHoveredRef.current = true;
+        if (rowRef.current) {
+            posRef.current = rowRef.current.scrollLeft;
+        }
+    };
+
+    const handleMouseLeave = () => {
+        isHoveredRef.current = false;
+        isDraggingRef.current = false;
+        setCursorGrabbing(false);
+        if (rowRef.current) {
+            posRef.current = rowRef.current.scrollLeft;
+        }
+    };
+
+    // Touch Handlers for Mobile & Tablet
+    const handleTouchStart = (e) => {
+        const el = rowRef.current;
+        if (!el) return;
+        isHoveredRef.current = true;
+        isDraggingRef.current = true;
+        movedRef.current = false;
+        startXRef.current = e.touches[0].pageX - el.offsetLeft;
+        scrollLeftStartRef.current = el.scrollLeft;
+        posRef.current = el.scrollLeft;
+    };
+
+    const handleTouchMove = (e) => {
+        const el = rowRef.current;
+        if (!isDraggingRef.current || !el) return;
+        const x = e.touches[0].pageX - el.offsetLeft;
+        const walk = (x - startXRef.current) * 1.3;
+
+        if (Math.abs(walk) > 4) {
+            movedRef.current = true;
+        }
+
+        const halfWidth = el.scrollWidth / 2;
+        let newScrollLeft = scrollLeftStartRef.current - walk;
+
+        if (halfWidth > 0) {
+            while (newScrollLeft >= halfWidth) {
+                newScrollLeft -= halfWidth;
+                scrollLeftStartRef.current -= halfWidth;
+            }
+            while (newScrollLeft < 0) {
+                newScrollLeft += halfWidth;
+                scrollLeftStartRef.current += halfWidth;
+            }
+        }
+
+        posRef.current = newScrollLeft;
+        el.scrollLeft = newScrollLeft;
+    };
+
+    const handleTouchEnd = () => {
+        isHoveredRef.current = false;
+        isDraggingRef.current = false;
+        if (rowRef.current) {
+            posRef.current = rowRef.current.scrollLeft;
+        }
+    };
+
+    return (
+        <div
+            ref={rowRef}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className={`flex items-center gap-5 overflow-x-auto no-scrollbar py-3 select-none ${
+                cursorGrabbing ? 'cursor-grabbing' : 'cursor-grab'
+            }`}
+            style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                WebkitOverflowScrolling: 'touch',
+            }}
+        >
+            {displayBrands.map((brand, idx) => (
+                <div
+                    key={`${direction}-${brand.name}-${idx}`}
+                    onClick={() => {
+                        if (!movedRef.current) {
+                            onSelectBrand(brand);
+                        }
+                    }}
+                    onMouseEnter={() => onHoverBrand && onHoverBrand(brand)}
+                    className="shrink-0 group relative bg-white/5 hover:bg-[#800020] border border-white/10 hover:border-rose-300/80 px-6 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-lg min-w-[210px] hover:scale-105 hover:-translate-y-1 transform-gpu pointer-events-auto"
+                >
+                    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white text-white group-hover:text-[#800020] flex items-center justify-center shrink-0 transition-colors shadow-xs overflow-hidden p-2">
+                        {brand.image && brand.image.trim() !== '' ? (
+                            <img 
+                                src={brand.image} 
+                                alt={brand.name} 
+                                className="w-full h-full object-contain filter group-hover:brightness-0 transition-all pointer-events-none" 
+                                draggable={false}
+                            />
+                        ) : brand.icon && brand.icon.includes('<svg') ? (
+                            <span dangerouslySetInnerHTML={{ __html: brand.icon }} className="w-6 h-6 flex items-center justify-center pointer-events-none" />
+                        ) : (
+                            <Icon icon={brand.icon || 'simple-icons:apple'} className="w-6 h-6 pointer-events-none" />
+                        )}
+                    </div>
+
+                    <div className="pointer-events-none">
+                        <h4 className="font-semibold text-white text-sm font-['Raleway'] tracking-wide group-hover:text-white">
+                            {brand.name}
+                        </h4>
+                        <span className="text-[10px] text-slate-300 group-hover:text-rose-100 block font-normal">
+                            {brand.tag}
+                        </span>
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export default function SocialImpact({ partnerBrand }) {
-    const [activeBrand, setActiveBrand] = useState(null);
     const [selectedBrandModal, setSelectedBrandModal] = useState(null);
 
-    const headerBadge = partnerBrand?.header_badge || 'Mitra Resmi Brand Dunia';
-    const headerTitle = partnerBrand?.header_title || 'Official Brand Partner & Distributor Ritel';
-    const headerDesc = partnerBrand?.header_description || 'Dancell bekerja sama langsung dengan produsen smartphone dan aksesori teknologi terkemuka dunia untuk menjamin keaslian 100% & garansi resmi di 56 cabang.';
+    // Fallbacks from DB partnerBrand model
+    const headerBadge = partnerBrand?.header_badge || 'Brand Partner Resmi';
+    const headerTitle = partnerBrand?.header_title || 'Mitra Brand Global Terkemuka';
+    const headerDesc = partnerBrand?.header_desc || 'Dancell bermitra langsung dengan brand teknologi dunia untuk menghadirkan smartphone, laptop, dan aksesori 100% original bergaransi resmi.';
 
     const stat1Val = partnerBrand?.stat_1_val || '15+';
     const stat1Label = partnerBrand?.stat_1_label || 'Brand Global Resmi';
     const stat2Val = partnerBrand?.stat_2_val || '100%';
     const stat2Label = partnerBrand?.stat_2_label || 'Produk Original';
-    const stat3Val = partnerBrand?.stat_3_val || '56';
+    const stat3Val = partnerBrand?.stat_3_val || '58';
     const stat3Label = partnerBrand?.stat_3_label || 'Outlet Ritel Aktif';
     const stat4Val = partnerBrand?.stat_4_val || 'Garansi';
     const stat4Label = partnerBrand?.stat_4_label || 'Resmi Indonesia';
@@ -55,13 +300,9 @@ export default function SocialImpact({ partnerBrand }) {
             { name: 'Nokia', icon: 'simple-icons:nokia', tag: 'Official Partner', desc: 'Nokia Tough & Smart Series' },
         ];
 
-    const footerNote = partnerBrand?.footer_note || 'Seluruh produk brand di atas bergaransi resmi & tersedia di 56 outlet Dancell Jawa Timur.';
+    const footerNote = partnerBrand?.footer_note || 'Seluruh produk brand di atas bergaransi resmi & tersedia di 58 outlet Dancell Jawa Timur.';
     const ctaBtnText = partnerBrand?.cta_btn_text || 'Temukan Outlet Terdekat';
     const ctaBtnLink = partnerBrand?.cta_btn_link || '#branches';
-
-    // Double lists for seamless infinite marquee scrolling
-    const marqueeRow1 = [...smartphoneBrands, ...smartphoneBrands];
-    const marqueeRow2 = [...accessoryBrands, ...accessoryBrands];
 
     return (
         <section id="products" className="py-24 bg-white relative overflow-hidden font-['Raleway']">
@@ -131,94 +372,41 @@ export default function SocialImpact({ partnerBrand }) {
                     <div className="absolute top-0 right-1/4 w-96 h-96 bg-rose-600/15 rounded-full blur-3xl pointer-events-none" />
                     <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-                    {/* Marquee Row 1 Header */}
-                    <div className="flex items-center justify-between px-2 mb-6 relative z-10">
-                        <span className="text-[11px] text-slate-400 hidden sm:inline-block">Hover / Sentuh logo untuk detail</span>
+                    {/* Marquee Row Header with Drag Hint */}
+                    <div className="flex items-center justify-between px-2 mb-4 relative z-10">
+                        <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                            <MoveHorizontal className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+                            <span>Hover untuk pause • Drag / Geser bebas • Klik untuk detail</span>
+                        </div>
                         <span className="text-[11px] text-slate-400 hidden sm:inline-block">100% Produk Original</span>
                     </div>
 
-                    {/* Infinite Marquee Row 1 (Moving Left) */}
-                    <div className="relative overflow-hidden py-3 marquee-container mb-8">
+                    {/* Infinite & Draggable Marquee Row 1 (Smartphone Brands) */}
+                    <div className="relative overflow-hidden py-1 mb-4">
                         {/* Gradient Edge Fades */}
                         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-slate-900 to-transparent z-20" />
                         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-slate-900 to-transparent z-20" />
 
-                        <div className="animate-marquee gap-5 flex items-center relative z-30 pointer-events-auto">
-                            {marqueeRow1.map((brand, idx) => (
-                                <motion.div
-                                    key={`r1-${idx}`}
-                                    onMouseEnter={() => setActiveBrand(brand)}
-                                    onClick={() => setSelectedBrandModal(brand)}
-                                    whileHover={{ scale: 1.05, y: -4 }}
-                                    className="shrink-0 group relative bg-white/5 hover:bg-[#800020] border border-white/10 hover:border-rose-300/80 px-6 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-lg min-w-[210px]"
-                                >
-                                    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white text-white group-hover:text-[#800020] flex items-center justify-center shrink-0 transition-colors shadow-xs overflow-hidden p-2">
-                                        {brand.image && brand.image.trim() !== '' ? (
-                                            <img 
-                                                src={brand.image} 
-                                                alt={brand.name} 
-                                                className="w-full h-full object-contain filter group-hover:brightness-0 transition-all" 
-                                            />
-                                        ) : brand.icon && brand.icon.includes('<svg') ? (
-                                            <span dangerouslySetInnerHTML={{ __html: brand.icon }} className="w-6 h-6 flex items-center justify-center" />
-                                        ) : (
-                                            <Icon icon={brand.icon || 'simple-icons:apple'} className="w-6 h-6" />
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <h4 className="font-semibold text-white text-sm font-['Raleway'] tracking-wide group-hover:text-white">
-                                            {brand.name}
-                                        </h4>
-                                        <span className="text-[10px] text-slate-300 group-hover:text-rose-100 block font-normal">
-                                            {brand.tag}
-                                        </span>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
+                        <DraggableMarqueeRow
+                            brands={smartphoneBrands}
+                            direction="left"
+                            speed={1.0}
+                            onSelectBrand={setSelectedBrandModal}
+                        />
                     </div>
 
-                    {/* Infinite Marquee Row 2 (Moving Right / Reverse) */}
-                    <div className="relative overflow-hidden py-3 marquee-container mb-6">
+                    {/* Infinite & Draggable Marquee Row 2 (Accessory Brands) */}
+                    <div className="relative overflow-hidden py-1 mb-4">
                         {/* Gradient Edge Fades */}
                         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-slate-900 to-transparent z-20" />
                         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-slate-900 to-transparent z-20" />
 
-                        <div className="animate-marquee-reverse gap-5 flex items-center relative z-30 pointer-events-auto">
-                            {marqueeRow2.map((brand, idx) => (
-                                <motion.div
-                                    key={`r2-${idx}`}
-                                    onMouseEnter={() => setActiveBrand(brand)}
-                                    onClick={() => setSelectedBrandModal(brand)}
-                                    whileHover={{ scale: 1.05, y: -4 }}
-                                    className="shrink-0 group relative bg-white/5 hover:bg-[#800020] border border-white/10 hover:border-rose-300/80 px-6 py-4 rounded-2xl backdrop-blur-md transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-lg min-w-[210px]"
-                                >
-                                    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white text-white group-hover:text-[#800020] flex items-center justify-center shrink-0 transition-colors shadow-xs overflow-hidden p-2">
-                                        {brand.image && brand.image.trim() !== '' ? (
-                                            <img 
-                                                src={brand.image} 
-                                                alt={brand.name} 
-                                                className="w-full h-full object-contain filter group-hover:brightness-0 transition-all" 
-                                            />
-                                        ) : brand.icon && brand.icon.includes('<svg') ? (
-                                            <span dangerouslySetInnerHTML={{ __html: brand.icon }} className="w-6 h-6 flex items-center justify-center" />
-                                        ) : (
-                                            <Icon icon={brand.icon || 'simple-icons:sony'} className="w-6 h-6" />
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <h4 className="font-semibold text-white text-sm font-['Raleway'] tracking-wide group-hover:text-white">
-                                            {brand.name}
-                                        </h4>
-                                        <span className="text-[10px] text-slate-300 group-hover:text-rose-100 block font-normal">
-                                            {brand.tag}
-                                        </span>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
+                        <DraggableMarqueeRow
+                            brands={accessoryBrands}
+                            direction="right"
+                            speed={1.0}
+                            onSelectBrand={setSelectedBrandModal}
+                        />
                     </div>
 
                     {/* Active Brand Highlight Footer Bar */}
