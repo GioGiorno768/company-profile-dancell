@@ -9,6 +9,7 @@ use App\Models\ArticleSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -120,8 +121,12 @@ class ArticleController extends Controller
         $imagePath = null;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
+            $uploadDir = public_path('uploads/articles');
+            if (!File::isDirectory($uploadDir)) {
+                File::makeDirectory($uploadDir, 0755, true, true);
+            }
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/articles'), $fileName);
+            $file->move($uploadDir, $fileName);
             $imagePath = '/uploads/articles/' . $fileName;
         }
 
@@ -196,8 +201,12 @@ class ArticleController extends Controller
         $imagePath = $article->image;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
+            $uploadDir = public_path('uploads/articles');
+            if (!File::isDirectory($uploadDir)) {
+                File::makeDirectory($uploadDir, 0755, true, true);
+            }
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/articles'), $fileName);
+            $file->move($uploadDir, $fileName);
             $imagePath = '/uploads/articles/' . $fileName;
         }
 

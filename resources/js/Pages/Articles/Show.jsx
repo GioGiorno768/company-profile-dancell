@@ -343,7 +343,7 @@ export default function ArticlesShow({ seo, footer, settings, article, relatedAr
                                         </p>
                                     </div>
                                     <a
-                                        href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Dancell,%20saya%20ingin%20konsultasi%20gadget"
+                                        href="https://api.whatsapp.com/send?phone=6285348678999&text=Halo%20Dancell,%20saya%20ingin%20konsultasi%20gadget"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white hover:bg-rose-50 text-[#800020] text-xs font-normal transition-all shadow-xs relative z-10 cursor-pointer"
