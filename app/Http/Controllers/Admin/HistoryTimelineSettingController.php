@@ -122,6 +122,7 @@ class HistoryTimelineSettingController extends Controller
             'milestones.*.stat_badge' => 'nullable|string|max:100',
             'milestones.*.stat_label' => 'nullable|string|max:255',
             'milestones.*.highlight_tag' => 'nullable|string|max:255',
+            'milestones.*.highlight_label' => 'nullable|string|max:255',
             'milestones.*.image' => 'nullable|string',
             'milestones.*.current' => 'nullable|boolean',
         ]);

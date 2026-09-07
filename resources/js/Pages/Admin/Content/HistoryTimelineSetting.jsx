@@ -154,6 +154,7 @@ export default function HistoryTimelineSetting({ historyTimeline, status }) {
             stat_badge: 'Pencapaian',
             stat_label: 'Keterangan Metrik',
             highlight_tag: '100% Produk Original',
+            highlight_label: 'Garansi Resmi Indonesia',
             image: '/images/hero.webp',
             current: false,
         };
@@ -477,16 +478,29 @@ export default function HistoryTimelineSetting({ historyTimeline, status }) {
                                                 />
                                             </div>
 
-                                            <div className="sm:col-span-2">
+                                            <div>
                                                 <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1">
-                                                    Metrik Kanan (Highlight Produk/Layanan)
+                                                    Metrik Kanan (Highlight / Nilai)
                                                 </label>
                                                 <input
                                                     type="text"
                                                     value={item.highlight_tag || ''}
                                                     onChange={(e) => handleUpdateMilestone(index, 'highlight_tag', e.target.value)}
                                                     className="w-full text-xs rounded-xl border border-slate-200 px-3 py-2 bg-white focus:border-[#800020] focus:ring-1 focus:ring-[#800020]"
-                                                    placeholder="Contoh: 100% Produk Original / Garansi Resmi Indonesia"
+                                                    placeholder="Contoh: Apple, Samsung, Xiaomi / 100% Resmi"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-[11px] font-bold text-slate-600 uppercase mb-1">
+                                                    Metrik Kanan (Keterangan / Deskripsi Bawah)
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={item.highlight_label || ''}
+                                                    onChange={(e) => handleUpdateMilestone(index, 'highlight_label', e.target.value)}
+                                                    className="w-full text-xs rounded-xl border border-slate-200 px-3 py-2 bg-white focus:border-[#800020] focus:ring-1 focus:ring-[#800020]"
+                                                    placeholder="Contoh: Garansi Resmi Indonesia / Mitra Terpercaya"
                                                 />
                                             </div>
 
@@ -521,9 +535,9 @@ export default function HistoryTimelineSetting({ historyTimeline, status }) {
                                                     )}
 
                                                     <div className="space-y-1">
-                                                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer border border-slate-200 transition-colors">
+                                                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 hover:border-[#800020] text-slate-700 hover:text-[#800020] bg-white text-xs font-medium cursor-pointer transition-colors shadow-2xs">
                                                             <Upload className="w-3.5 h-3.5" />
-                                                            <span>{item.image ? 'Ganti Foto Era Ini' : 'Upload Foto Dokumentasi'}</span>
+                                                            <span>{item.image ? 'Ganti Foto Era Ini' : 'Upload Foto Era Ini'}</span>
                                                             <input 
                                                                 type="file" 
                                                                 accept="image/*" 
@@ -531,8 +545,8 @@ export default function HistoryTimelineSetting({ historyTimeline, status }) {
                                                                 onChange={(e) => handleImageUpload(index, e.target.files[0])}
                                                             />
                                                         </label>
-                                                        <p className="text-[10px] text-slate-400">
-                                                            Format: JPG, PNG, WebP (Tersimpan otomatis ke database).
+                                                        <p className="text-[10px] text-slate-400 font-light block">
+                                                            Format: JPG, PNG, WebP (Tersimpan otomatis ke database)
                                                         </p>
                                                     </div>
                                                 </div>
@@ -541,26 +555,41 @@ export default function HistoryTimelineSetting({ historyTimeline, status }) {
                                         </div>
                                     </div>
                                 ))}
+
+                                {/* Add New Milestone Era Button */}
+                                <button
+                                    type="button"
+                                    onClick={handleAddMilestone}
+                                    className="w-full py-3.5 rounded-2xl border-2 border-dashed border-slate-200 hover:border-[#800020] text-slate-500 hover:text-[#800020] bg-white hover:bg-rose-50/30 transition-all font-medium text-xs flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                    <span>Tambah Era Sejarah Baru</span>
+                                </button>
                             </div>
                         </div>
 
-                        {/* BOTTOM SUBMIT BUTTON */}
-                        <div className="pt-2">
+                        {/* Save Sticky Action Bar for Story Section */}
+                        <div className="p-4 bg-slate-50 border-t border-slate-200 rounded-b-3xl flex items-center justify-between">
+                            <div className="text-xs text-slate-500">
+                                Total Era Tersimpan: <strong className="text-slate-800">{data.milestones.length} Era</strong>
+                            </div>
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#800020] hover:bg-[#5c0017] text-white font-medium text-xs shadow-lg shadow-rose-950/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+                                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#800020] hover:bg-[#600018] text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all disabled:opacity-50 cursor-pointer"
                             >
-                                <Save className="w-4 h-4" />
-                                <span>{processing ? 'Menyimpan Perubahan...' : 'Simpan Konten Sejarah & Timeline'}</span>
+                                <Save className="w-3.5 h-3.5" />
+                                <span>{processing ? 'Menyimpan Perubahan...' : 'Simpan Semua Era'}</span>
                             </button>
                         </div>
 
                     </div>
 
-                    {/* RIGHT COLUMN: LIVE INTERACTIVE PREVIEW (STICKY & AUTO-SCROLL-SYNC) (5 Cols) */}
-                    <div className="lg:col-span-5 lg:sticky lg:top-[130px] space-y-4">
-                        <div className="bg-slate-950 rounded-3xl p-6 sm:p-7 border border-white/10 shadow-2xl text-white space-y-6 overflow-hidden relative transition-all duration-300">
+                    {/* ======================================================== */}
+                    {/* RIGHT COLUMN: STICKY INTERACTIVE REALTIME PREVIEW (40%)  */}
+                    {/* ======================================================== */}
+                    <div className="lg:col-span-5">
+                        <div className="sticky top-6 bg-slate-950 text-white rounded-3xl p-6 border border-slate-800 shadow-2xl space-y-6 overflow-hidden relative">
                             
                             {/* SEAMLESS BACKGROUND IMAGE WITH DEEP DARK GRADIENT */}
                             {currentActivePreview?.image && (
@@ -577,15 +606,16 @@ export default function HistoryTimelineSetting({ historyTimeline, status }) {
                                 </div>
                             )}
 
-                            {/* Ambient Glow */}
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#800020]/25 rounded-full blur-3xl pointer-events-none" />
+                            {/* Ambient Lighting in Preview */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#800020]/20 rounded-full blur-3xl pointer-events-none" />
+                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-rose-600/10 rounded-full blur-3xl pointer-events-none" />
 
-                            <div className="flex items-center justify-between border-b border-white/10 pb-3 relative z-20">
-                                <span className="text-xs font-bold text-rose-300 flex items-center gap-1.5">
+                            {/* Top Indicator */}
+                            <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-20">
+                                <span className="text-[11px] font-mono uppercase tracking-wider text-rose-300 font-bold flex items-center gap-1.5">
                                     <Eye className="w-3.5 h-3.5" />
-                                    <span>PRATINJAU REALTIME</span>
+                                    <span>Pratinjau Realtime</span>
                                 </span>
-
                                 <span className="text-[11px] font-mono text-slate-400">
                                     0{previewIdx + 1} / 0{data.milestones.length}
                                 </span>
@@ -643,7 +673,7 @@ export default function HistoryTimelineSetting({ historyTimeline, status }) {
                                                 {currentActivePreview?.highlight_tag || '100% Resmi'}
                                             </span>
                                             <span className="text-[10px] text-slate-400 font-light block">
-                                                Garansi Resmi Indonesia
+                                                {currentActivePreview?.highlight_label || 'Garansi Resmi Indonesia'}
                                             </span>
                                         </div>
                                     </div>

@@ -30,7 +30,7 @@ export default function BranchNetwork({ branchSection = null, branches = [] }) {
     const bannerTitle = branchSection?.banner_title || `Total ${allBranches.length} Cabang & Terus Bertambah`;
     const bannerDesc = branchSection?.banner_description || 'Dancell berkomitmen menghadirkan outlet terdekat yang mudah dijangkau di seluruh kabupaten/kota Jawa Timur.';
     const ctaText = branchSection?.cta_btn_text || 'Hubungi Manajemen Dancell';
-    const ctaLink = branchSection?.cta_btn_link || '#contact';
+    const ctaLink = branchSection?.cta_btn_link || 'https://api.whatsapp.com/send/?phone=6285230855400&text&type=phone_number&app_absent=0';
 
     return (
         <section id="branches" className="py-20 bg-slate-50 relative overflow-hidden font-['Raleway']">

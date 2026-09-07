@@ -115,7 +115,7 @@ export default function HistoryTimeline({ historyTimeline }) {
                 stat1Val: ms.stat_badge || 'Toko Utama',
                 stat1Label: ms.stat_label || 'Jawa Timur',
                 stat2Val: ms.highlight_tag || (ms.current ? 'Kondisi Terkini' : '100% Resmi'),
-                stat2Label: 'Garansi Resmi Indonesia',
+                stat2Label: ms.highlight_label || 'Garansi Resmi Indonesia',
                 imageSrc: ms.image || visual.imageSrc,
                 imageAlt: ms.title || 'Sejarah Dancell',
                 gradientColor: visual.gradientColor,
