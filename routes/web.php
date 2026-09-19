@@ -19,6 +19,7 @@ use App\Models\VisiMisiSetting;
 use App\Models\SeoSetting;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 
 use Illuminate\Support\Facades\Cache;
@@ -65,8 +66,8 @@ Route::get('/sitemap.xml', function () {
         $baseUrl = 'https://dancell-official.com';
 
         // Use actual content modification dates for reliable lastmod
-        $homepageLastmod = SeoSetting::max('updated_at') ?? now();
-        $cabangLastmod = Branch::max('updated_at') ?? now();
+        $homepageLastmod = Carbon::parse(SeoSetting::max('updated_at') ?? now());
+        $cabangLastmod = Carbon::parse(Branch::max('updated_at') ?? now());
 
         $urls = [];
 
